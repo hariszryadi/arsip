@@ -1,0 +1,12 @@
+.sidebar-dark .nav-sidebar>.nav-item>.nav-link.active {
+    background-color: #E7F5F3 !important;
+    color: #00B49F !important;
+}
+.sidebar-dark .nav-sidebar .nav-item>.nav-link.active {
+    background-color: #E7F5F3 !important;
+    color: #00B49F !important;
+}
+.table > thead > tr {
+    background-color: #01534A;
+    color: #fff;
+}
