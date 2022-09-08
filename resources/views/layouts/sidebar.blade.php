@@ -57,11 +57,11 @@
             <!-- /main -->
 
             <!-- Page kits -->
-            <li class="nav-item nav-item-submenu {{ request()->is('user') ? 'nav-item-expanded nav-item-open' : '' }}">
+            <li class="nav-item nav-item-submenu {{ request()->is('user') || request()->is('user/*') ? 'nav-item-expanded nav-item-open' : '' }}">
                 <a href="#" class="nav-link"><i class="icon-user-lock"></i> <span>User Config</span></a>
                 <ul class="nav nav-group-sub" data-submenu-title="User Config">
                     <li class="nav-item"><a href="#" class="nav-link">Role</a></li>
-                    <li class="nav-item"><a href="{{ route('user.index') }}" class="nav-link {{ request()->is('user') ? 'active' : '' }}">User</a></li>
+                    <li class="nav-item"><a href="{{ route('user.index') }}" class="nav-link {{ request()->is('user') || request()->is('user/*') ? 'active' : '' }}">User</a></li>
                 </ul>
             </li>
             <!-- /page kits -->

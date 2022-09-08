@@ -48,7 +48,7 @@ class SecondaryClassificationController extends Controller
                                     </a>
 
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="#" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Ubah</a>
+                                        <a href="#" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
                                     </div>
                                 </div>
                             </div>';

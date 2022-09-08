@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use DataTables;
 
@@ -12,6 +13,11 @@ class UserController extends Controller
      * Folder views
      */
     protected $_view = 'user.';
+    
+    /**
+     * Route views
+     */
+    protected $_route = 'user.';
 
     /**
      * Create a new controller instance.
@@ -37,6 +43,14 @@ class UserController extends Controller
                     return $date->format('j F Y ');
                 })
                 ->addColumn('action', function($data){
+                    if ($data->email == 'superadmin@arsip.id') {
+                        $disabled = 'disabled';
+                        $text = 'text-secondary';
+                    } else {
+                        $disabled = '';
+                        $text = 'text-danger';
+                    }
+
                     return '<div class="list-icons">
                                 <div class="dropdown">
                                     <a href="#" class="list-icons-item" data-toggle="dropdown">
@@ -44,7 +58,8 @@ class UserController extends Controller
                                     </a>
 
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="#" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Ubah</a>
+                                        <a href="'.route('user.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
+                                        <a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item" '.$disabled.'><i class="icon-bin '.$text.'"></i> Hapus</a>
                                     </div>
                                 </div>
                             </div>';
@@ -62,7 +77,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view($this->_view.'create');
     }
 
     /**
@@ -73,7 +88,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|confirmed'
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password)
+        ]);
+
+        return redirect()->route($this->_route.'index')->with('success', 'Data user berhasil ditambahkan');
     }
 
     /**
@@ -95,7 +122,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+        return view($this->_view.'edit', compact('user'));
     }
 
     /**
@@ -107,7 +135,31 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|max:255',
+            'email' => 'required|email|unique:users,email,'.$id
+        ]);
+
+        if ($request->password != '') {
+            $this->validate($request, [
+                'password' => 'confirmed'
+            ]);
+
+            $user = User::find($id);
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password)
+            ]);
+        } else {
+            $user = User::find($id);
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email
+            ]);
+        }
+
+        return redirect()->route($this->_route.'index')->with('success', 'Data user berhasil diubah');
     }
 
     /**
@@ -118,6 +170,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return response()->json(['success' => 'Data user berhasil dihapus']);
     }
 }

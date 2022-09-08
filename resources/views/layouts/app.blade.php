@@ -24,6 +24,7 @@
 	<script src="{{ asset('global_assets/js/plugins/pickers/daterangepicker.js') }}"></script>
 	<script src="{{ asset('global_assets/js/plugins/tables/datatables/datatables.min.js') }}"></script>
 	<script src="{{ asset('global_assets/js/plugins/forms/selects/select2.min.js') }}"></script>
+	<script src="{{ asset('global_assets/js/plugins/notifications/sweet_alert.min.js') }}"></script>
 
 	<script src="{{ asset('assets/js/app.js') }}"></script>
 	<!-- /theme JS files -->
@@ -54,6 +55,7 @@
 		<!-- Main content -->
 		<div class="content-wrapper">
 
+			@include('helper.alert-swal')
 			@yield('content')
 
 		</div>
@@ -63,8 +65,19 @@
 	<!-- /page content -->
 
 	<script>
-		// init select2
+		// Init select2
         $('.select-search').select2();
+
+		// Defaults sweet alert
+		var swalInit = swal.mixin({
+							buttonsStyling: false,
+							customClass: {
+								confirmButton: 'btn btn-primary',
+								cancelButton: 'btn btn-light',
+								denyButton: 'btn btn-light',
+								input: 'form-control'
+							}
+						});
 	</script>
 	@yield('scripts')
 </body>

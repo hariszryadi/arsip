@@ -46,7 +46,7 @@ class PrimaryClassificationController extends Controller
                 //                     </a>
                 //                     <ul class="dropdown-menu dropdown-menu-right text-center">
                 //                         <li>
-                //                             <a href="/classification/'.$data->id .'/edit"><i class="icon-pencil5 text-primary"></i> Ubah</a>
+                //                             <a href="/classification/'.$data->id .'/edit"><i class="icon-pencil5 text-primary"></i> Edit</a>
                 //                         </li>
                 //                         <li>
                 //                             <a href="javascript:void(0)" id="delete" data-id="'.$data->id.'"><i class="icon-bin text-danger"></i> Hapus</a>

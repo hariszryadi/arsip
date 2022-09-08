@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .dropdown-item:disabled {
+        cursor: not-allowed !important;
+    }
+</style>
 <!-- Inner content -->
 <div class="content-inner">
 
@@ -35,6 +40,10 @@
             </div>
             
             <div class="card-body">
+                <div class="form-group text-left">
+                    <a href="{{ route('user.create')}}" class="btn btn-primary"><i class="icon-file-plus"></i> Tambah</a>
+                </div>
+
                 <table class="table datatable-basic table-hover table-bordered striped table-responsive">
                     <thead>
                         <tr>
@@ -91,6 +100,44 @@
                     paginate: { 'first': 'First', 'last': 'Last', 'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;', 'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;' }
                 }
             });
+
+        })
+        
+        $(document).on('click', '#delete', function () {
+            var id = $(this).attr('data-id');
+            var url = "{{ route('user.destroy', ":id") }}";
+            url = url.replace(':id', id);
+            var disabled = $(this).attr('disabled');
+
+            if (disabled) {
+                return false;
+            } else {
+                swalInit.fire({
+                    title: "Apakah Anda Yakin Akan Menghapus Data ini?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Ya, Hapus!",
+                    cancelButtonText: "Kembali"
+                }).then(function(result) {
+                    if(result.value) {
+                        $.ajax({
+                            url: url,
+                            method: "DELETE",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function (resp) {
+                                $('.datatable-basic').DataTable().ajax.reload();
+                                swalInit.fire('Sukses!', resp.success, 'success');
+                            },
+                            error: function (xhr, status, error) {
+                                swalInit.fire('Error!', xhr.responseText, 'error');
+                            }
+                        })
+                    }
+                });
+            }
         })
     </script>
 @endsection
