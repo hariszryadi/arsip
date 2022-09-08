@@ -9,7 +9,7 @@
 
 <div class="navbar-brand text-center text-lg-left">
     <a href="" class="d-inline-block">
-        <img src="{{ asset('images/logo-sm.png') }}" class="d-none d-sm-block" alt="" style="height: 35px">
+        <img src="{{ asset('images/depo.png') }}" class="d-none d-sm-block" alt="" style="height: 35px">
         <img src="{{ asset('images/logo-sm.png') }}" class="d-sm-none" alt="" style="height: 35px">
     </a>
 </div>

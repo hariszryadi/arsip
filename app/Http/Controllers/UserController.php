@@ -3,17 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\PrimaryClassification;
-use App\Models\TertiaryClassification;
-use App\Models\SecondaryClassification;
+use App\Models\User;
 use DataTables;
 
-class TertiaryClassificationController extends Controller
+class UserController extends Controller
 {
     /**
      * Folder views
      */
-    protected $_view = 'classification.tertiary.';
+    protected $_view = 'user.';
 
     /**
      * Create a new controller instance.
@@ -31,20 +29,13 @@ class TertiaryClassificationController extends Controller
      */
     public function index()
     {
-        $primaries = PrimaryClassification::orderBy('id')->get();
-        $secondaries = SecondaryClassification::orderBy('id')->get();
-
         if (request()->ajax()) {
-            $query = TertiaryClassification::with('secondary');
-            if (request()->filter_primary != null) {
-                $query->whereRelation('secondary', 'primary_classification_id', request()->filter_primary);
-            }
-            if (request()->filter_secondary != null) {
-                $query->where('secondary_classification_id', request()->filter_secondary);
-            }
-            $query->orderBy('id')->get();
-
-            return Datatables::of($query)
+            return Datatables::of(User::orderBy('id')->get())
+                ->editColumn('created_at', function($data) {
+                    $date = $data->created_at;
+                    $date->settings(['formatFunction' => 'translatedFormat']);
+                    return $date->format('j F Y ');
+                })
                 ->addColumn('action', function($data){
                     return '<div class="list-icons">
                                 <div class="dropdown">
@@ -61,7 +52,7 @@ class TertiaryClassificationController extends Controller
                 ->make(true);
         }
 
-        return view($this->_view.'index', compact('primaries', 'secondaries'));
+        return view($this->_view.'index');
     }
 
     /**
@@ -128,29 +119,5 @@ class TertiaryClassificationController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    /**
-     * Get data secondary classification by primary classification id
-     * 
-     * @param \Illuminate\Http\Request  $request
-     * @return json
-     */
-    public function get_secondary(Request $request)
-    {
-        try {
-            if ($request->primary_id == '') {
-                $secondary = SecondaryClassification::orderBy('id')->get();
-            } else {
-                $secondary = SecondaryClassification::where('primary_classification_id', $request->primary_id)->orderBy('id')->get();
-            }
-            return response()->json([
-                'data' => $secondary
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ], 500);
-        }
     }
 }

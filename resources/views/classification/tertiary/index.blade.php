@@ -84,9 +84,33 @@
             tertiaryClassificationList();
         })
 
-        // $('#filter-primary').on('change', function () {
-        //     alert($(this).val())
-        // })
+        $('#filter-primary').on('change', function () {
+            var primary_id = $(this).val();
+            $.ajax({
+                url: "{{ route('tertiary-classification-get-secondary') }}",
+                method: "POST",
+                data: {
+                    primary_id: primary_id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (resp) {
+                    // console.log(resp.data);
+                    if (resp.data != null) {
+                        $('#filter-secondary').empty();
+                        $('#filter-secondary').append('<option value="">All Sekunder</option');
+                        $.each(resp.data, function (i, v) {
+                            $('#filter-secondary').append('<option value="'+v.id+'">'+v.code+' - '+v.name+'</option');
+                        })
+                    }
+                },
+                error: function (error) {
+                    var responseText=JSON.parse(error.responseText);
+                    console.log(responseText.messages);
+                }
+            })
+        })
 
         $('.btn-filter').on('click', function () {
             tertiaryClassificationList();
