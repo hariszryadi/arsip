@@ -14,6 +14,11 @@ class PrimaryClassificationController extends Controller
     protected $_view = 'classification.primary.';
 
     /**
+     * Route index
+     */
+    protected $_route = 'primary-classification.index';
+
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -38,23 +43,19 @@ class PrimaryClassificationController extends Controller
                         return 'Subtantif';
                     }
                 })
-                // ->addColumn('action', function($data){
-                //     return '<ul class="icons-list">
-                //                 <li>
-                //                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                //                         <i class="icon-menu9"></i>
-                //                     </a>
-                //                     <ul class="dropdown-menu dropdown-menu-right text-center">
-                //                         <li>
-                //                             <a href="/classification/'.$data->id .'/edit"><i class="icon-pencil5 text-primary"></i> Edit</a>
-                //                         </li>
-                //                         <li>
-                //                             <a href="javascript:void(0)" id="delete" data-id="'.$data->id.'"><i class="icon-bin text-danger"></i> Hapus</a>
-                //                         </li>
-                //                     </ul>
-                //                 </li>
-                //             </ul>';
-                // })
+                ->addColumn('action', function($data){
+                    return '<div class="list-icons">
+                                <div class="dropdown">
+                                    <a href="#" class="list-icons-item" data-toggle="dropdown">
+                                        <i class="icon-menu9"></i>
+                                    </a>
+
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a href="'.route('primary-classification.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
+                                    </div>
+                                </div>
+                            </div>';
+                })
                 ->make(true);
         }
 
@@ -101,7 +102,8 @@ class PrimaryClassificationController extends Controller
      */
     public function edit($id)
     {
-        //
+        $primary = PrimaryClassification::find($id);
+        return view($this->_view.'edit', compact('primary'));
     }
 
     /**
@@ -113,7 +115,17 @@ class PrimaryClassificationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|max:255'
+        ]);
+
+        $primary = PrimaryClassification::find($id);
+        $primary->update([
+            'category' => $request->category,
+            'name' => $request->name
+        ]);
+
+        return redirect()->route($this->_route)->with('success', 'Data klasifikasi sekunder berhasil diubah');
     }
 
     /**

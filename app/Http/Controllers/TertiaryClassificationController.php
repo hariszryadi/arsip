@@ -16,6 +16,11 @@ class TertiaryClassificationController extends Controller
     protected $_view = 'classification.tertiary.';
 
     /**
+     * Route index
+     */
+    protected $_route = 'tertiary-classification.index';
+
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -53,7 +58,7 @@ class TertiaryClassificationController extends Controller
                                     </a>
 
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="#" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
+                                        <a href="'.route('tertiary-classification.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
                                     </div>
                                 </div>
                             </div>';
@@ -104,7 +109,8 @@ class TertiaryClassificationController extends Controller
      */
     public function edit($id)
     {
-        //
+        $tertiary = TertiaryClassification::find($id);
+        return view($this->_view.'edit', compact('tertiary'));
     }
 
     /**
@@ -116,7 +122,17 @@ class TertiaryClassificationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|max:255'
+        ]);
+
+        $tertiary = TertiaryClassification::find($id);
+        $tertiary->update([
+            'name' => $request->name,
+            'description' => $request->description
+        ]);
+
+        return redirect()->route($this->_route)->with('success', 'Data klasifikasi tersier berhasil diubah');
     }
 
     /**

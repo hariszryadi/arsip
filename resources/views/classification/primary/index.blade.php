@@ -42,6 +42,7 @@
                             <th>Kategori</th>
                             <th>Kode</th>
                             <th>Nama</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                 </table>
@@ -75,12 +76,12 @@
                     },
                     { data: "category" },
                     { data: "code" },
-                    { data: "name" }
+                    { data: "name" },
+                    { data: "action", orderable: false }
                 ],
                 columnDefs: [
                     { width: "5%", "targets": [0] },
-                    // { width: "10%", "targets": [2] },
-                    // { className: "text-center", "targets": [2] }
+                    { className: "text-center", "targets": [4] }
                 ],
                 dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
                 language: {

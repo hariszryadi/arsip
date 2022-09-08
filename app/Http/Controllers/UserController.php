@@ -15,9 +15,9 @@ class UserController extends Controller
     protected $_view = 'user.';
     
     /**
-     * Route views
+     * Route index
      */
-    protected $_route = 'user.';
+    protected $_route = 'user.index';
 
     /**
      * Create a new controller instance.
@@ -100,7 +100,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
-        return redirect()->route($this->_route.'index')->with('success', 'Data user berhasil ditambahkan');
+        return redirect()->route($this->_route)->with('success', 'Data user berhasil ditambahkan');
     }
 
     /**
@@ -159,7 +159,7 @@ class UserController extends Controller
             ]);
         }
 
-        return redirect()->route($this->_route.'index')->with('success', 'Data user berhasil diubah');
+        return redirect()->route($this->_route)->with('success', 'Data user berhasil diubah');
     }
 
     /**

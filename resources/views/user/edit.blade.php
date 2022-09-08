@@ -35,11 +35,11 @@
             </div>
             
             <div class="card-body">
-                <form class="form-horizontal" id="form" action="{{ route('user.update', $user->id) }}" method="POST" enctype="multipart/form-data">
+                <form class="form-horizontal" id="form" action="{{ route('user.update', $user->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="form-group row">
-                        <label class="col-form-label col-lg-2 @error('name') text-danger @enderror">Nama</label>
+                        <label class="col-form-label col-lg-2 @error('name') text-danger @enderror" for="name">Nama</label>
                         <div class="col-lg-10">
                             <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" value="{{ old('name')!== null ? old('name') : $user->name }}" placeholder="Nama">
                             @error('name')
@@ -51,7 +51,7 @@
                     </div>
     
                     <div class="form-group row">
-                        <label class="col-form-label col-lg-2 @error('email') text-danger @enderror">Email</label>
+                        <label class="col-form-label col-lg-2 @error('email') text-danger @enderror" for="email">Email</label>
                         <div class="col-lg-10">
                             <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" value="{{ old('email')!== null ? old('email') : $user->email }}" placeholder="Email">
                             @error('email')
@@ -63,7 +63,7 @@
                     </div>
     
                     <div class="form-group row">
-                        <label class="col-form-label col-lg-2 @error('password') text-danger @enderror">Password</label>
+                        <label class="col-form-label col-lg-2 @error('password') text-danger @enderror" for="password">Password</label>
                         <div class="col-lg-10">
                             <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" id="password" placeholder="Password">
                             @error('password')
@@ -75,7 +75,7 @@
                     </div>
                     
                     <div class="form-group row">
-                        <label class="col-form-label col-lg-2">Konfirmasi Password</label>
+                        <label class="col-form-label col-lg-2" for="password_confirmation">Konfirmasi Password</label>
                         <div class="col-lg-10">
                             <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" placeholder="Password Confirmation">
                         </div>

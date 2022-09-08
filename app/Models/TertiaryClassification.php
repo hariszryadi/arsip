@@ -9,6 +9,8 @@ class TertiaryClassification extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name', 'description'];
+    
     public function secondary() {
         return $this->belongsTo(SecondaryClassification::class, 'secondary_classification_id');
     }

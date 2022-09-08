@@ -13,6 +13,11 @@ class SecondaryClassificationController extends Controller
      * Folder views
      */
     protected $_view = 'classification.secondary.';
+    
+    /**
+     * Route index
+     */
+    protected $_route = 'secondary-classification.index';
 
     /**
      * Create a new controller instance.
@@ -48,7 +53,7 @@ class SecondaryClassificationController extends Controller
                                     </a>
 
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="#" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
+                                        <a href="'.route('secondary-classification.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
                                     </div>
                                 </div>
                             </div>';
@@ -99,7 +104,8 @@ class SecondaryClassificationController extends Controller
      */
     public function edit($id)
     {
-        //
+        $secondary = SecondaryClassification::find($id);
+        return view($this->_view.'edit', compact('secondary'));
     }
 
     /**
@@ -111,7 +117,17 @@ class SecondaryClassificationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|max:255'
+        ]);
+
+        $secondary = SecondaryClassification::find($id);
+        $secondary->update([
+            'name' => $request->name,
+            'description' => $request->description
+        ]);
+
+        return redirect()->route($this->_route)->with('success', 'Data klasifikasi sekunder berhasil diubah');
     }
 
     /**
