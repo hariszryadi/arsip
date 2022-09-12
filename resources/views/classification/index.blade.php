@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-{{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css"> --}}
 <!-- Inner content -->
 <div class="content-inner">
 

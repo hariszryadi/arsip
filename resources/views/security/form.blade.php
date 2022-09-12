@@ -8,7 +8,7 @@
     <div class="page-header page-header-light">
         <div class="page-header-content header-elements-lg-inline">
             <div class="page-title d-flex">
-                <h4>Klasifikasi</h4>
+                <h4>Keamanan</h4>
             </div>
         </div>
 
@@ -17,7 +17,7 @@
                 <div class="breadcrumb">
                     <a href="{{ route('home') }}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
                     <span class="breadcrumb-item">Master</span>
-                    <span class="breadcrumb-item active">Klasifikasi</span>
+                    <span class="breadcrumb-item active">Keamanan</span>
                 </div>
 
             </div>
@@ -31,34 +31,22 @@
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Edit Klasifikasi</h3>
+                <h3 class="card-title">{{ isset($security) ? 'Edit Keamanan' : 'Tambah Keamanan' }}</h3>
             </div>
             
             <div class="card-body">
-                <form class="form-horizontal" id="form" action="{{ route('classification.update', $primary->id) }}" method="POST">
+                @isset($security)
+                <form class="form-horizontal" id="form" action="{{ route('security.update', $security->id) }}" method="POST">
                     @csrf
                     @method('PUT')
-                    <div class="form-group row">
-                        <label class="col-form-label col-lg-2">Kode</label>
-                        <div class="col-lg-10">
-                            <input type="text" class="form-control" id="code" value="{{ $primary->code }}" readonly>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group row">
-                        <label class="col-form-label col-lg-2" for="category">Kategori</label>
-                        <div class="col-lg-10">
-                            <select class="form-control" name="category" id="category">
-                                <option value="1" {{ $primary->category == '1' ? 'selected' : '' }}>Fasilitatif</option>
-                                <option value="2" {{ $primary->category == '2' ? 'selected' : '' }}>Subtantif</option>
-                            </select>
-                        </div>
-                    </div>
-
+                @else
+                <form class="form-horizontal" id="form" action="{{ route('security.store') }}" method="POST">
+                    @csrf
+                @endisset
                     <div class="form-group row">
                         <label class="col-form-label col-lg-2 @error('name') text-danger @enderror" for="name">Nama</label>
                         <div class="col-lg-10">
-                            <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" value="{{ old('name')!== null ? old('name') : $primary->name }}" placeholder="Nama">
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" value="{{ old('name')!== null ? old('name') : (isset($security) ? $security->name : '') }}" placeholder="Nama">
                             @error('name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -68,8 +56,8 @@
                     </div>
     
                     <div class="form-group" style="margin-top: 50px; margin-left: 10px;">
-                        <a class="btn btn-danger" href="{{ route('classification.index') }}">Kembali</a>
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <a class="btn btn-danger" href="{{ route('security.index') }}">Kembali</a>
+                        <button type="submit" class="btn btn-primary">{{ isset($security) ? 'Update' : 'Simpan' }}</button>
                     </div>
                 </form>
             </div>

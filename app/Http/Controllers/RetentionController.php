@@ -3,21 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use App\Models\User;
+use App\Models\RetentionClassification;
 use DataTables;
 
-class UserController extends Controller
+class RetentionController extends Controller
 {
     /**
      * Folder views
      */
-    protected $_view = 'user.';
-    
+    protected $_view = 'retention.';
+
     /**
      * Route index
      */
-    protected $_route = 'user.index';
+    protected $_route = 'retention.index';
 
     /**
      * Create a new controller instance.
@@ -36,20 +35,20 @@ class UserController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            return Datatables::of(User::orderBy('id')->get())
+            return Datatables::of(RetentionClassification::orderBy('id')->get())
                 ->editColumn('created_at', function($data) {
-                    $date = $data->created_at;
-                    return $date->format('Y-m-d');
+                    if ($data->created_at != null) {
+                        $date = $data->created_at;
+                        return $date->format('Y-m-d H:i:s');
+                    }
+                })
+                ->editColumn('updated_at', function($data) {
+                    if ($data->updated_at != null) {
+                        $date = $data->updated_at;
+                        return $date->format('Y-m-d H:i:s');
+                    }
                 })
                 ->addColumn('action', function($data){
-                    if ($data->email == 'superadmin@arsip.id') {
-                        $disabled = 'disabled';
-                        $text = 'text-secondary';
-                    } else {
-                        $disabled = '';
-                        $text = 'text-danger';
-                    }
-
                     return '<div class="list-icons">
                                 <div class="dropdown">
                                     <a href="#" class="list-icons-item" data-toggle="dropdown">
@@ -57,8 +56,8 @@ class UserController extends Controller
                                     </a>
 
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="'.route('user.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
-                                        <a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item" '.$disabled.'><i class="icon-bin '.$text.'"></i> Hapus</a>
+                                        <a href="'.route('retention.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
+                                        <a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i> Hapus</a>
                                     </div>
                                 </div>
                             </div>';
@@ -76,7 +75,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view($this->_view.'create');
+        return view($this->_view.'form');
     }
 
     /**
@@ -89,17 +88,13 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
+        RetentionClassification::create([
+            'name' => $request->name
         ]);
 
-        return redirect()->route($this->_route)->with('success', 'Data user berhasil ditambahkan');
+        return redirect()->route($this->_route)->with('success', 'Data retensi berhasil ditambahkan');
     }
 
     /**
@@ -121,8 +116,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
-        return view($this->_view.'edit', compact('user'));
+        $retention = RetentionClassification::find($id);
+        return view($this->_view.'form', compact('retention'));
     }
 
     /**
@@ -136,29 +131,14 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:255',
-            'email' => 'required|email|unique:users,email,'.$id
         ]);
 
-        if ($request->password != '') {
-            $this->validate($request, [
-                'password' => 'confirmed'
-            ]);
+        $retention = RetentionClassification::find($id);
+        $retention->update([
+            'name' => $request->name
+        ]);
 
-            $user = User::find($id);
-            $user->update([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password)
-            ]);
-        } else {
-            $user = User::find($id);
-            $user->update([
-                'name' => $request->name,
-                'email' => $request->email
-            ]);
-        }
-
-        return redirect()->route($this->_route)->with('success', 'Data user berhasil diubah');
+        return redirect()->route($this->_route)->with('success', 'Data retensi berhasil diubah');
     }
 
     /**
@@ -169,9 +149,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
+        $retetntion = RetentionClassification::findOrFail($id);
+        $retetntion->delete();
 
-        return response()->json(['success' => 'Data user berhasil dihapus']);
+        return response()->json(['success' => 'Data retensi berhasil dihapus']);
     }
 }
