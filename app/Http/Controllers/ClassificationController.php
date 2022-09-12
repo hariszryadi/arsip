@@ -4,21 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PrimaryClassification;
-use App\Models\TertiaryClassification;
 use App\Models\SecondaryClassification;
+use App\Models\TertiaryClassification;
 use DataTables;
 
-class TertiaryClassificationController extends Controller
+class ClassificationController extends Controller
 {
     /**
      * Folder views
      */
-    protected $_view = 'classification.tertiary.';
+    protected $_view = 'classification.';
 
     /**
      * Route index
      */
-    protected $_route = 'tertiary-classification.index';
+    protected $_route = 'classification.index';
 
     /**
      * Create a new controller instance.
@@ -36,20 +36,15 @@ class TertiaryClassificationController extends Controller
      */
     public function index()
     {
-        $primaries = PrimaryClassification::orderBy('id')->get();
-        $secondaries = SecondaryClassification::orderBy('id')->get();
-
         if (request()->ajax()) {
-            $query = TertiaryClassification::with('secondary');
-            if (request()->filter_primary != null) {
-                $query->whereRelation('secondary', 'primary_classification_id', request()->filter_primary);
-            }
-            if (request()->filter_secondary != null) {
-                $query->where('secondary_classification_id', request()->filter_secondary);
-            }
-            $query->orderBy('id')->get();
-
-            return Datatables::of($query)
+            return Datatables::of(PrimaryClassification::orderBy('id')->get())
+                ->editColumn('category', function($data) {
+                    if ($data->category == '1') {
+                        return 'Fasilitatif';
+                    } else {
+                        return 'Subtantif';
+                    }
+                })
                 ->addColumn('action', function($data){
                     return '<div class="list-icons">
                                 <div class="dropdown">
@@ -58,7 +53,7 @@ class TertiaryClassificationController extends Controller
                                     </a>
 
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="'.route('tertiary-classification.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
+                                        <a href="'.route('classification.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
                                     </div>
                                 </div>
                             </div>';
@@ -66,7 +61,7 @@ class TertiaryClassificationController extends Controller
                 ->make(true);
         }
 
-        return view($this->_view.'index', compact('primaries', 'secondaries'));
+        return view($this->_view.'index');
     }
 
     /**
@@ -109,8 +104,8 @@ class TertiaryClassificationController extends Controller
      */
     public function edit($id)
     {
-        $tertiary = TertiaryClassification::find($id);
-        return view($this->_view.'edit', compact('tertiary'));
+        $primary = PrimaryClassification::find($id);
+        return view($this->_view.'edit', compact('primary'));
     }
 
     /**
@@ -126,13 +121,13 @@ class TertiaryClassificationController extends Controller
             'name' => 'required|max:255'
         ]);
 
-        $tertiary = TertiaryClassification::find($id);
-        $tertiary->update([
-            'name' => $request->name,
-            'description' => $request->description
+        $primary = PrimaryClassification::find($id);
+        $primary->update([
+            'category' => $request->category,
+            'name' => $request->name
         ]);
 
-        return redirect()->route($this->_route)->with('success', 'Data klasifikasi tersier berhasil diubah');
+        return redirect()->route($this->_route)->with('success', 'Data klasifikasi berhasil diubah');
     }
 
     /**
@@ -162,6 +157,30 @@ class TertiaryClassificationController extends Controller
             }
             return response()->json([
                 'data' => $secondary
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get data tertiary classification by primary secondary id
+     * 
+     * @param \Illuminate\Http\Request  $request
+     * @return json
+     */
+    public function get_tertiary(Request $request)
+    {
+        try {
+            if ($request->secondary_id == '') {
+                $tertiary = TertiaryClassification::orderBy('id')->get();
+            } else {
+                $tertiary = TertiaryClassification::where('secondary_classification_id', $request->secondary_id)->orderBy('id')->get();
+            }
+            return response()->json([
+                'data' => $tertiary
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

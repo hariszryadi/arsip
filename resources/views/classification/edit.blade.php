@@ -35,7 +35,7 @@
             </div>
             
             <div class="card-body">
-                <form class="form-horizontal" id="form" action="{{ route('primary-classification.update', $primary->id) }}" method="POST">
+                <form class="form-horizontal" id="form" action="{{ route('classification.update', $primary->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="form-group row">
@@ -68,7 +68,7 @@
                     </div>
     
                     <div class="form-group" style="margin-top: 50px; margin-left: 10px;">
-                        <a class="btn btn-danger" href="{{ route('primary-classification.index') }}">Kembali</a>
+                        <a class="btn btn-danger" href="{{ route('classification.index') }}">Kembali</a>
                         <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                 </form>

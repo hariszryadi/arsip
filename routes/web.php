@@ -3,9 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\PrimaryClassificationController;
-use App\Http\Controllers\SecondaryClassificationController;
-use App\Http\Controllers\TertiaryClassificationController;
+use App\Http\Controllers\ArchivesController;
+use App\Http\Controllers\ClassificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,10 +21,10 @@ Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 // Master
-Route::resource('primary-classification', PrimaryClassificationController::class);
-Route::resource('secondary-classification', SecondaryClassificationController::class);
-Route::resource('tertiary-classification', TertiaryClassificationController::class);
-Route::post('tertiary-classification-get-secondary', [TertiaryClassificationController::class, 'get_secondary'])->name('tertiary-classification-get-secondary');
-
+Route::resource('classification', ClassificationController::class);
+Route::post('classification-get-secondary', [ClassificationController::class, 'get_secondary'])->name('classification-get-secondary');
+Route::post('classification-get-tertiary', [ClassificationController::class, 'get_tertiary'])->name('classification-get-tertiary');
+// Data
+Route::resource('archives', ArchivesController::class);
 // User Config
 Route::resource('user', UserController::class);

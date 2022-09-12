@@ -45,18 +45,21 @@
                     </span>
                 </a>
             </li>
-            <li class="nav-item nav-item-submenu {{ request()->is('primary-classification') || request()->is('primary-classification/*') || request()->is('secondary-classification') || request()->is('secondary-classification/*') || request()->is('tertiary-classification') || request()->is('tertiary-classification/*') ? 'nav-item-expanded nav-item-open' : '' }}">
+            <li class="nav-item nav-item-submenu {{ request()->is('classification') || request()->is('classification/*') || request()->is('secondary-classification') || request()->is('secondary-classification/*') || request()->is('tertiary-classification') || request()->is('tertiary-classification/*') ? 'nav-item-expanded nav-item-open' : '' }}">
                 <a href="#" class="nav-link"><i class="icon-cube3"></i> <span>Master</span></a>
 
                 <ul class="nav nav-group-sub" data-submenu-title="Master">
-                    <li class="nav-item"><a href="{{ route('primary-classification.index') }}" class="nav-link {{ request()->is('primary-classification') || request()->is('primary-classification/*') ? 'active' : '' }}">Klasifikasi Primer</a></li>
-                    <li class="nav-item"><a href="{{ route('secondary-classification.index') }}" class="nav-link {{ request()->is('secondary-classification') || request()->is('secondary-classification/*') ? 'active' : '' }}">Klasifikasi Sekunder</a></li>
-                    <li class="nav-item"><a href="{{ route('tertiary-classification.index') }}" class="nav-link {{ request()->is('tertiary-classification') || request()->is('tertiary-classification/*') ? 'active' : '' }}">Klasifikasi Tersier</a></li>
+                    <li class="nav-item"><a href="{{ route('classification.index') }}" class="nav-link {{ request()->is('classification') || request()->is('classification/*') ? 'active' : '' }}">Klasifikasi</a></li>
                 </ul>
             </li>
-            <!-- /main -->
+            
+            <li class="nav-item nav-item-submenu {{ request()->is('archives') || request()->is('archives/*') ? 'nav-item-expanded nav-item-open' : '' }}">
+                <a href="#" class="nav-link"><i class="icon-stack"></i> <span>Data</span></a>
+                <ul class="nav nav-group-sub" data-submenu-title="Data">
+                    <li class="nav-item"><a href="{{ route('archives.index') }}" class="nav-link {{ request()->is('archives') || request()->is('archives/*') ? 'active' : '' }}">Arsip</a></li>
+                </ul>
+            </li>
 
-            <!-- Page kits -->
             <li class="nav-item nav-item-submenu {{ request()->is('user') || request()->is('user/*') ? 'nav-item-expanded nav-item-open' : '' }}">
                 <a href="#" class="nav-link"><i class="icon-user-lock"></i> <span>User Config</span></a>
                 <ul class="nav nav-group-sub" data-submenu-title="User Config">
@@ -64,7 +67,7 @@
                     <li class="nav-item"><a href="{{ route('user.index') }}" class="nav-link {{ request()->is('user') || request()->is('user/*') ? 'active' : '' }}">User</a></li>
                 </ul>
             </li>
-            <!-- /page kits -->
+            <!-- /main -->
 
         </ul>
     </div>

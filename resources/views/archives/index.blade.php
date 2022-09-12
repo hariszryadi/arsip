@@ -8,7 +8,7 @@
     <div class="page-header page-header-light">
         <div class="page-header-content header-elements-lg-inline">
             <div class="page-title d-flex">
-                <h4>Klasifikasi Primer</h4>
+                <h4>Arsip</h4>
             </div>
         </div>
 
@@ -16,8 +16,8 @@
             <div class="d-flex">
                 <div class="breadcrumb">
                     <a href="{{ route('home') }}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
-                    <span class="breadcrumb-item">Master</span>
-                    <span class="breadcrumb-item active">Klasifikasi Primer</span>
+                    <span class="breadcrumb-item">Data</span>
+                    <span class="breadcrumb-item active">Arsip</span>
                 </div>
 
             </div>
@@ -31,17 +31,21 @@
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">List Klasifikasi Primer</h3>
+                <h3 class="card-title">List Arsip</h3>
             </div>
             
             <div class="card-body">
+                <div class="form-group text-left">
+                    <a href="{{ route('archives.create')}}" class="btn btn-primary"><i class="icon-file-plus"></i> Tambah</a>
+                </div>
+
                 <table class="table datatable-basic table-hover table-bordered striped table-responsive">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Kategori</th>
-                            <th>Kode</th>
-                            <th>Nama</th>
+                            <th>Pencipta Arsip</th>
+                            <th>No Berkas</th>
+                            <th>Tanggal Buat</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -66,7 +70,7 @@
                 bLengthChange: true,
                 pageLength: 10,
                 ajax: {
-                    url: "{{ route('primary-classification.index') }}",
+                    url: "{{ route('archives.index') }}",
                 },
                 columns: [
                     {
@@ -74,10 +78,10 @@
                             return meta.row + meta.settings._iDisplayStart + 1;
                         },
                     },
-                    { data: "category" },
-                    { data: "code" },
-                    { data: "name" },
-                    { data: "action", orderable: false }
+                    { data: "created_by" },
+                    { data: "file_number" },
+                    { data: "created_at" },
+                    { data: "action", orderable: false}
                 ],
                 columnDefs: [
                     { width: "5%", "targets": [0] },
@@ -89,6 +93,39 @@
                     searchPlaceholder: 'Type to filter...',
                     lengthMenu: '<span>Show:</span> _MENU_',
                     paginate: { 'first': 'First', 'last': 'Last', 'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;', 'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;' }
+                }
+            });
+
+        })
+        
+        $(document).on('click', '#delete', function () {
+            var id = $(this).attr('data-id');
+            var url = "{{ route('archives.destroy', ":id") }}";
+            url = url.replace(':id', id);
+
+            swalInit.fire({
+                title: "Apakah Anda Yakin Akan Menghapus Data ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Ya, Hapus!",
+                cancelButtonText: "Kembali"
+            }).then(function(result) {
+                if(result.value) {
+                    $.ajax({
+                        url: url,
+                        method: "DELETE",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (resp) {
+                            $('.datatable-basic').DataTable().ajax.reload();
+                            swalInit.fire('Sukses!', resp.success, 'success');
+                        },
+                        error: function (xhr, status, error) {
+                            swalInit.fire('Error!', xhr.responseText, 'error');
+                        }
+                    })
                 }
             });
         })

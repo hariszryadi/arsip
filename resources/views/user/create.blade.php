@@ -35,7 +35,7 @@
             </div>
             
             <div class="card-body">
-                <form class="form-horizontal" id="form" action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
+                <form class="form-horizontal" id="form" action="{{ route('user.store') }}" method="POST">
                     @csrf
                     <div class="form-group row">
                         <label class="col-form-label col-lg-2 @error('name') text-danger @enderror" for="name">Nama</label>
