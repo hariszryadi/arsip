@@ -25,6 +25,6 @@
                                 input: 'form-control'
                             }
                         });
-        swalInit.fire('Error!', resp.error, 'error');
+        swalInit.fire('Error!', message, 'error');
     </script>
 @endif

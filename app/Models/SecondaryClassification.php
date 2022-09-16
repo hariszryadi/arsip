@@ -16,6 +16,6 @@ class SecondaryClassification extends Model
     }
 
     public function tertiary() {
-        return $this->hasMany(SecondaryClassification::class);
+        return $this->hasMany(TertiaryClassification::class);
     }
 }

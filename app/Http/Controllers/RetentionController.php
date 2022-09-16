@@ -36,18 +36,6 @@ class RetentionController extends Controller
     {
         if (request()->ajax()) {
             return Datatables::of(RetentionClassification::orderBy('id')->get())
-                ->editColumn('created_at', function($data) {
-                    if ($data->created_at != null) {
-                        $date = $data->created_at;
-                        return $date->format('Y-m-d H:i:s');
-                    }
-                })
-                ->editColumn('updated_at', function($data) {
-                    if ($data->updated_at != null) {
-                        $date = $data->updated_at;
-                        return $date->format('Y-m-d H:i:s');
-                    }
-                })
                 ->addColumn('action', function($data){
                     return '<div class="list-icons">
                                 <div class="dropdown">

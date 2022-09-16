@@ -36,18 +36,6 @@ class SecurityController extends Controller
     {
         if (request()->ajax()) {
             return Datatables::of(SecurityClassification::orderBy('id')->get())
-                ->editColumn('created_at', function($data) {
-                    if ($data->created_at != null) {
-                        $date = $data->created_at;
-                        return $date->format('Y-m-d H:i:s');
-                    }
-                })
-                ->editColumn('updated_at', function($data) {
-                    if ($data->updated_at != null) {
-                        $date = $data->updated_at;
-                        return $date->format('Y-m-d H:i:s');
-                    }
-                })
                 ->addColumn('action', function($data){
                     return '<div class="list-icons">
                                 <div class="dropdown">
@@ -88,10 +76,16 @@ class SecurityController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:255',
+            'access_rights' => 'required|max:255',
+            'basic_consideration' => 'required|max:255',
+            'processing_unit' => 'required|max:255'
         ]);
 
         SecurityClassification::create([
-            'name' => $request->name
+            'name' => $request->name,
+            'access_rights' => $request->access_rights,
+            'basic_consideration' => $request->basic_consideration,
+            'processing_unit' => $request->processing_unit
         ]);
 
         return redirect()->route($this->_route)->with('success', 'Data keamanan berhasil ditambahkan');
@@ -131,11 +125,17 @@ class SecurityController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:255',
+            'access_rights' => 'required|max:255',
+            'basic_consideration' => 'required|max:255',
+            'processing_unit' => 'required|max:255'
         ]);
 
         $security = SecurityClassification::find($id);
         $security->update([
-            'name' => $request->name
+            'name' => $request->name,
+            'access_rights' => $request->access_rights,
+            'basic_consideration' => $request->basic_consideration,
+            'processing_unit' => $request->processing_unit
         ]);
 
         return redirect()->route($this->_route)->with('success', 'Data keamanan berhasil diubah');

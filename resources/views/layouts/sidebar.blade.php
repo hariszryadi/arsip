@@ -45,13 +45,14 @@
                     </span>
                 </a>
             </li>
-            <li class="nav-item nav-item-submenu {{ request()->is('classification') || request()->is('classification/*') || request()->is('security') || request()->is('security/*') || request()->is('retention') || request()->is('retention/*') ? 'nav-item-expanded nav-item-open' : '' }}">
+            <li class="nav-item nav-item-submenu {{ request()->is('classification') || request()->is('classification/*') || request()->is('security') || request()->is('security/*') || request()->is('retention') || request()->is('retention/*') || request()->is('mapping') || request()->is('mapping/*') ? 'nav-item-expanded nav-item-open' : '' }}">
                 <a href="#" class="nav-link"><i class="icon-cube3"></i> <span>Master</span></a>
 
                 <ul class="nav nav-group-sub" data-submenu-title="Master">
                     <li class="nav-item"><a href="{{ route('classification.index') }}" class="nav-link {{ request()->is('classification') || request()->is('classification/*') ? 'active' : '' }}">Klasifikasi</a></li>
                     <li class="nav-item"><a href="{{ route('security.index') }}" class="nav-link {{ request()->is('security') || request()->is('security/*') ? 'active' : '' }}">Keamanan</a></li>
                     <li class="nav-item"><a href="{{ route('retention.index') }}" class="nav-link {{ request()->is('retention') || request()->is('retention/*') ? 'active' : '' }}">Retensi</a></li>
+                    <li class="nav-item"><a href="{{ route('mapping.index') }}" class="nav-link {{ request()->is('mapping') || request()->is('mapping/*') ? 'active' : '' }}">Mapping</a></li>
                 </ul>
             </li>
             

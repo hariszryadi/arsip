@@ -44,8 +44,9 @@
                         <tr>
                             <th>#</th>
                             <th>Nama</th>
-                            <th>Tanggal Buat</th>
-                            <th>Tanggal Update</th>
+                            <th>Hak Akses</th>
+                            <th>Dasar Pertimbangan</th>
+                            <th>Unit Pengolah</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -79,13 +80,14 @@
                         },
                     },
                     { data: "name" },
-                    { data: "created_at" },
-                    { data: "updated_at" },
+                    { data: "access_rights" },
+                    { data: "basic_consideration" },
+                    { data: "processing_unit" },
                     { data: "action", orderable: false}
                 ],
                 columnDefs: [
                     { width: "5%", "targets": [0] },
-                    { className: "text-center", "targets": [4] }
+                    { className: "text-center", "targets": [5] }
                 ],
                 dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
                 language: {

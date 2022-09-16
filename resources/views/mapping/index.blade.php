@@ -8,7 +8,7 @@
     <div class="page-header page-header-light">
         <div class="page-header-content header-elements-lg-inline">
             <div class="page-title d-flex">
-                <h4>Retensi</h4>
+                <h4>Mapping</h4>
             </div>
         </div>
 
@@ -17,7 +17,7 @@
                 <div class="breadcrumb">
                     <a href="{{ route('home') }}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
                     <span class="breadcrumb-item">Master</span>
-                    <span class="breadcrumb-item active">Retensi</span>
+                    <span class="breadcrumb-item active">Mapping</span>
                 </div>
 
             </div>
@@ -31,19 +31,24 @@
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">List Retensi</h3>
+                <h3 class="card-title">List Mapping</h3>
             </div>
             
             <div class="card-body">
                 <div class="form-group text-left">
-                    <a href="{{ route('retention.create')}}" class="btn btn-primary"><i class="icon-file-plus"></i> Tambah</a>
+                    <a href="{{ route('mapping.create')}}" class="btn btn-primary"><i class="icon-file-plus"></i> Tambah</a>
                 </div>
 
                 <table class="table datatable-basic table-hover table-bordered striped table-responsive">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Nama</th>
+                            <th>Klasifikasi</th>
+                            <th>Jenis Arsip</th>
+                            <th>Keamanan</th>
+                            <th>Retensi</th>
+                            <th>Aktif</th>
+                            <th>Inaktif</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -68,7 +73,7 @@
                 bLengthChange: true,
                 pageLength: 10,
                 ajax: {
-                    url: "{{ route('retention.index') }}",
+                    url: "{{ route('mapping.index') }}",
                 },
                 columns: [
                     {
@@ -77,12 +82,16 @@
                         },
                     },
                     { data: "name" },
+                    { data: "archive_type" },
+                    { data: "security" },
+                    { data: "retention" },
+                    { data: "active" },
+                    { data: "inactive" },
                     { data: "action", orderable: false}
                 ],
                 columnDefs: [
                     { width: "5%", "targets": [0] },
-                    { width: "15%", "targets": [2] },
-                    { className: "text-center", "targets": [2] }
+                    { className: "text-center", "targets": [5, 6, 7] }
                 ],
                 dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
                 language: {
@@ -97,7 +106,7 @@
         
         $(document).on('click', '#delete', function () {
             var id = $(this).attr('data-id');
-            var url = "{{ route('retention.destroy', ":id") }}";
+            var url = "{{ route('mapping.destroy', ":id") }}";
             url = url.replace(':id', id);
             var disabled = $(this).attr('disabled');
 

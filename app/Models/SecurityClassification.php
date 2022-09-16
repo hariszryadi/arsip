@@ -9,5 +9,5 @@ class SecurityClassification extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'access_rights', 'basic_consideration', 'processing_unit'];
 }

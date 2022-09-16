@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSecurityClassificationsTable extends Migration
+class CreateMappingTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,15 @@ class CreateSecurityClassificationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('security_classifications', function (Blueprint $table) {
+        Schema::create('mapping', function (Blueprint $table) {
             $table->id();
+            $table->string('code');
             $table->string('name');
-            $table->string('access_rights');
-            $table->string('basic_consideration');
-            $table->string('processing_unit');
+            $table->string('archive_type');
+            $table->string('security');
+            $table->string('retention');
+            $table->integer('active');
+            $table->integer('inactive');
             $table->timestamps();
         });
     }
@@ -30,6 +33,6 @@ class CreateSecurityClassificationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('security_classifications');
+        Schema::dropIfExists('mapping');
     }
 }

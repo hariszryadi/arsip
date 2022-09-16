@@ -54,6 +54,42 @@
                             @enderror
                         </div>
                     </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-form-label col-lg-2 @error('access_rights') text-danger @enderror" for="access_rights">Hak Akses</label>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control @error('access_rights') is-invalid @enderror" name="access_rights" id="access_rights" value="{{ old('access_rights')!== null ? old('access_rights') : (isset($security) ? $security->access_rights : '') }}" placeholder="Hak Akses">
+                            @error('access_rights')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-form-label col-lg-2 @error('basic_consideration') text-danger @enderror" for="basic_consideration">Dasar Pertimbangan</label>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control @error('basic_consideration') is-invalid @enderror" name="basic_consideration" id="basic_consideration" value="{{ old('basic_consideration')!== null ? old('basic_consideration') : (isset($security) ? $security->basic_consideration : '') }}" placeholder="Dasar Pertimbangan">
+                            @error('basic_consideration')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-form-label col-lg-2 @error('processing_unit') text-danger @enderror" for="processing_unit">Unit Pengolah</label>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control @error('processing_unit') is-invalid @enderror" name="processing_unit" id="processing_unit" value="{{ old('processing_unit')!== null ? old('processing_unit') : (isset($security) ? $security->processing_unit : '') }}" placeholder="Unit Pengolah">
+                            @error('processing_unit')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
     
                     <div class="form-group" style="margin-top: 50px; margin-left: 10px;">
                         <a class="btn btn-danger" href="{{ route('security.index') }}">Kembali</a>
