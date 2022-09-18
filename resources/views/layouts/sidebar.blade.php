@@ -56,10 +56,10 @@
                 </ul>
             </li>
             
-            <li class="nav-item nav-item-submenu {{ request()->is('archives') || request()->is('archives/*') ? 'nav-item-expanded nav-item-open' : '' }}">
+            <li class="nav-item nav-item-submenu {{ request()->is('archives-static') || request()->is('archives-static/*') ? 'nav-item-expanded nav-item-open' : '' }}">
                 <a href="#" class="nav-link"><i class="icon-stack"></i> <span>Data</span></a>
                 <ul class="nav nav-group-sub" data-submenu-title="Data">
-                    <li class="nav-item"><a href="{{ route('archives.index') }}" class="nav-link {{ request()->is('archives') || request()->is('archives/*') ? 'active' : '' }}">Arsip</a></li>
+                    <li class="nav-item"><a href="{{ route('archives-static.index') }}" class="nav-link {{ request()->is('archives-static') || request()->is('archives-static/*') ? 'active' : '' }}">Arsip Statis</a></li>
                 </ul>
             </li>
 

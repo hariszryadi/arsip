@@ -8,7 +8,7 @@
     <div class="page-header page-header-light">
         <div class="page-header-content header-elements-lg-inline">
             <div class="page-title d-flex">
-                <h4>Arsip</h4>
+                <h4>Arsip Statis</h4>
             </div>
         </div>
 
@@ -17,7 +17,7 @@
                 <div class="breadcrumb">
                     <a href="{{ route('home') }}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
                     <span class="breadcrumb-item">Data</span>
-                    <span class="breadcrumb-item active">Arsip</span>
+                    <span class="breadcrumb-item active">Arsip Statis</span>
                 </div>
 
             </div>
@@ -31,21 +31,24 @@
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">List Arsip</h3>
+                <h3 class="card-title">List Arsip Statis</h3>
             </div>
             
             <div class="card-body">
                 <div class="form-group text-left">
-                    <a href="{{ route('archives.create')}}" class="btn btn-primary"><i class="icon-file-plus"></i> Tambah</a>
+                    <a href="{{ route('archives-static.create')}}" class="btn btn-primary"><i class="icon-file-plus"></i> Tambah</a>
                 </div>
 
                 <table class="table datatable-basic table-hover table-bordered striped table-responsive">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Pencipta Arsip</th>
-                            <th>No Berkas</th>
-                            <th>Tanggal Buat</th>
+                            <th>Nama Arsip</th>
+                            <th>Jenis Arsip</th>
+                            <th>Tahun</th>
+                            <th>Jml. Berkas</th>
+                            <th>Tk. Perkembangan</th>
+                            <th>Lokasi</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -70,7 +73,7 @@
                 bLengthChange: true,
                 pageLength: 10,
                 ajax: {
-                    url: "{{ route('archives.index') }}",
+                    url: "{{ route('archives-static.index') }}",
                 },
                 columns: [
                     {
@@ -78,14 +81,17 @@
                             return meta.row + meta.settings._iDisplayStart + 1;
                         },
                     },
-                    { data: "created_by" },
-                    { data: "file_number" },
-                    { data: "created_at" },
+                    { data: "name" },
+                    { data: "mapping.archive_type" },
+                    { data: "year" },
+                    { data: "amount" },
+                    { data: "dev_level" },
+                    { data: "location" },
                     { data: "action", orderable: false}
                 ],
                 columnDefs: [
                     { width: "5%", "targets": [0] },
-                    { className: "text-center", "targets": [4] }
+                    { className: "text-center", "targets": [7] }
                 ],
                 dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
                 language: {
@@ -100,7 +106,7 @@
         
         $(document).on('click', '#delete', function () {
             var id = $(this).attr('data-id');
-            var url = "{{ route('archives.destroy', ":id") }}";
+            var url = "{{ route('archives-static.destroy', ":id") }}";
             url = url.replace(':id', id);
 
             swalInit.fire({

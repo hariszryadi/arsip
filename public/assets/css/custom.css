@@ -35,3 +35,7 @@ table.dataTable tr.dt-hasChild td.dt-control:before, #secondary-table tr.dt-hasC
     content: "-";
     background-color: #d33333;
 }
+
+.is-invalid + .select2-container--default .select2-selection--single {
+    border: 1px solid #ef5350;
+}

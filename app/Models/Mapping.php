@@ -20,4 +20,8 @@ class Mapping extends Model
         'active',
         'inactive'
     ];
+
+    public function archives() {
+        return $this->hasMany(Archives::class);
+    }
 }

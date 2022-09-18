@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MappingController;
-use App\Http\Controllers\ArchivesController;
+use App\Http\Controllers\ArchivesStaticController;
 use App\Http\Controllers\SecurityController;
 use App\Http\Controllers\RetentionController;
 use App\Http\Controllers\ClassificationController;
@@ -31,6 +31,6 @@ Route::resource('security', SecurityController::class);
 Route::resource('retention', RetentionController::class);
 Route::resource('mapping', MappingController::class);
 // Data
-Route::resource('archives', ArchivesController::class);
+Route::resource('archives-static', ArchivesStaticController::class);
 // User Config
 Route::resource('user', UserController::class);
