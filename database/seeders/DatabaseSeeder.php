@@ -19,5 +19,6 @@ class DatabaseSeeder extends Seeder
         $this->call(SecondaryClassificationsTableSeeder::class);
         $this->call(TertiaryClassificationsTableSeeder::class);
         $this->call(SecurityClassificationsTableSeeder::class);
+        $this->call(RetentionClassificationsTableSeeder::class);
     }
 }

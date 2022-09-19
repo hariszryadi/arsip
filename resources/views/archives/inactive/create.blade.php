@@ -88,12 +88,12 @@
                                 </span>
                             @enderror
                         </div>
-                        <label class="col-form-label col-lg-2 @error('amount') text-danger @enderror" for="amount">Jumlah Berkas</label>
+                        <label class="col-form-label col-lg-2 @error('amount') text-danger @enderror" for="amount">Jumlah</label>
                         <div class="col-lg-4">
                             <div class="input-group">
                                 <input type="number" class="form-control @error('amount') is-invalid @enderror" name="amount" min="0" value="{{ old('amount') !== null ? old('amount') : 0 }}">
                                 <span class="input-group-append">
-                                    <span class="input-group-text">Sampul</span>
+                                    <span class="input-group-text">Berkas</span>
                                 </span>
                                 @error('amount')
                                     <span class="invalid-feedback" role="alert">
