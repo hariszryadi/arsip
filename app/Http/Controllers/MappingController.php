@@ -48,8 +48,16 @@ class MappingController extends Controller
      */
     public function index()
     {
+        $query = DB::select("SELECT
+                    mapping.* 
+                FROM
+                    mapping
+                    LEFT JOIN primary_classifications ON SUBSTRING_INDEX( mapping.CODE, '.', 1 ) = primary_classifications.CODE 
+                ORDER BY
+                    primary_classifications.id");
+
         if (request()->ajax()) {
-            return Datatables::of(Mapping::orderBy('id')->get())
+            return Datatables::of($query)
                 ->editColumn('name', function($data) {
                     return $data->code.' - '.$data->name;
                 })
