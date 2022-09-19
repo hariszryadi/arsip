@@ -8,7 +8,7 @@
     <div class="page-header page-header-light">
         <div class="page-header-content header-elements-lg-inline">
             <div class="page-title d-flex">
-                <h4>Arsip Statis</h4>
+                <h4>Arsip Inaktif</h4>
             </div>
         </div>
 
@@ -17,7 +17,7 @@
                 <div class="breadcrumb">
                     <a href="{{ route('home') }}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
                     <span class="breadcrumb-item">Data</span>
-                    <span class="breadcrumb-item active">Arsip Statis</span>
+                    <span class="breadcrumb-item active">Arsip Inaktif</span>
                 </div>
 
             </div>
@@ -31,7 +31,7 @@
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Tambah Arsip</h3>
+                <h3 class="card-title">Tambah Arsip Inaktif</h3>
             </div>
             
             <div class="card-body">
@@ -173,11 +173,16 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-form-label col-lg-2" for="customFile">Upload Arsip</label>
+                        <label class="col-form-label col-lg-2 @error('file') text-danger @enderror" for="customFile">Upload Arsip</label>
                         <div class="col-lg-10">
                             <div class="custom-file">
-                                <input type="file" name="file" class="custom-file-input" id="customFile">
+                                <input type="file" name="file" class="custom-file-input @error('file') is-invalid @enderror" id="customFile">
                                 <label class="custom-file-label" for="customFile">Choose file</label>
+                                @error('file')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -218,6 +223,10 @@
 <script>
     $(document).on("input", ".numeric", function() {
         this.value = this.value.replace(/\D/g,'');
+    });
+
+    $(".custom-file-input").on("change", function(e){
+        $('.custom-file-label').text(e.target.files[0].name);
     });
 </script>
 @endsection

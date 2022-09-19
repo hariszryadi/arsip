@@ -56,10 +56,12 @@
                 </ul>
             </li>
             
-            <li class="nav-item nav-item-submenu {{ request()->is('archives-static') || request()->is('archives-static/*') ? 'nav-item-expanded nav-item-open' : '' }}">
+            <li class="nav-item nav-item-submenu {{ request()->is('archives-static') || request()->is('archives-static/*') || request()->is('archives-inactive') || request()->is('archives-inactive/*') || request()->is('archives-vital') || request()->is('archives-vital/*') ? 'nav-item-expanded nav-item-open' : '' }}">
                 <a href="#" class="nav-link"><i class="icon-stack"></i> <span>Data</span></a>
                 <ul class="nav nav-group-sub" data-submenu-title="Data">
                     <li class="nav-item"><a href="{{ route('archives-static.index') }}" class="nav-link {{ request()->is('archives-static') || request()->is('archives-static/*') ? 'active' : '' }}">Arsip Statis</a></li>
+                    <li class="nav-item"><a href="{{ route('archives-inactive.index') }}" class="nav-link {{ request()->is('archives-inactive') || request()->is('archives-inactive/*') ? 'active' : '' }}">Arsip Inaktif</a></li>
+                    <li class="nav-item"><a href="{{ route('archives-vital.index') }}" class="nav-link {{ request()->is('archives-vital') || request()->is('archives-vital/*') ? 'active' : '' }}">Arsip Vital</a></li>
                 </ul>
             </li>
 

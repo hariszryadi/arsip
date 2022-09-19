@@ -8,7 +8,7 @@
     <div class="page-header page-header-light">
         <div class="page-header-content header-elements-lg-inline">
             <div class="page-title d-flex">
-                <h4>Arsip Statis</h4>
+                <h4>Arsip Inaktif</h4>
             </div>
         </div>
 
@@ -17,7 +17,7 @@
                 <div class="breadcrumb">
                     <a href="{{ route('home') }}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
                     <span class="breadcrumb-item">Data</span>
-                    <span class="breadcrumb-item active">Arsip Statis</span>
+                    <span class="breadcrumb-item active">Arsip Inaktif</span>
                 </div>
 
             </div>
@@ -31,7 +31,7 @@
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Edit Arsip Statis</h3>
+                <h3 class="card-title">Edit Arsip Inaktif</h3>
             </div>
             
             <div class="card-body">
@@ -247,6 +247,10 @@
 <script>
     $(document).on("input", ".numeric", function() {
         this.value = this.value.replace(/\D/g,'');
+    });
+
+    $(".custom-file-input").on("change", function(e){
+        $('.custom-file-label').text(e.target.files[0].name);
     });
 </script>
 @endsection

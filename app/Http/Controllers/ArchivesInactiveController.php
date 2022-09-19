@@ -10,17 +10,17 @@ use App\Models\Archives;
 use DataTables;
 use File;
 
-class ArchivesStaticController extends Controller
+class ArchivesInactiveController extends Controller
 {
     /**
      * Folder views
      */
-    protected $_view = 'archives.static.';
+    protected $_view = 'archives.inactive.';
     
     /**
      * Route index
      */
-    protected $_route = 'archives-static.index';
+    protected $_route = 'archives-inactive.index';
 
     /**
      * Create a new controller instance.
@@ -39,7 +39,7 @@ class ArchivesStaticController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            return Datatables::of(Archives::with('mapping')->where('status', '1')->orderBy('id')->get())
+            return Datatables::of(Archives::with('mapping')->where('status', '2')->orderBy('id')->get())
                 ->editColumn('amount', function($data) {
                     return $data->amount . ' Sampul';
                 })
@@ -54,7 +54,7 @@ class ArchivesStaticController extends Controller
                                     </a>
 
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="'.route('archives-static.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
+                                        <a href="'.route('archives-inactive.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
                                         <a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i> Hapus</a>
                                     </div>
                                 </div>
@@ -104,7 +104,7 @@ class ArchivesStaticController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $file_name = date('YmdHis') . $file->getClientOriginalName();
-            $path = $file->storeAs('archive/static', $file_name, ['disk' => 'public']);
+            $path = $file->storeAs('archive/inactive', $file_name, ['disk' => 'public']);
         }
 
         Archives::create([
@@ -120,7 +120,7 @@ class ArchivesStaticController extends Controller
             'loc_box' => $request->loc_box,
             'file' => $path,
             'officer' => $request->officer,
-            'status' => '1'
+            'status' => '2'
         ]);
 
         return redirect()->route($this->_route)->with('success', 'Data arsip berhasil ditambahkan');
@@ -149,7 +149,6 @@ class ArchivesStaticController extends Controller
         $mapping = Mapping::orderBy('id')->get();
         $user = User::orderBy('id')->get();
         return view($this->_view.'edit', compact('archives', 'mapping', 'user'));
-
     }
 
     /**
@@ -180,7 +179,7 @@ class ArchivesStaticController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $file_name = date('YmdHis') . $file->getClientOriginalName();
-            $path = $file->storeAs('archive/static', $file_name, ['disk' => 'public']);
+            $path = $file->storeAs('archive/inactive', $file_name, ['disk' => 'public']);
 
             $old_path = \storage_path('app/public/' . $archives->file);
             File::delete($old_path);
