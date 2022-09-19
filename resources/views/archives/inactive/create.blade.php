@@ -35,7 +35,7 @@
             </div>
             
             <div class="card-body">
-                <form class="form-horizontal" id="form" action="{{ route('archives-static.store') }}" method="POST" enctype="multipart/form-data">
+                <form class="form-horizontal" id="form" action="{{ route('archives-inactive.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group row">
                         <label class="col-form-label col-lg-2 @error('name') text-danger @enderror" for="name">Nama Arsip</label>
@@ -205,7 +205,7 @@
                     </div>
     
                     <div class="form-group" style="margin-top: 50px; margin-left: 10px;">
-                        <a class="btn btn-danger" href="{{ route('archives-static.index') }}">Kembali</a>
+                        <a class="btn btn-danger" href="{{ route('archives-inactive.index') }}">Kembali</a>
                         <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                 </form>

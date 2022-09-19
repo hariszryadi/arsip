@@ -34,7 +34,10 @@ Route::resource('retention', RetentionController::class);
 Route::resource('mapping', MappingController::class);
 // Data
 Route::resource('archives-static', ArchivesStaticController::class);
+Route::get('archives-static/download/{id}', [ArchivesStaticController::class, 'download'])->name('archives-static.download');
 Route::resource('archives-inactive', ArchivesInactiveController::class);
+Route::get('archives-inactive/download/{id}', [ArchivesInactiveController::class, 'download'])->name('archives-inactive.download');
 Route::resource('archives-vital', ArchivesVitalController::class);
+Route::get('archives-vital/download/{id}', [ArchivesVitalController::class, 'download'])->name('archives-vital.download');
 // User Config
 Route::resource('user', UserController::class);

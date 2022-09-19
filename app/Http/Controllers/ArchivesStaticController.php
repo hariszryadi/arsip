@@ -54,6 +54,7 @@ class ArchivesStaticController extends Controller
                                     </a>
 
                                     <div class="dropdown-menu dropdown-menu-right">
+                                        <a href="'.route('archives-static.download', $data->id).'" class="dropdown-item"><i class="icon-download text-success"></i> Download</a>
                                         <a href="'.route('archives-static.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
                                         <a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i> Hapus</a>
                                     </div>
@@ -247,6 +248,27 @@ class ArchivesStaticController extends Controller
             default:
                 return '-';
                 break;
+        }
+    }
+
+    /**
+     * Download file archives
+     */
+    public function download($id)
+    {
+        try {
+            $archives = Archives::find($id);
+            $file = public_path('storage/' . $archives->file);
+            $headers = array(
+                'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                'Pragma' => 'no-cache',
+                'Expires' => '0',
+                'Content-Description' => 'File Transfer'
+            );
+
+            return response()->download($file, basename($file), $headers);
+        } catch (\Exception $e) {
+            abort(500);
         }
     }
 }

@@ -35,7 +35,7 @@
             </div>
             
             <div class="card-body">
-                <form class="form-horizontal" id="form" action="{{ route('archives-static.update', $archives->id) }}" method="POST" enctype="multipart/form-data">
+                <form class="form-horizontal" id="form" action="{{ route('archives-inactive.update', $archives->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="form-group row">
@@ -229,7 +229,7 @@
                     </div>
     
                     <div class="form-group" style="margin-top: 50px; margin-left: 10px;">
-                        <a class="btn btn-danger" href="{{ route('archives-static.index') }}">Kembali</a>
+                        <a class="btn btn-danger" href="{{ route('archives-inactive.index') }}">Kembali</a>
                         <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                 </form>
