@@ -17,7 +17,7 @@ class CreateMappingTable extends Migration
             $table->id();
             $table->string('code');
             $table->string('name');
-            $table->string('archive_type');
+            $table->text('archive_type');
             $table->string('security');
             $table->string('retention');
             $table->integer('active');

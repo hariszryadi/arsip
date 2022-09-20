@@ -130,16 +130,12 @@ class MappingController extends Controller
     {
         $this->validate($request, [
             'classification' => 'required',
-            'archive_type' => 'required|max:255',
+            'archive_type' => 'required|unique:mapping,archive_type',
             'security' => 'required',
             'retention' => 'required',
             'active' => 'required',
             'inactive' => 'required'
         ]);
-
-        if (Mapping::where('archive_type', $request->archive_type)->exists()) {
-            return redirect()->route($this->_route)->with('error', 'Data mapping dengan jenis arsip '.$request->archive_type.' sudah ada');
-        }
 
         Mapping::create([
             'code' => $request->classification,
@@ -209,7 +205,7 @@ class MappingController extends Controller
     {
         $this->validate($request, [
             'classification' => 'required',
-            'archive_type' => 'required|max:255',
+            'archive_type' => 'required|unique:mapping,archive_type,'.$id,
             'security' => 'required',
             'retention' => 'required',
             'active' => 'required',
