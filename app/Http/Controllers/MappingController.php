@@ -7,6 +7,7 @@ use App\Models\Mapping;
 use App\Models\PrimaryClassification;
 use App\Models\SecurityClassification;
 use App\Models\RetentionClassification;
+use App\Models\SecondaryClassification;
 use Illuminate\Support\Facades\DB;
 use DataTables;
 
@@ -52,9 +53,9 @@ class MappingController extends Controller
                     mapping.* 
                 FROM
                     mapping
-                    LEFT JOIN primary_classifications ON SUBSTRING_INDEX( mapping.CODE, '.', 1 ) = primary_classifications.CODE 
+                    LEFT JOIN primary_classifications ON SUBSTRING_INDEX( mapping.code, '.', 1 ) = primary_classifications.code 
                 ORDER BY
-                    primary_classifications.id");
+                    primary_classifications.id, mapping.code");
 
         if (request()->ajax()) {
             return Datatables::of($query)
@@ -113,6 +114,10 @@ class MappingController extends Controller
                 array_push($classification, ['id' => $p->id, 'code' => $p->code, 'name' => $p->name]);
             }
         }
+        // insert manual HK.02
+        $hk = SecondaryClassification::where('code', 'HK.02')->first();
+        $insert_hk = ['id' => $hk->id, 'code' => $hk->code, 'name' => $hk->name];
+        array_splice( $classification, 22, 0, [$insert_hk] );
 
         $security = SecurityClassification::orderBy('id')->get();
         $retention = RetentionClassification::orderBy('id')->get();
@@ -187,7 +192,11 @@ class MappingController extends Controller
                 array_push($classification, ['id' => $p->id, 'code' => $p->code, 'name' => $p->name]);
             }
         }
-
+        // insert manual HK.02
+        $hk = SecondaryClassification::where('code', 'HK.02')->first();
+        $insert_hk = ['id' => $hk->id, 'code' => $hk->code, 'name' => $hk->name];
+        array_splice( $classification, 22, 0, [$insert_hk] );
+        
         $security = SecurityClassification::orderBy('id')->get();
         $retention = RetentionClassification::orderBy('id')->get();
 

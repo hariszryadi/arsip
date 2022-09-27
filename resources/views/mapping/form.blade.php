@@ -67,7 +67,7 @@
                     <div class="form-group row">
                         <label class="col-form-label col-lg-2 @error('archive_type') text-danger @enderror" for="archive_type">Jenis Arsip</label>
                         <div class="col-lg-10">
-                            <input type="text" class="form-control @error('archive_type') is-invalid @enderror" name="archive_type" placeholder="Jenis Arsip" value="{{ isset($mapping) ? $mapping->archive_type : '' }}">
+                            <input type="text" class="form-control @error('archive_type') is-invalid @enderror" name="archive_type" placeholder="Jenis Arsip" value="{{ old('archive_type')!== null ? old('archive_type') : (isset($mapping) ? $mapping->archive_type : '') }}">
                             @error('archive_type')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
