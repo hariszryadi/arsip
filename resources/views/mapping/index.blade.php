@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
 <!-- Inner content -->
 <div class="content-inner">
 
@@ -64,6 +65,11 @@
 @endsection
 
 @section('scripts')
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script>
         $(document).ready(function () {
             $('.datatable-basic').DataTable({
@@ -93,12 +99,35 @@
                     { width: "5%", "targets": [0] },
                     { className: "text-center", "targets": [5, 6, 7] }
                 ],
-                dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
+                dom: '<"datatable-header"flB><"datatable-scroll"t><"datatable-footer"ip>',
                 language: {
                     search: '<span>Filter:</span> _INPUT_',
                     searchPlaceholder: 'Type to filter...',
                     lengthMenu: '<span>Show:</span> _MENU_',
                     paginate: { 'first': 'First', 'last': 'Last', 'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;', 'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;' }
+                },
+                buttons: [
+                    { 
+                        extend: 'excelHtml5', 
+                        exportOptions: {
+                            columns: ':not(:last-child)',
+                        } 
+                    },
+                    { 
+                        extend: 'pdfHtml5', 
+                        exportOptions: {
+                            columns: ':not(:last-child)',
+                        },
+                        orientation: 'landscape'
+                    }
+                ],
+                "preDrawCallback": function( settings ) {
+                    var btnsXls = $('.buttons-excel');
+                    var btnsPdf = $('.buttons-pdf');
+                    btnsXls.addClass('btn btn-success btn-sm');
+                    btnsXls.removeClass('dt-button');
+                    btnsPdf.addClass('btn btn-danger btn-sm');
+                    btnsPdf.removeClass('dt-button');
                 }
             });
 
