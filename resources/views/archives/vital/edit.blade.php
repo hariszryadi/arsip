@@ -158,7 +158,7 @@
                                 </span>
                             @enderror
                         </div>
-                        <label class="col-form-label col-lg-2 @error('loc_status') text-danger @enderror" for="loc_status">Status</label>
+                        <label class="col-form-label col-lg-2 @error('loc_status') text-danger @enderror" for="loc_status">Tipe</label>
                         <div class="col-lg-4">
                             <select name="loc_status" class="form-control select-search @error('loc_status') is-invalid @enderror" id="loc_status" data-fouc>
                                 @if (old('loc_status') !== null)

@@ -35,7 +35,7 @@
             </div>
             
             <div class="card-body">
-                <table class="table datatable-basic table-hover table-bordered striped table-responsive">
+                <table class="table datatable-basic table-hover table-bordered">
                     <thead>
                         <tr>
                             <th>#</th>

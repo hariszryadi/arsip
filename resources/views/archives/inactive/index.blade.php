@@ -39,7 +39,7 @@
                     <a href="{{ route('archives-inactive.create')}}" class="btn btn-primary"><i class="icon-file-plus"></i> Tambah</a>
                 </div>
 
-                <table class="table datatable-basic table-hover table-bordered striped table-responsive">
+                <table class="table datatable-basic table-hover table-bordered">
                     <thead>
                         <tr>
                             <th>#</th>

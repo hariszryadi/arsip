@@ -2,6 +2,17 @@
 
 @section('content')
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+<style>
+    .hidden {
+        display: none !important;
+    }
+    .dt-buttons {
+        margin: 0 !important;
+    }
+    .dt-buttons>.btn {
+        border-radius: 0.25rem !important;
+    }
+</style>
 <!-- Inner content -->
 <div class="content-inner">
 
@@ -40,7 +51,24 @@
                     <a href="{{ route('mapping.create')}}" class="btn btn-primary"><i class="icon-file-plus"></i> Tambah</a>
                 </div>
 
-                <table class="table datatable-basic table-hover table-bordered striped table-responsive">
+                <div class="form-group row">
+                    <div class="col-lg-5">
+                        <select class="form-control select-search" id="filter-primary" data-fouc>
+                            <option value="">All</option>
+                            @foreach ($primaries as $item)
+                                <option value="{{ $item->code }}">{{ $item->code }} - {{ $item->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-lg-5">
+                        <input type="text" class="form-control" id="filter-archive-type" placeholder="Ketik jenis arsip">
+                    </div>
+                    <div class="col-lg-2">
+                        <button type="button" class="btn btn-secondary btn-block btn-filter">Filter</button>
+                    </div>
+                </div>
+
+                <table class="table datatable-basic table-hover table-bordered">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -72,14 +100,28 @@
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script>
         $(document).ready(function () {
+            mappingList();
+        })
+
+        $('.btn-filter').on('click', function () {
+            mappingList();
+        })
+
+        function mappingList() {
+            $('.datatable-basic').dataTable().fnDestroy();
             $('.datatable-basic').DataTable({
                 processing: true,
                 serverside: true,
                 autoWidth: false,
                 bLengthChange: true,
+                bFilter: false,
                 pageLength: 10,
                 ajax: {
                     url: "{{ route('mapping.index') }}",
+                    data: function (d) {
+                        d.filter_primary = $('#filter-primary').val(),
+                        d.filter_archive_type = $('#filter-archive-type').val()
+                    }
                 },
                 columns: [
                     {
@@ -108,15 +150,35 @@
                 },
                 buttons: [
                     { 
-                        extend: 'excelHtml5', 
+                        extend: 'excelHtml5',
+                        title: '',
                         exportOptions: {
                             columns: ':not(:last-child)',
+                            format: {
+                                body: function ( data, row, column, node ) {
+                                    if (column == 0) {
+                                        return row+1;
+                                    } else {
+                                        return data;
+                                    }
+                                }
+                            }
                         } 
                     },
                     { 
-                        extend: 'pdfHtml5', 
+                        extend: 'pdfHtml5',
+                        title: '',
                         exportOptions: {
                             columns: ':not(:last-child)',
+                            format: {
+                                body: function ( data, row, column, node ) {
+                                    if (column == 0) {
+                                        return row+1;
+                                    } else {
+                                        return data;
+                                    }
+                                }
+                            }
                         },
                         orientation: 'landscape'
                     }
@@ -124,14 +186,27 @@
                 "preDrawCallback": function( settings ) {
                     var btnsXls = $('.buttons-excel');
                     var btnsPdf = $('.buttons-pdf');
-                    btnsXls.addClass('btn btn-success btn-sm');
+                    btnsXls.addClass('btn btn-success btn-sm mr-3 hidden');
+                    btnsXls.html('<i class="icon-file-excel"></i> Export Excel')
                     btnsXls.removeClass('dt-button');
-                    btnsPdf.addClass('btn btn-danger btn-sm');
+                    btnsPdf.addClass('btn btn-danger btn-sm mr-3 hidden');
+                    btnsPdf.html('<i class="icon-file-pdf"></i> Export Pdf')
                     btnsPdf.removeClass('dt-button');
+                },
+                // "drawCallback": function(settings, json) {
+                //     var btnsXls = $('.buttons-excel');
+                //     var btnsPdf = $('.buttons-pdf');
+                //     btnsXls.removeClass('hidden');
+                //     btnsPdf.removeClass('hidden');
+                // },
+                "initComplete": function(settings, json) {
+                    var btnsXls = $('.buttons-excel');
+                    var btnsPdf = $('.buttons-pdf');
+                    btnsXls.removeClass('hidden');
+                    btnsPdf.removeClass('hidden');
                 }
             });
-
-        })
+        }
         
         $(document).on('click', '#delete', function () {
             var id = $(this).attr('data-id');

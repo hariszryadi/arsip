@@ -1482,7 +1482,7 @@ class TertiaryClassificationsTableSeeder extends Seeder
             [
                 'secondary_classification_id' => 91,
                 'code' => 'DK.07.02',
-                'name' => 'Penilaian non akademik',
+                'name' => 'Pembinaan dan Pemasyarakatan',
                 'description' => 'Arsip yang berkaitan dengan pembinaan dan pemasyarakatan bahasa meliputi penyuluhan dan bantuan teknis.',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s')
             ],

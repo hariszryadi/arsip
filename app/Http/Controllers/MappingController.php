@@ -49,13 +49,30 @@ class MappingController extends Controller
      */
     public function index()
     {
-        $query = DB::select("SELECT
-                    mapping.* 
-                FROM
-                    mapping
-                    LEFT JOIN primary_classifications ON SUBSTRING_INDEX( mapping.code, '.', 1 ) = primary_classifications.code 
-                ORDER BY
-                    primary_classifications.id, mapping.code");
+        $primaries = PrimaryClassification::orderBy('id')->get();
+
+        // $query = DB::select("SELECT
+        //             mapping.* 
+        //         FROM
+        //             mapping
+        //             LEFT JOIN primary_classifications ON SUBSTRING_INDEX( mapping.code, '.', 1 ) = primary_classifications.code
+        //         ORDER BY
+        //             primary_classifications.id, mapping.code");
+
+        $query = DB::table('mapping')
+                ->selectRaw('mapping.*')
+                ->leftJoin('primary_classifications', DB::raw("SUBSTRING_INDEX( mapping.code, '.', 1 )"), 'primary_classifications.code');
+                
+        if (request()->filter_primary != null) {
+            $query->where(DB::raw("SUBSTRING_INDEX( mapping.code, '.', 1 )"), request()->filter_primary);
+        }
+
+        if (request()->filter_archive_type != null) {
+            $query->where('mapping.archive_type', 'like', '%'.request()->filter_archive_type.'%');
+        }
+
+        $query->orderBy('primary_classifications.id')->orderBy('mapping.code')->get();
+        
 
         if (request()->ajax()) {
             return Datatables::of($query)
@@ -87,7 +104,7 @@ class MappingController extends Controller
                 ->make(true);
         }
 
-        return view($this->_view.'index');
+        return view($this->_view.'index', compact('primaries'));
     }
 
     /**
