@@ -18,7 +18,8 @@ class Mapping extends Model
         'security',
         'retention',
         'active',
-        'inactive'
+        'inactive',
+        'retention_text'
     ];
 
     public function archives() {

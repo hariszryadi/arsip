@@ -39,7 +39,7 @@ Route::resource('mapping', MappingController::class);
 // Data
 Route::resource('archives-static', ArchivesStaticController::class);
 Route::get('archives-static/download/{id}', [ArchivesStaticController::class, 'download'])->name('archives-static.download');
-// Route::post('archives-static/import', [ArchivesStaticController::class, 'import'])->name('archives-static.import');
+Route::post('archives-static/import', [ArchivesStaticController::class, 'import'])->name('archives-static.import');
 Route::resource('archives-inactive', ArchivesInactiveController::class);
 Route::get('archives-inactive/download/{id}', [ArchivesInactiveController::class, 'download'])->name('archives-inactive.download');
 Route::resource('archives-vital', ArchivesVitalController::class);

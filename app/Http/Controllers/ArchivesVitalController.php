@@ -41,7 +41,7 @@ class ArchivesVitalController extends Controller
         if (request()->ajax()) {
             return Datatables::of(Archives::with('mapping')->where('status', '3')->orderBy('id')->get())
                 ->editColumn('amount', function($data) {
-                    return $data->amount . ' Sampul';
+                    return $data->amount . ' Folder';
                 })
                 ->editColumn('dev_level', function($data) {
                     return $this->get_dev_level($data->dev_level);
@@ -74,9 +74,27 @@ class ArchivesVitalController extends Controller
      */
     public function create()
     {
-        $mapping = Mapping::orderBy('id')->get();
+        $classification = [];
+        $primary = PrimaryClassification::orderBy('id')->get();
+        foreach ($primary as $i => $p) {
+            if ($p->secondary()->exists()) {
+                array_push($classification, ['id' => $p->id, 'code' => $p->code, 'name' => $p->name]);
+                foreach ($p->secondary as $j => $s) {
+                    if ($s->tertiary()->exists()) {
+                        array_push($classification, ['id' => $s->id, 'code' => $s->code, 'name' => $s->name]);
+                        foreach ($s->tertiary as $k => $t) {
+                            array_push($classification, ['id' => $t->id, 'code' => $t->code, 'name' => $t->name]);
+                        }
+                    } else {
+                        array_push($classification, ['id' => $s->id, 'code' => $s->code, 'name' => $s->name]);
+                    }
+                }
+            } else {
+                array_push($classification, ['id' => $p->id, 'code' => $p->code, 'name' => $p->name]);
+            }
+        }
         $user = User::orderBy('id')->get();
-        return view($this->_view.'create', compact('mapping', 'user'));
+        return view($this->_view.'create', compact('classification', 'user'));
     }
 
     /**
@@ -89,7 +107,7 @@ class ArchivesVitalController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:255',
-            'mapping' => 'required',
+            'code_classification' => 'required',
             'year' => 'required',
             'amount' => 'required',
             'dev_level' => 'required',
@@ -110,7 +128,7 @@ class ArchivesVitalController extends Controller
 
         Archives::create([
             'name' => $request->name,
-            'mapping_id' => $request->mapping,
+            'code_classification' => $request->code_classification,
             'year' => $request->year,
             'amount' => $request->amount,
             'dev_level' => $request->dev_level,
@@ -124,7 +142,7 @@ class ArchivesVitalController extends Controller
             'status' => '3'
         ]);
 
-        return redirect()->route($this->_route)->with('success', 'Data arsip berhasil ditambahkan');
+        return redirect()->route($this->_route)->with('success', 'Data arsip vital berhasil ditambahkan');
     }
 
     /**
@@ -147,9 +165,27 @@ class ArchivesVitalController extends Controller
     public function edit($id)
     {
         $archives = Archives::find($id);
-        $mapping = Mapping::orderBy('id')->get();
+        $classification = [];
+        $primary = PrimaryClassification::orderBy('id')->get();
+        foreach ($primary as $i => $p) {
+            if ($p->secondary()->exists()) {
+                array_push($classification, ['id' => $p->id, 'code' => $p->code, 'name' => $p->name]);
+                foreach ($p->secondary as $j => $s) {
+                    if ($s->tertiary()->exists()) {
+                        array_push($classification, ['id' => $s->id, 'code' => $s->code, 'name' => $s->name]);
+                        foreach ($s->tertiary as $k => $t) {
+                            array_push($classification, ['id' => $t->id, 'code' => $t->code, 'name' => $t->name]);
+                        }
+                    } else {
+                        array_push($classification, ['id' => $s->id, 'code' => $s->code, 'name' => $s->name]);
+                    }
+                }
+            } else {
+                array_push($classification, ['id' => $p->id, 'code' => $p->code, 'name' => $p->name]);
+            }
+        }
         $user = User::orderBy('id')->get();
-        return view($this->_view.'edit', compact('archives', 'mapping', 'user'));
+        return view($this->_view.'edit', compact('archives', 'classification', 'user'));
     }
 
     /**
@@ -163,7 +199,7 @@ class ArchivesVitalController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:255',
-            'mapping' => 'required',
+            'code_classification' => 'required',
             'year' => 'required',
             'amount' => 'required',
             'dev_level' => 'required',
@@ -190,7 +226,7 @@ class ArchivesVitalController extends Controller
 
         $archives->update([
             'name' => $request->name,
-            'mapping_id' => $request->mapping,
+            'code_classification' => $request->code_classification,
             'year' => $request->year,
             'amount' => $request->amount,
             'dev_level' => $request->dev_level,
@@ -203,7 +239,7 @@ class ArchivesVitalController extends Controller
             'officer' => $request->officer,
         ]);
 
-        return redirect()->route($this->_route)->with('success', 'Data arsip berhasil diubah');
+        return redirect()->route($this->_route)->with('success', 'Data arsip vital berhasil diubah');
     }
 
     /**
@@ -219,11 +255,12 @@ class ArchivesVitalController extends Controller
         File::delete($path);
         $archives->delete();
 
-        return response()->json(['success' => 'Data archives berhasil dihapus']);
+        return response()->json(['success' => 'Data arsip vital berhasil dihapus']);
     }
 
     /**
      * Get description development level
+     * 
      * @param String $dev_level
      */
     private function get_dev_level($dev_level) {

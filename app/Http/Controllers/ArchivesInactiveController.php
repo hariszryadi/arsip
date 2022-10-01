@@ -41,7 +41,7 @@ class ArchivesInactiveController extends Controller
         if (request()->ajax()) {
             return Datatables::of(Archives::with('mapping')->where('status', '2')->orderBy('id')->get())
                 ->editColumn('amount', function($data) {
-                    return $data->amount . ' Sampul';
+                    return $data->amount . ' Berkas';
                 })
                 ->editColumn('dev_level', function($data) {
                     return $this->get_dev_level($data->dev_level);
@@ -124,7 +124,7 @@ class ArchivesInactiveController extends Controller
             'status' => '2'
         ]);
 
-        return redirect()->route($this->_route)->with('success', 'Data arsip berhasil ditambahkan');
+        return redirect()->route($this->_route)->with('success', 'Data arsip inaktif berhasil ditambahkan');
     }
 
     /**
@@ -203,7 +203,7 @@ class ArchivesInactiveController extends Controller
             'officer' => $request->officer,
         ]);
 
-        return redirect()->route($this->_route)->with('success', 'Data arsip berhasil diubah');
+        return redirect()->route($this->_route)->with('success', 'Data arsip inaktif berhasil diubah');
     }
 
     /**
@@ -219,11 +219,12 @@ class ArchivesInactiveController extends Controller
         File::delete($path);
         $archives->delete();
 
-        return response()->json(['success' => 'Data archives berhasil dihapus']);
+        return response()->json(['success' => 'Data arsip inaktif berhasil dihapus']);
     }
 
     /**
      * Get description development level
+     * 
      * @param String $dev_level
      */
     private function get_dev_level($dev_level) {

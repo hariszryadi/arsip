@@ -211,7 +211,7 @@
                             })
                         } else {
                             c.addClass('dt-hasChild shown');
-                            child_table += '<tr><td colspan="3" class="text-center">Not data available in table</td></tr>'
+                            child_table += '<tr><td colspan="4" class="text-center">Not data available in table</td></tr>'
                         }
                     },
                     error: function (error) {

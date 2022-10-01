@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PrimaryClassification;
-use App\Models\User;
-use App\Models\Mapping;
+use Illuminate\Support\Facades\DB;
+use App\Imports\ArchivesImport;
 use App\Models\Archives;
+use App\Models\Mapping;
+use App\Models\User;
 use DataTables;
+use Excel;
 use File;
 
 class ArchivesStaticController extends Controller
@@ -74,9 +77,27 @@ class ArchivesStaticController extends Controller
      */
     public function create()
     {
-        $mapping = Mapping::orderBy('id')->get();
+        $classification = [];
+        $primary = PrimaryClassification::orderBy('id')->get();
+        foreach ($primary as $i => $p) {
+            if ($p->secondary()->exists()) {
+                array_push($classification, ['id' => $p->id, 'code' => $p->code, 'name' => $p->name]);
+                foreach ($p->secondary as $j => $s) {
+                    if ($s->tertiary()->exists()) {
+                        array_push($classification, ['id' => $s->id, 'code' => $s->code, 'name' => $s->name]);
+                        foreach ($s->tertiary as $k => $t) {
+                            array_push($classification, ['id' => $t->id, 'code' => $t->code, 'name' => $t->name]);
+                        }
+                    } else {
+                        array_push($classification, ['id' => $s->id, 'code' => $s->code, 'name' => $s->name]);
+                    }
+                }
+            } else {
+                array_push($classification, ['id' => $p->id, 'code' => $p->code, 'name' => $p->name]);
+            }
+        }
         $user = User::orderBy('id')->get();
-        return view($this->_view.'create', compact('mapping', 'user'));
+        return view($this->_view.'create', compact('classification', 'user'));
     }
 
     /**
@@ -89,7 +110,7 @@ class ArchivesStaticController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:255',
-            'mapping' => 'required',
+            'code_classification' => 'required',
             'year' => 'required',
             'amount' => 'required',
             'dev_level' => 'required',
@@ -110,7 +131,7 @@ class ArchivesStaticController extends Controller
 
         Archives::create([
             'name' => $request->name,
-            'mapping_id' => $request->mapping,
+            'code_classification' => $request->code_classification,
             'year' => $request->year,
             'amount' => $request->amount,
             'dev_level' => $request->dev_level,
@@ -124,7 +145,7 @@ class ArchivesStaticController extends Controller
             'status' => '1'
         ]);
 
-        return redirect()->route($this->_route)->with('success', 'Data arsip berhasil ditambahkan');
+        return redirect()->route($this->_route)->with('success', 'Data arsip statis berhasil ditambahkan');
     }
 
     /**
@@ -147,9 +168,27 @@ class ArchivesStaticController extends Controller
     public function edit($id)
     {
         $archives = Archives::find($id);
-        $mapping = Mapping::orderBy('id')->get();
+        $classification = [];
+        $primary = PrimaryClassification::orderBy('id')->get();
+        foreach ($primary as $i => $p) {
+            if ($p->secondary()->exists()) {
+                array_push($classification, ['id' => $p->id, 'code' => $p->code, 'name' => $p->name]);
+                foreach ($p->secondary as $j => $s) {
+                    if ($s->tertiary()->exists()) {
+                        array_push($classification, ['id' => $s->id, 'code' => $s->code, 'name' => $s->name]);
+                        foreach ($s->tertiary as $k => $t) {
+                            array_push($classification, ['id' => $t->id, 'code' => $t->code, 'name' => $t->name]);
+                        }
+                    } else {
+                        array_push($classification, ['id' => $s->id, 'code' => $s->code, 'name' => $s->name]);
+                    }
+                }
+            } else {
+                array_push($classification, ['id' => $p->id, 'code' => $p->code, 'name' => $p->name]);
+            }
+        }
         $user = User::orderBy('id')->get();
-        return view($this->_view.'edit', compact('archives', 'mapping', 'user'));
+        return view($this->_view.'edit', compact('archives', 'classification', 'user'));
 
     }
 
@@ -164,7 +203,7 @@ class ArchivesStaticController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:255',
-            'mapping' => 'required',
+            'code_classification' => 'required',
             'year' => 'required',
             'amount' => 'required',
             'dev_level' => 'required',
@@ -191,7 +230,7 @@ class ArchivesStaticController extends Controller
 
         $archives->update([
             'name' => $request->name,
-            'mapping_id' => $request->mapping,
+            'code_classification' => $request->code_classification,
             'year' => $request->year,
             'amount' => $request->amount,
             'dev_level' => $request->dev_level,
@@ -204,7 +243,7 @@ class ArchivesStaticController extends Controller
             'officer' => $request->officer,
         ]);
 
-        return redirect()->route($this->_route)->with('success', 'Data arsip berhasil diubah');
+        return redirect()->route($this->_route)->with('success', 'Data arsip statis berhasil diubah');
     }
 
     /**
@@ -220,14 +259,16 @@ class ArchivesStaticController extends Controller
         File::delete($path);
         $archives->delete();
 
-        return response()->json(['success' => 'Data archives berhasil dihapus']);
+        return response()->json(['success' => 'Data arsip statis berhasil dihapus']);
     }
 
     /**
      * Get description development level
+     * 
      * @param String $dev_level
      */
-    private function get_dev_level($dev_level) {
+    private function get_dev_level($dev_level) 
+    {
         switch ($dev_level) {
             case '1':
                 return 'Asli';
@@ -269,6 +310,20 @@ class ArchivesStaticController extends Controller
             return response()->download($file, basename($file), $headers);
         } catch (\Exception $e) {
             abort(500);
+        }
+    }
+
+    public function import(Request $request)
+    {
+        try {
+            Excel::import(new ArchivesImport, $request->file);
+            return response()->json([
+                'success' => 'Berhasil melakukan import data arsip.'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 }

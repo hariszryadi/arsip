@@ -119,7 +119,7 @@
                         <label class="col-form-label col-lg-2 @error('active') text-danger @enderror" for="active">Retensi Aktif</label>
                         <div class="col-lg-4">
                             <div class="input-group">
-                                <input type="number" class="form-control @error('active') is-invalid @enderror" name="active" min="0" value="{{ isset($mapping) ? $mapping->active : 0 }}">
+                                <input type="number" class="form-control @error('active') is-invalid @enderror" id="active" name="active" min="0" value="{{ isset($mapping) ? $mapping->active : 0 }}">
                                 <span class="input-group-append">
                                     <span class="input-group-text">Tahun</span>
                                 </span>
@@ -133,7 +133,7 @@
                         <label class="col-form-label col-lg-2 @error('inactive') text-danger @enderror" for="inactive">Retensi Inaktif</label>
                         <div class="col-lg-4">
                             <div class="input-group">
-                                <input type="number" class="form-control @error('inactive') is-invalid @enderror" name="inactive" min="0" value="{{ isset($mapping) ? $mapping->inactive : 0 }}">
+                                <input type="number" class="form-control @error('inactive') is-invalid @enderror" id="inactive" name="inactive" min="0" value="{{ isset($mapping) ? $mapping->inactive : 0 }}">
                                 <span class="input-group-append">
                                     <span class="input-group-text">Tahun</span>
                                 </span>
@@ -142,6 +142,15 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row" id="row-retention-text" {{ isset($mapping) ? ($mapping->active != 0 ? 'style=display:none;' : '') : '' }}>
+                        <label class="col-form-label col-lg-2" for="active"></label>
+                        <div class="col-lg-4">
+                            <div class="input-group">
+                                <input type="text" class="form-control @error('active') is-invalid @enderror" name="retention_text" value="{{ old('retention_text')!== null ? old('retention_text') : (isset($mapping) ? $mapping->retention_text : '') }}">
                             </div>
                         </div>
                     </div>
@@ -159,4 +168,16 @@
 
 </div>
 <!-- /inner content -->
+@endsection
+
+@section('scripts')
+    <script>
+        $('#active').on('change', function () {
+            if ($(this).val() != 0) {
+                $('#row-retention-text').hide();
+            } else {
+                $('#row-retention-text').show();
+            }
+        })
+    </script>
 @endsection

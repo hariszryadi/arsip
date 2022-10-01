@@ -50,15 +50,15 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-form-label col-lg-2 @error('mapping') text-danger @enderror" for="mapping">Jenis Arsip</label>
+                        <label class="col-form-label col-lg-2 @error('code_classification') text-danger @enderror" for="code_classification">Klasifikasi</label>
                         <div class="col-lg-10">
-                            <select name="mapping" class="form-control select-search @error('mapping') is-invalid @enderror" id="mapping" select-search>
-                                <option value="" selected disabled>Pilih Jenis Arsip</option>
-                                @foreach ($mapping as $item)
-                                    <option value="{{ $item->id }}" {{ old('mapping') == $item->id ? 'selected' : '' }}>{{ $item->archive_type }}</option>
+                            <select name="code_classification" class="form-control select-search @error('code_classification') is-invalid @enderror" id="code_classification" select-search>
+                                <option value="" selected disabled>Pilih Klasifikasi</option>
+                                @foreach ($classification as $item)
+                                    <option value="{{ $item['code'] }}" {{ old('code_classification') == $item['code'] ? 'selected' : '' }}>{{ $item['code'] }} - {{ $item['name'] }}</option>
                                 @endforeach
                             </select>
-                            @error('mapping')
+                            @error('code_classification')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>

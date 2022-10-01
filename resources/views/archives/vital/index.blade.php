@@ -44,7 +44,7 @@
                         <tr>
                             <th>#</th>
                             <th>Nama Arsip</th>
-                            <th>Jenis Arsip</th>
+                            <th>Klasifikasi</th>
                             <th>Tahun</th>
                             <th>Jml. Berkas</th>
                             <th>Tk. Perkembangan</th>
@@ -82,7 +82,7 @@
                         },
                     },
                     { data: "name" },
-                    { data: "mapping.archive_type" },
+                    { data: "code_classification" },
                     { data: "year" },
                     { data: "amount" },
                     { data: "dev_level" },

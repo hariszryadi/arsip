@@ -32,6 +32,9 @@ class MappingController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * Query classification
+     */
     private function query($code) {
         $query = DB::select('SELECT * FROM ( 
             SELECT CODE, NAME FROM primary_classifications UNION ALL 
@@ -166,7 +169,8 @@ class MappingController extends Controller
             'security' => $request->security,
             'retention' => $request->retention,
             'active' => $request->active,
-            'inactive' => $request->inactive
+            'inactive' => $request->inactive,
+            'retention_text' => $request->retention_text
         ]);
 
         return redirect()->route($this->_route)->with('success', 'Data mapping berhasil ditambahkan');
@@ -246,7 +250,8 @@ class MappingController extends Controller
             'security' => $request->security,
             'retention' => $request->retention,
             'active' => $request->active,
-            'inactive' => $request->inactive
+            'inactive' => $request->inactive,
+            'retention_text' => $request->retention_text
         ]);
 
         return redirect()->route($this->_route)->with('success', 'Data mapping berhasil diubah');

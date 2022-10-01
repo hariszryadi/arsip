@@ -14,6 +14,7 @@ class Archives extends Model
     protected $fillable = [
         'name',
         'mapping_id',
+        'code_classification',
         'year',
         'amount',
         'dev_level',
