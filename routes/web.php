@@ -29,12 +29,17 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::resource('classification', ClassificationController::class);
 Route::post('classification-get-secondary', [ClassificationController::class, 'get_secondary'])->name('classification-get-secondary');
 Route::post('classification-get-tertiary', [ClassificationController::class, 'get_tertiary'])->name('classification-get-tertiary');
+Route::get('classification/secondary/{id}/edit', [ClassificationController::class, 'edit_secondary'])->name('classification.secondary.edit');
+Route::put('classification/secondary/{id}/update', [ClassificationController::class, 'update_secondary'])->name('classification.secondary.update');
+Route::get('classification/tertiary/{id}/edit', [ClassificationController::class, 'edit_tertiary'])->name('classification.tertiary.edit');
+Route::put('classification/tertiary/{id}/update', [ClassificationController::class, 'update_tertiary'])->name('classification.tertiary.update');
 Route::resource('security', SecurityController::class);
 Route::resource('retention', RetentionController::class);
 Route::resource('mapping', MappingController::class);
 // Data
 Route::resource('archives-static', ArchivesStaticController::class);
 Route::get('archives-static/download/{id}', [ArchivesStaticController::class, 'download'])->name('archives-static.download');
+// Route::post('archives-static/import', [ArchivesStaticController::class, 'import'])->name('archives-static.import');
 Route::resource('archives-inactive', ArchivesInactiveController::class);
 Route::get('archives-inactive/download/{id}', [ArchivesInactiveController::class, 'download'])->name('archives-inactive.download');
 Route::resource('archives-vital', ArchivesVitalController::class);

@@ -109,11 +109,26 @@
                     success: function (resp) {
                         // console.log(resp.data);
                         $.each(resp.data, function (i, v) {
+                            var url = "{{ route('classification.secondary.edit', ":id") }}";
+                            url = url.replace(':id', v.id);
+                            
                             child_table += '<tr>'+
                                     '<td class="dt-control-secondary" data-id='+v.id+'></td>'+
                                     '<td>'+v.code+'</td>'+
                                     '<td>'+v.name+'</td>'+
                                     '<td>'+v.description+'</td>'+
+                                    '<td class=" text-center">'+
+                                        '<div class="list-icons">'+
+                                            '<div class="dropdown">'+
+                                                '<a href="#" class="list-icons-item" data-toggle="dropdown">'+
+                                                    '<i class="icon-menu9"></i>'+
+                                                '</a>'+
+                                                '<div class="dropdown-menu dropdown-menu-right">'+
+                                                    '<a href="'+url+'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>'+
+                                                '</div>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</td>'+
                                 '</tr>';
                         })
                     },
@@ -130,6 +145,7 @@
                                     '<th>Kode</th>'+
                                     '<th>Nama</th>'+
                                     '<th>Deskripsi</th>'+
+                                    '<th>Aksi</th>'+
                                 '</tr>'+
                             '</thead>'+
                             '<tbody>'+
@@ -172,10 +188,25 @@
                         if (resp.data.length > 0) {
                             c.addClass('dt-hasChild shown');
                             $.each(resp.data, function (i, v) {
+                                var url = "{{ route('classification.tertiary.edit', ":id") }}";
+                                url = url.replace(':id', v.id);
+                                
                                 child_table += '<tr>'+
                                         '<td>'+v.code+'</td>'+
                                         '<td>'+v.name+'</td>'+
                                         '<td>'+v.description+'</td>'+
+                                        '<td class=" text-center">'+
+                                            '<div class="list-icons">'+
+                                                '<div class="dropdown">'+
+                                                    '<a href="#" class="list-icons-item" data-toggle="dropdown">'+
+                                                        '<i class="icon-menu9"></i>'+
+                                                    '</a>'+
+                                                    '<div class="dropdown-menu dropdown-menu-right">'+
+                                                        '<a href="'+url+'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>'+
+                                                    '</div>'+
+                                                '</div>'+
+                                            '</div>'+
+                                        '</td>'+
                                     '</tr>';
                             })
                         } else {
@@ -190,13 +221,14 @@
                 })
 
                 return '<tr>'+
-                            '<td colspan="4">'+
+                            '<td colspan="5">'+
                                 '<table id="tertiary-table" width="100%">'+
                                     '<thead>'+
                                         '<tr style="background-color: #01534A; color: #fff">'+
                                             '<th>Kode</th>'+
                                             '<th>Nama</th>'+
                                             '<th>Deskripsi</th>'+
+                                            '<th>Aksi</th>'+
                                         '</tr>'+
                                     '</thead>'+
                                     '<tbody>'+

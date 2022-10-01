@@ -127,7 +127,7 @@ class ClassificationController extends Controller
             'name' => $request->name
         ]);
 
-        return redirect()->route($this->_route)->with('success', 'Data klasifikasi berhasil diubah');
+        return redirect()->route($this->_route)->with('success', 'Data klasifikasi primer berhasil diubah');
     }
 
     /**
@@ -187,5 +187,73 @@ class ClassificationController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Show the form for editing the specified resource secondary.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit_secondary($id)
+    {
+        $secondary = SecondaryClassification::find($id);
+        return view($this->_view.'edit_secondary', compact('secondary'));
+    }
+
+    /**
+     * Update the specified resource secondary in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update_secondary(Request $request, $id)
+    {
+        $this->validate($request, [
+            'name' => 'required|max:255'
+        ]);
+
+        $secondary = SecondaryClassification::find($id);
+        $secondary->update([
+            'name' => $request->name,
+            'description' => $request->description
+        ]);
+
+        return redirect()->route($this->_route)->with('success', 'Data klasifikasi sekunder berhasil diubah');
+    }
+
+    /**
+     * Show the form for editing the specified resource tertiary.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit_tertiary($id)
+    {
+        $tertiary = TertiaryClassification::find($id);
+        return view($this->_view.'edit_tertiary', compact('tertiary'));
+    }
+
+    /**
+     * Update the specified resource tertiary in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update_tertiary(Request $request, $id)
+    {
+        $this->validate($request, [
+            'name' => 'required|max:255'
+        ]);
+
+        $tertiary = TertiaryClassification::find($id);
+        $tertiary->update([
+            'name' => $request->name,
+            'description' => $request->description
+        ]);
+
+        return redirect()->route($this->_route)->with('success', 'Data klasifikasi tersier berhasil diubah');
     }
 }
