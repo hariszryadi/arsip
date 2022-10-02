@@ -9,6 +9,7 @@ use App\Http\Controllers\RetentionController;
 use App\Http\Controllers\ArchivesVitalController;
 use App\Http\Controllers\ClassificationController;
 use App\Http\Controllers\ArchivesStaticController;
+use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\ArchivesInactiveController;
 
 /*
@@ -46,3 +47,6 @@ Route::resource('archives-vital', ArchivesVitalController::class);
 Route::get('archives-vital/download/{id}', [ArchivesVitalController::class, 'download'])->name('archives-vital.download');
 // User Config
 Route::resource('user', UserController::class);
+// Change Pasword
+Route::get('change-password', [ChangePasswordController::class, 'edit'])->name('change-password.edit');
+Route::put('change-password/{id}', [ChangePasswordController::class, 'update'])->name('change-password.update');

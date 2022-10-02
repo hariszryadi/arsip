@@ -68,7 +68,7 @@
                     </div>
                 </div>
 
-                <table class="table datatable-basic table-hover table-bordered">
+                <table class="table datatable-basic table-hover table-bordered table-responsive">
                     <thead>
                         <tr>
                             <th>#</th>

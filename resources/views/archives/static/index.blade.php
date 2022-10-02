@@ -41,7 +41,7 @@
                     <button type="button" class="btn btn-warning" id="btn-download-template"><i class="icon-file-download"></i> Template</button>
                 </div>
 
-                <table class="table datatable-basic table-hover table-bordered">
+                <table class="table datatable-basic table-hover table-bordered table-responsive">
                     <thead>
                         <tr>
                             <th>#</th>

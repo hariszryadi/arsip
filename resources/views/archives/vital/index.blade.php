@@ -39,7 +39,7 @@
                     <a href="{{ route('archives-vital.create')}}" class="btn btn-primary"><i class="icon-file-plus"></i> Tambah</a>
                 </div>
 
-                <table class="table datatable-basic table-hover table-bordered">
+                <table class="table datatable-basic table-hover table-bordered table-responsive">
                     <thead>
                         <tr>
                             <th>#</th>

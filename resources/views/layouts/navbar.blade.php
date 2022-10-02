@@ -33,7 +33,7 @@
         </a>
 
         <div class="dropdown-menu dropdown-menu-right">
-            <a href="#" class="dropdown-item"><i class="icon-cog5"></i> Ubah Password</a>
+            <a href="{{ route('change-password.edit') }}" class="dropdown-item"><i class="icon-cog5"></i> Ubah Password</a>
             <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="icon-switch2"></i> Logout</a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                 @csrf
