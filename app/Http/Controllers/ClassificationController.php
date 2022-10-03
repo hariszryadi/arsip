@@ -54,6 +54,7 @@ class ClassificationController extends Controller
 
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <a href="'.route('classification.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
+                                        <a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i> Hapus</a>
                                     </div>
                                 </div>
                             </div>';
@@ -71,7 +72,7 @@ class ClassificationController extends Controller
      */
     public function create()
     {
-        //
+        return view($this->_view.'create_primary');
     }
 
     /**
@@ -82,7 +83,18 @@ class ClassificationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'code' => 'required|max:2',
+            'name' => 'required|max:255'
+        ]);
+
+        PrimaryClassification::create([
+            'code' => $request->code,
+            'category' => $request->category,
+            'name' => $request->name
+        ]);
+
+        return redirect()->route($this->_route)->with('success', 'Data klasifikasi primer berhasil ditambahkan');
     }
 
     /**
@@ -105,7 +117,7 @@ class ClassificationController extends Controller
     public function edit($id)
     {
         $primary = PrimaryClassification::find($id);
-        return view($this->_view.'edit', compact('primary'));
+        return view($this->_view.'edit_primary', compact('primary'));
     }
 
     /**
@@ -138,7 +150,10 @@ class ClassificationController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $primary = PrimaryClassification::findOrFail($id);
+        $primary->delete();
+
+        return response()->json(['success' => 'Data klasifikasi primer berhasil dihapus']);
     }
 
     /**
@@ -190,6 +205,41 @@ class ClassificationController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource secondary.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create_secondary()
+    {
+        $primary = PrimaryClassification::orderBy('id')->get();
+        return view($this->_view.'create_secondary', compact('primary'));
+    }
+
+    /**
+     * Store a newly created resource secondary in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store_secondary(Request $request)
+    {
+        $this->validate($request, [
+            'primary_classification' => 'required',
+            'code' => 'required|max:5',
+            'name' => 'required|max:255'
+        ]);
+
+        SecondaryClassification::create([
+            'primary_classification_id' => $request->primary_classification,
+            'code' => $request->code,
+            'name' => $request->name,
+            'description' => $request->description != null ? $request->description : ''
+        ]);
+
+        return redirect()->route($this->_route)->with('success', 'Data klasifikasi sekunder berhasil ditambahkan');
+    }
+
+    /**
      * Show the form for editing the specified resource secondary.
      *
      * @param  int  $id
@@ -224,6 +274,56 @@ class ClassificationController extends Controller
     }
 
     /**
+     * Remove the specified resource secondary from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy_secondary($id)
+    {
+        $secondary = SecondaryClassification::findOrFail($id);
+        $secondary->delete();
+
+        return response()->json(['success' => 'Data klasifikasi sekunder berhasil dihapus']);
+    }
+
+    /**
+     * Show the form for creating a new resource tertiary.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create_tertiary()
+    {
+        $primary = PrimaryClassification::orderBy('id')->get();
+        return view($this->_view.'create_tertiary', compact('primary'));
+    }
+
+    /**
+     * Store a newly created resource tertiary in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store_tertiary(Request $request)
+    {
+        $this->validate($request, [
+            'primary_classification' => 'required',
+            'secondary_classification' => 'required',
+            'code' => 'required|max:8',
+            'name' => 'required|max:255'
+        ]);
+
+        TertiaryClassification::create([
+            'secondary_classification_id' => $request->secondary_classification,
+            'code' => $request->code,
+            'name' => $request->name,
+            'description' => $request->description != null ? $request->description : ''
+        ]);
+
+        return redirect()->route($this->_route)->with('success', 'Data klasifikasi tersier berhasil ditambahkan');
+    }
+
+    /**
      * Show the form for editing the specified resource tertiary.
      *
      * @param  int  $id
@@ -255,5 +355,19 @@ class ClassificationController extends Controller
         ]);
 
         return redirect()->route($this->_route)->with('success', 'Data klasifikasi tersier berhasil diubah');
+    }
+
+    /**
+     * Remove the specified resource tertiary from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy_tertiary($id)
+    {
+        $tertiary = TertiaryClassification::findOrFail($id);
+        $tertiary->delete();
+
+        return response()->json(['success' => 'Data klasifikasi tersier berhasil dihapus']);
     }
 }

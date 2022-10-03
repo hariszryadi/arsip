@@ -8,6 +8,16 @@ use App\Models\User;
 
 class ChangePasswordController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function edit()
     {
         return view('change-password.form');

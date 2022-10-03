@@ -9,7 +9,7 @@ class PrimaryClassification extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['category', 'name'];
+    protected $fillable = ['code', 'category', 'name'];
     
     public function secondary() {
         return $this->hasMany(SecondaryClassification::class);
