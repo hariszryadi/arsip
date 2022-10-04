@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\PrimaryClassification;
 use App\Models\SecondaryClassification;
 use App\Models\TertiaryClassification;
+use App\Models\Archives;
+use App\Models\Mapping;
 use DataTables;
 
 class ClassificationController extends Controller
@@ -130,11 +132,97 @@ class ClassificationController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
+            'code' => 'required|max:2',
             'name' => 'required|max:255'
         ]);
 
         $primary = PrimaryClassification::find($id);
+        $secondaries = SecondaryClassification::where('primary_classification_id', $id)->get();
+        $mappings = Mapping::where('code', $primary->code)->get();
+        $archives = Archives::where('code_classification', $primary->code)->get();
+
+        // update manual relation secondary table
+        if (!empty($secondaries)) {
+            foreach ($secondaries as $key => $secondary) {
+                $tertiaries = TertiaryClassification::where('secondary_classification_id', $secondary->id)->get();
+                $s_mappings = Mapping::where('code', $secondary->code)->get();
+                $s_archives = Archives::where('code_classification', $secondary->code)->get();
+
+                // update manual relation tertiary table
+                if (!empty($tertiaries)) {
+                    foreach ($tertiaries as $key => $tertiary) {
+                        $t_mappings = Mapping::where('code', $tertiary->code)->get();
+                        $t_archives = Archives::where('code_classification', $tertiary->code)->get();
+
+                        // update manual relation tertiary mapping table
+                        if (!empty($t_mappings)) {
+                            foreach ($t_mappings as $key => $t_mapping) {
+                                $t_mapping->update([
+                                    'code' => $request->code . substr($tertiary->code, 2, 6)
+                                ]);
+                            }
+                        }
+
+                        // update manual relation tertiary archives table
+                        if (!empty($t_archives)) {
+                            foreach ($t_archives as $key => $t_archive) {
+                                $t_archive->update([
+                                    'code_classification' => $request->code . substr($tertiary->code, 2, 6)
+                                ]);
+                            }
+                        }
+
+                        $tertiary->update([
+                            'code' => $request->code . substr($tertiary->code, 2, 6)
+                        ]);
+                    }
+                }
+
+                // update manual relation secondary mapping table
+                if (!empty($s_mappings)) {
+                    foreach ($s_mappings as $key => $s_mapping) {
+                        $s_mapping->update([
+                            'code' => $request->code . substr($secondary->code, 2, 3)
+                        ]);
+                    }
+                }
+
+                // update manual relation secondary archives table
+                if (!empty($s_archives)) {
+                    foreach ($s_archives as $key => $s_archive) {
+                        $s_archive->update([
+                            'code_classification' => $request->code . substr($secondary->code, 2, 3)
+                        ]);
+                    }
+                }
+
+                $secondary->update([
+                    'code' => $request->code . substr($secondary->code, 2, 3)
+                ]);
+            }
+        }
+
+        // update manual relation mapping table
+        if (!empty($mappings)) {
+            foreach ($mappings as $key => $mapping) {
+                $mapping->update([
+                    'code' => $request->code,
+                    'name' => $request->name
+                ]);
+            }
+        }
+
+        // update manual relation archives table
+        if (!empty($archives)) {
+            foreach ($archives as $key => $archive) {
+                $archive->update([
+                    'code_classification' => $request->code
+                ]);
+            }
+        }
+
         $primary->update([
+            'code' => $request->code,
             'category' => $request->category,
             'name' => $request->name
         ]);
@@ -151,7 +239,11 @@ class ClassificationController extends Controller
     public function destroy($id)
     {
         $primary = PrimaryClassification::findOrFail($id);
+        $mapping = Mapping::where('code', 'like', '%' . $primary->code . '%');
+        $archives = Archives::where('code_classification', 'like', '%' . $primary->code . '%');
         $primary->delete();
+        $mapping->delete();
+        $archives->delete();
 
         return response()->json(['success' => 'Data klasifikasi primer berhasil dihapus']);
     }
@@ -261,13 +353,68 @@ class ClassificationController extends Controller
     public function update_secondary(Request $request, $id)
     {
         $this->validate($request, [
+            'code' => 'required|max:5',
             'name' => 'required|max:255'
         ]);
 
         $secondary = SecondaryClassification::find($id);
+        $tertiaries = TertiaryClassification::where('secondary_classification_id', $id)->get();
+        $mappings = Mapping::where('code', $secondary->code)->get();
+        $archives = Archives::where('code_classification', $secondary->code)->get();
+
+        // update manual relation tertiary table
+        if (!empty($tertiaries)) {
+            foreach ($tertiaries as $key => $tertiary) {
+                $t_mappings = Mapping::where('code', $tertiary->code)->get();
+                $t_archives = Archives::where('code_classification', $tertiary->code)->get();
+
+                // update manual relation tertiary mapping table
+                if (!empty($t_mappings)) {
+                    foreach ($t_mappings as $key => $t_mapping) {
+                        $t_mapping->update([
+                            'code' => $request->code . substr($tertiary->code, 5, 5)
+                        ]);
+                    }
+                }
+
+                // update manual relation tertiary archives table
+                if (!empty($t_archives)) {
+                    foreach ($t_archives as $key => $t_archive) {
+                        $t_archive->update([
+                            'code_classification' => $request->code . substr($tertiary->code, 5, 5)
+                        ]);
+                    }
+                }
+
+                $tertiary->update([
+                    'code' => $request->code . substr($tertiary->code, 5, 5)
+                ]);
+            }
+        }
+
+        // update manual relation mapping table
+        if (!empty($mappings)) {
+            foreach ($mappings as $key => $mapping) {
+                $mapping->update([
+                    'code' => $request->code,
+                    'name' => $request->name
+                ]);
+            }
+        }
+
+        // update manual relation archives table
+        if (!empty($archives)) {
+            foreach ($archives as $key => $archive) {
+                $archive->update([
+                    'code_classification' => $request->code
+                ]);
+            }
+        }
+
         $secondary->update([
+            'code' => $request->code,
             'name' => $request->name,
-            'description' => $request->description
+            'description' => $request->description != null ? $request->description : ''
         ]);
 
         return redirect()->route($this->_route)->with('success', 'Data klasifikasi sekunder berhasil diubah');
@@ -282,7 +429,11 @@ class ClassificationController extends Controller
     public function destroy_secondary($id)
     {
         $secondary = SecondaryClassification::findOrFail($id);
+        $mapping = Mapping::where('code', 'like', '%' . $secondary->code . '%');
+        $archives = Archives::where('code_classification', 'like', '%' . $secondary->code . '%');
         $secondary->delete();
+        $mapping->delete();
+        $archives->delete();
 
         return response()->json(['success' => 'Data klasifikasi sekunder berhasil dihapus']);
     }
@@ -345,13 +496,37 @@ class ClassificationController extends Controller
     public function update_tertiary(Request $request, $id)
     {
         $this->validate($request, [
+            'code' => 'required|max:8',
             'name' => 'required|max:255'
         ]);
 
         $tertiary = TertiaryClassification::find($id);
+        $mappings = Mapping::where('code', $tertiary->code)->get();
+        $archives = Archives::where('code_classification', $tertiary->code)->get();
+
+        // update manual relation mapping table
+        if (!empty($mappings)) {
+            foreach ($mappings as $key => $mapping) {
+                $mapping->update([
+                    'code' => $request->code,
+                    'name' => $request->name
+                ]);
+            }
+        }
+
+        // update manual relation archives table
+        if (!empty($archives)) {
+            foreach ($archives as $key => $archive) {
+                $archive->update([
+                    'code_classification' => $request->code
+                ]);
+            }
+        }
+
         $tertiary->update([
+            'code' => $request->code,
             'name' => $request->name,
-            'description' => $request->description
+            'description' => $request->description != null ? $request->description : ''
         ]);
 
         return redirect()->route($this->_route)->with('success', 'Data klasifikasi tersier berhasil diubah');
@@ -366,7 +541,11 @@ class ClassificationController extends Controller
     public function destroy_tertiary($id)
     {
         $tertiary = TertiaryClassification::findOrFail($id);
+        $mapping = Mapping::where('code', 'like', '%' . $tertiary->code . '%');
+        $archives = Archives::where('code_classification', 'like', '%' . $tertiary->code . '%');
         $tertiary->delete();
+        $mapping->delete();
+        $archives->delete();
 
         return response()->json(['success' => 'Data klasifikasi tersier berhasil dihapus']);
     }

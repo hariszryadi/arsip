@@ -39,9 +39,14 @@
                     @csrf
                     @method('PUT')
                     <div class="form-group row">
-                        <label class="col-form-label col-lg-2">Kode</label>
+                        <label class="col-form-label col-lg-2 @error('code') text-danger @enderror">Kode</label>
                         <div class="col-lg-10">
-                            <input type="text" class="form-control" id="code" value="{{ $tertiary->code }}" readonly>
+                            <input type="text" class="form-control @error('code') is-invalid @enderror" name="code" id="code" value="{{ old('code')!== null ? old('code') : $tertiary->code }}" placeholder="Kode">
+                            @error('code')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                     </div>
 
