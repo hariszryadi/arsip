@@ -193,12 +193,12 @@
                     btnsPdf.html('<i class="icon-file-pdf"></i> Export Pdf')
                     btnsPdf.removeClass('dt-button');
                 },
-                // "drawCallback": function(settings, json) {
-                //     var btnsXls = $('.buttons-excel');
-                //     var btnsPdf = $('.buttons-pdf');
-                //     btnsXls.removeClass('hidden');
-                //     btnsPdf.removeClass('hidden');
-                // },
+                "drawCallback": function(settings, json) {
+                    var btnsXls = $('.buttons-excel');
+                    var btnsPdf = $('.buttons-pdf');
+                    btnsXls.removeClass('hidden');
+                    btnsPdf.removeClass('hidden');
+                },
                 "initComplete": function(settings, json) {
                     var btnsXls = $('.buttons-excel');
                     var btnsPdf = $('.buttons-pdf');
@@ -233,7 +233,8 @@
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
                             success: function (resp) {
-                                $('.datatable-basic').DataTable().ajax.reload();
+                                // $('.datatable-basic').DataTable().ajax.reload();
+                                mappingList();
                                 swalInit.fire('Sukses!', resp.success, 'success');
                             },
                             error: function (xhr, status, error) {
