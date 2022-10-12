@@ -138,7 +138,15 @@ class MappingController extends Controller
         $hk = SecondaryClassification::where('code', 'HK.02')->first();
         $insert_hk = ['id' => $hk->id, 'code' => $hk->code, 'name' => $hk->name];
         array_splice( $classification, 22, 0, [$insert_hk] );
-
+        // insert manual PG.02
+        $pg2 = SecondaryClassification::where('code', 'PG.02')->first();
+        $insert_pg2 = ['id' => $pg2->id, 'code' => $pg2->code, 'name' => $pg2->name];
+        array_splice( $classification, 149, 0, [$insert_pg2] );
+        // insert manual PG.03
+        $pg3 = SecondaryClassification::where('code', 'PG.03')->first();
+        $insert_pg3 = ['id' => $pg3->id, 'code' => $pg3->code, 'name' => $pg3->name];
+        array_splice( $classification, 153, 0, [$insert_pg3] );
+        
         $security = SecurityClassification::orderBy('id')->get();
         $retention = RetentionClassification::orderBy('id')->get();
 
