@@ -135,9 +135,9 @@ class MappingController extends Controller
             }
         }
         // insert manual HK.02
-        $hk = SecondaryClassification::where('code', 'HK.02')->first();
-        $insert_hk = ['id' => $hk->id, 'code' => $hk->code, 'name' => $hk->name];
-        array_splice( $classification, 22, 0, [$insert_hk] );
+        $hk2 = SecondaryClassification::where('code', 'HK.02')->first();
+        $insert_hk2 = ['id' => $hk2->id, 'code' => $hk2->code, 'name' => $hk2->name];
+        array_splice( $classification, 22, 0, [$insert_hk2] );
         // insert manual PG.02
         $pg2 = SecondaryClassification::where('code', 'PG.02')->first();
         $insert_pg2 = ['id' => $pg2->id, 'code' => $pg2->code, 'name' => $pg2->name];
@@ -146,10 +146,14 @@ class MappingController extends Controller
         $pg3 = SecondaryClassification::where('code', 'PG.03')->first();
         $insert_pg3 = ['id' => $pg3->id, 'code' => $pg3->code, 'name' => $pg3->name];
         array_splice( $classification, 153, 0, [$insert_pg3] );
-        // insert manual PG.03
+        // insert manual PK.01
         $pk1 = SecondaryClassification::where('code', 'PK.01')->first();
         $insert_pk1 = ['id' => $pk1->id, 'code' => $pk1->code, 'name' => $pk1->name];
         array_splice( $classification, 575, 0, [$insert_pk1] );
+        // insert manual KS
+        $ks = PrimaryClassification::where('code', 'KS')->first();
+        $insert_ks = ['id' => $ks->id, 'code' => $ks->code, 'name' => $ks->name];
+        array_splice( $classification, 632, 0, [$insert_ks] );
 
         $security = SecurityClassification::orderBy('id')->get();
         $retention = RetentionClassification::orderBy('id')->get();
@@ -226,9 +230,9 @@ class MappingController extends Controller
             }
         }
         // insert manual HK.02
-        $hk = SecondaryClassification::where('code', 'HK.02')->first();
-        $insert_hk = ['id' => $hk->id, 'code' => $hk->code, 'name' => $hk->name];
-        array_splice( $classification, 22, 0, [$insert_hk] );
+        $hk2 = SecondaryClassification::where('code', 'HK.02')->first();
+        $insert_hk2 = ['id' => $hk2->id, 'code' => $hk2->code, 'name' => $hk2->name];
+        array_splice( $classification, 22, 0, [$insert_hk2] );
         // insert manual PG.02
         $pg2 = SecondaryClassification::where('code', 'PG.02')->first();
         $insert_pg2 = ['id' => $pg2->id, 'code' => $pg2->code, 'name' => $pg2->name];
@@ -237,10 +241,14 @@ class MappingController extends Controller
         $pg3 = SecondaryClassification::where('code', 'PG.03')->first();
         $insert_pg3 = ['id' => $pg3->id, 'code' => $pg3->code, 'name' => $pg3->name];
         array_splice( $classification, 153, 0, [$insert_pg3] );
-        // insert manual PG.03
+        // insert manual PK.01
         $pk1 = SecondaryClassification::where('code', 'PK.01')->first();
         $insert_pk1 = ['id' => $pk1->id, 'code' => $pk1->code, 'name' => $pk1->name];
         array_splice( $classification, 575, 0, [$insert_pk1] );
+        // insert manual KS
+        $ks = PrimaryClassification::where('code', 'KS')->first();
+        $insert_ks = ['id' => $ks->id, 'code' => $ks->code, 'name' => $ks->name];
+        array_splice( $classification, 632, 0, [$insert_ks] );
         
         $security = SecurityClassification::orderBy('id')->get();
         $retention = RetentionClassification::orderBy('id')->get();
