@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PrimaryClassification;
-use Illuminate\Support\Facades\DB;
-use App\Imports\ArchivesImport;
+use App\Imports\ArchivesStaticImport;
 use App\Models\Archives;
-use App\Models\Mapping;
 use App\Models\User;
 use DataTables;
 use Excel;
@@ -315,17 +313,54 @@ class ArchivesStaticController extends Controller
         }
     }
 
+    /**
+     * Import archives
+     * 
+     * @param \Illuminate\Http\Request  $request
+     */
     public function import(Request $request)
     {
         try {
-            Excel::import(new ArchivesImport, $request->file);
+            $this->validate($request, [
+                'file' => 'required'
+            ]);
+
+            Excel::import(new ArchivesStaticImport, $request->file);
+
             return response()->json([
                 'success' => 'Berhasil melakukan import data arsip statis.'
             ], 200);
-        } catch (\Exception $e) {
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errors = "";
+            foreach ($failures as $failure) {
+                $errors .= "Error baris " . $failure->row() . ", " . $failure->errors()[0] . "<br>\n";
+            }
+
             return response()->json([
-                'error' => $e->getMessage()
+                'errors' => $errors
             ], 500);
+        }
+    }
+
+    /**
+     * Download template file for import archives
+     * 
+     */
+    public function download_template()
+    {
+        try {
+            $file = public_path('template/template-arsip-statis.xlsx');
+            $headers = array(
+                'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                'Pragma' => 'no-cache',
+                'Expires' => '0',
+                'Content-Description' => 'File Transfer'
+            );
+
+            return response()->download($file, basename($file), $headers);
+        } catch (\Exception $e) {
+            abort(500);
         }
     }
 }

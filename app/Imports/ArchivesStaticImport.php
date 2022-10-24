@@ -3,12 +3,11 @@
 namespace App\Imports;
 
 use App\Models\Archives;
-use App\Models\Mapping;
-use App\Models\User;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
-class ArchivesImport implements ToModel, WithHeadingRow
+class ArchivesStaticImport implements ToModel, WithHeadingRow, WithValidation
 {
     /**
     * @param array $row
@@ -17,12 +16,9 @@ class ArchivesImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        $mapping = Mapping::where('archive_type', $row['jenis_arsip'])->first();
-        $user = User::where('name', $row['petugas'])->first();
-
         return new Archives([
             "name" => $row['nama'],
-            "mapping_id" => $mapping->id,
+            "code_classification" => $row['kode_klasifikasi'],
             "year" => $row['tahun'],
             "amount" => $row['jumlah_berkas'],
             "dev_level" => $this->get_dev_level($row['tingkat_perkembangan']),
@@ -31,9 +27,24 @@ class ArchivesImport implements ToModel, WithHeadingRow
             "loc_status" => $this->get_loc_status($row['status']),
             "loc_rack" => $row['rak'],
             "loc_box" => $row['box'],
-            "officer" => $user->id,
+            "officer" => auth()->user()->id,
             "status" => '1'
         ]);
+    }
+
+    public function rules(): array
+    {
+        return [
+            '*.nama' => 'required',
+            '*.kode_klasifikasi' => 'required',
+            '*.tahun' => 'required',
+            '*.jumlah_berkas' => 'required',
+            '*.tingkat_perkembangan' => 'required',
+            '*.lantai' => 'required',
+            '*.status' => 'required',
+            '*.rak' => 'required',
+            '*.box' => 'required'
+        ];
     }
 
     private function get_dev_level($dev_level) 

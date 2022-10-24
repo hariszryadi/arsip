@@ -38,7 +38,7 @@
                 <div class="form-group text-left">
                     <a href="{{ route('archives-static.create')}}" class="btn btn-primary mr-2"><i class="icon-file-plus"></i> Tambah</a>
                     <button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#importModal"><i class="icon-file-excel"></i> Import</button>
-                    <button type="button" class="btn btn-warning" id="btn-download-template"><i class="icon-file-download"></i> Template</button>
+                    <a href="{{ route('download-template-archive-static') }}" class="btn btn-warning"><i class="icon-file-download"></i> Template</a>
                 </div>
 
                 <table class="table datatable-basic table-hover table-bordered table-responsive">
@@ -190,8 +190,9 @@
                     $('.custom-file-label').text('Choose file');
                 },
                 error: function(xhr, textStatus, error) {
+                    var json = $.parseJSON(xhr.responseText);
                     $('#importModal').modal('hide');
-                    swalInit.fire('Error!', xhr.statusText, 'error');
+                    swalInit.fire('Error!', json.errors, 'error');
                     $('#import-form')[0].reset();
                     $('.custom-file-label').text('Choose file');
                 }
@@ -206,9 +207,5 @@
             $('#import-form')[0].reset();
             $('.custom-file-label').text('Choose file');
         });
-
-        $('#btn-download-template').on('click', function () {
-            alert('sedang dalam pengembangan')
-        })
     </script>
 @endsection

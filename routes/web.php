@@ -47,6 +47,8 @@ Route::resource('mapping', MappingController::class);
 Route::resource('archives-static', ArchivesStaticController::class);
 Route::get('archives-static/download/{id}', [ArchivesStaticController::class, 'download'])->name('archives-static.download');
 Route::post('archives-static/import', [ArchivesStaticController::class, 'import'])->name('archives-static.import');
+Route::post('archives-static/import', [ArchivesStaticController::class, 'import'])->name('archives-static.import');
+Route::get('download-template-archive-static', [ArchivesStaticController::class, 'download_template'])->name('download-template-archive-static');
 Route::resource('archives-inactive', ArchivesInactiveController::class);
 Route::get('archives-inactive/download/{id}', [ArchivesInactiveController::class, 'download'])->name('archives-inactive.download');
 Route::post('archives-inactive/import', [ArchivesInactiveController::class, 'import'])->name('archives-inactive.import');
