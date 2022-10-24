@@ -7,9 +7,9 @@ use App\Imports\ArchivesInactiveImport;
 use App\Models\Archives;
 use App\Models\Mapping;
 use App\Models\User;
-use DataTables;
-use Excel;
-use File;
+use Illuminate\Support\Facades\File;
+use Maatwebsite\Excel\Facades\Excel;
+use Yajra\DataTables\DataTables;
 
 class ArchivesInactiveController extends Controller
 {

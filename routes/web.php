@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MappingController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\ClassificationController;
 use App\Http\Controllers\ArchivesStaticController;
 use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\ArchivesInactiveController;
+use App\Http\Controllers\RackController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +45,7 @@ Route::delete('classification/tertiary/{id}', [ClassificationController::class, 
 Route::resource('security', SecurityController::class);
 Route::resource('retention', RetentionController::class);
 Route::resource('mapping', MappingController::class);
+Route::resource('rack', RackController::class);
 // Data
 Route::resource('archives-static', ArchivesStaticController::class);
 Route::get('archives-static/download/{id}', [ArchivesStaticController::class, 'download'])->name('archives-static.download');

@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\PrimaryClassification;
 use App\Models\User;
 use App\Models\Archives;
-use DataTables;
-use File;
-use Excel;
+use Illuminate\Support\Facades\File;
+use Maatwebsite\Excel\Facades\Excel;
+use Yajra\DataTables\DataTables;
 
 class ArchivesVitalController extends Controller
 {
@@ -40,7 +40,7 @@ class ArchivesVitalController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            return Datatables::of(Archives::with('mapping')->where('status', '3')->orderBy('id')->get())
+            return DataTables::of(Archives::with('mapping')->where('status', '3')->orderBy('id')->get())
                 ->editColumn('amount', function($data) {
                     return $data->amount . ' Folder';
                 })

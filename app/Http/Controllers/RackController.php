@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rack;
 use Illuminate\Http\Request;
-use App\Models\SecurityClassification;
 use Yajra\DataTables\DataTables;
 
-class SecurityController extends Controller
+class RackController extends Controller
 {
     /**
      * Folder views
      */
-    protected $_view = 'security.';
+    protected $_view = 'rack.';
 
     /**
      * Route index
      */
-    protected $_route = 'security.index';
+    protected $_route = 'rack.index';
 
     /**
      * Create a new controller instance.
@@ -35,7 +35,7 @@ class SecurityController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            return DataTables::of(SecurityClassification::orderBy('id')->get())
+            return DataTables::of(Rack::orderBy('id')->get())
                 ->addColumn('action', function($data){
                     return '<div class="list-icons">
                                 <div class="dropdown">
@@ -44,11 +44,19 @@ class SecurityController extends Controller
                                     </a>
 
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="'.route('security.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
+                                        <a href="'.route('rack.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
                                         <a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i> Hapus</a>
                                     </div>
                                 </div>
                             </div>';
+                })
+                ->editColumn('type', function($data) {
+                    if ($data->type == 'S') {
+                        return 'Statis';
+                    } else {
+                        return 'Dinamis';
+                    }
+                    
                 })
                 ->make(true);
         }
@@ -75,20 +83,20 @@ class SecurityController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|max:255',
-            'access_rights' => 'required|max:255',
-            'basic_consideration' => 'required|max:255',
-            'processing_unit' => 'required|max:255'
+            'floor' => 'required',
+            'type' => 'required',
+            'no_rack' => 'required',
+            'capacity' => 'required'
         ]);
 
-        SecurityClassification::create([
-            'name' => $request->name,
-            'access_rights' => $request->access_rights,
-            'basic_consideration' => $request->basic_consideration,
-            'processing_unit' => $request->processing_unit
+        Rack::create([
+            'floor' => $request->floor,
+            'type' => $request->type,
+            'no_rack' => $request->no_rack,
+            'capacity' => $request->capacity
         ]);
 
-        return redirect()->route($this->_route)->with('success', 'Data keamanan berhasil ditambahkan');
+        return redirect()->route($this->_route)->with('success', 'Data rak berhasil ditambahkan');
     }
 
     /**
@@ -110,8 +118,8 @@ class SecurityController extends Controller
      */
     public function edit($id)
     {
-        $security = SecurityClassification::find($id);
-        return view($this->_view.'form', compact('security'));
+        $rack = Rack::find($id);
+        return view($this->_view.'form', compact('rack'));
     }
 
     /**
@@ -124,21 +132,21 @@ class SecurityController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'name' => 'required|max:255',
-            'access_rights' => 'required|max:255',
-            'basic_consideration' => 'required|max:255',
-            'processing_unit' => 'required|max:255'
+            'floor' => 'required',
+            'type' => 'required',
+            'no_rack' => 'required',
+            'capacity' => 'required'
         ]);
 
-        $security = SecurityClassification::find($id);
-        $security->update([
-            'name' => $request->name,
-            'access_rights' => $request->access_rights,
-            'basic_consideration' => $request->basic_consideration,
-            'processing_unit' => $request->processing_unit
+        $rack = Rack::find($id);
+        $rack->update([
+            'floor' => $request->floor,
+            'type' => $request->type,
+            'no_rack' => $request->no_rack,
+            'capacity' => $request->capacity
         ]);
 
-        return redirect()->route($this->_route)->with('success', 'Data keamanan berhasil diubah');
+        return redirect()->route($this->_route)->with('success', 'Data rak berhasil diubah');
     }
 
     /**
@@ -149,9 +157,9 @@ class SecurityController extends Controller
      */
     public function destroy($id)
     {
-        $security = SecurityClassification::findOrFail($id);
-        $security->delete();
+        $rack = Rack::findOrFail($id);
+        $rack->delete();
 
-        return response()->json(['success' => 'Data keamanan berhasil dihapus']);
+        return response()->json(['success' => 'Data rak berhasil dihapus']);
     }
 }

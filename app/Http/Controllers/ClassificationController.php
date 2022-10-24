@@ -8,7 +8,7 @@ use App\Models\SecondaryClassification;
 use App\Models\TertiaryClassification;
 use App\Models\Archives;
 use App\Models\Mapping;
-use DataTables;
+use Yajra\DataTables\DataTables;
 
 class ClassificationController extends Controller
 {
@@ -39,7 +39,7 @@ class ClassificationController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            return Datatables::of(PrimaryClassification::orderBy('id')->get())
+            return DataTables::of(PrimaryClassification::orderBy('id')->get())
                 ->editColumn('category', function($data) {
                     if ($data->category == '1') {
                         return 'Fasilitatif';

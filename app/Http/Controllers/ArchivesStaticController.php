@@ -7,9 +7,9 @@ use App\Models\PrimaryClassification;
 use App\Imports\ArchivesStaticImport;
 use App\Models\Archives;
 use App\Models\User;
-use DataTables;
-use Excel;
-use File;
+use Illuminate\Support\Facades\File;
+use Maatwebsite\Excel\Facades\Excel;
+use Yajra\DataTables\DataTables;
 
 class ArchivesStaticController extends Controller
 {

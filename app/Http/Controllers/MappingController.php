@@ -9,7 +9,7 @@ use App\Models\SecurityClassification;
 use App\Models\RetentionClassification;
 use App\Models\SecondaryClassification;
 use Illuminate\Support\Facades\DB;
-use DataTables;
+use Yajra\DataTables\DataTables;
 
 class MappingController extends Controller
 {
@@ -78,7 +78,7 @@ class MappingController extends Controller
         
 
         if (request()->ajax()) {
-            return Datatables::of($query)
+            return DataTables::of($query)
                 ->editColumn('name', function($data) {
                     return $data->code.' - '.$data->name;
                 })

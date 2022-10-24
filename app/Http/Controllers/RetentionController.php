@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\RetentionClassification;
-use DataTables;
+use Yajra\DataTables\DataTables;
 
 class RetentionController extends Controller
 {
@@ -35,7 +35,7 @@ class RetentionController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            return Datatables::of(RetentionClassification::orderBy('id')->get())
+            return DataTables::of(RetentionClassification::orderBy('id')->get())
                 ->addColumn('action', function($data){
                     return '<div class="list-icons">
                                 <div class="dropdown">
