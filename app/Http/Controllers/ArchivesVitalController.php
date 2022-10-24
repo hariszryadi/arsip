@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ArchivesVitalImport;
 use Illuminate\Http\Request;
 use App\Models\PrimaryClassification;
 use App\Models\User;
-use App\Models\Mapping;
 use App\Models\Archives;
 use DataTables;
 use File;
+use Excel;
 
 class ArchivesVitalController extends Controller
 {
@@ -294,6 +295,7 @@ class ArchivesVitalController extends Controller
     {
         try {
             $archives = Archives::find($id);
+
             if ($archives->file !== null) {
                 $file = public_path('storage/' . $archives->file);
                 $headers = array(
@@ -307,6 +309,57 @@ class ArchivesVitalController extends Controller
             } else {
                 return redirect()->back()->with('error', 'File tidak ditemukan');
             }
+        } catch (\Exception $e) {
+            abort(500);
+        }
+    }
+
+        /**
+     * Import archives
+     * 
+     * @param \Illuminate\Http\Request  $request
+     */
+    public function import(Request $request)
+    {
+        try {
+            $this->validate($request, [
+                'file' => 'required'
+            ]);
+
+            Excel::import(new ArchivesVitalImport, $request->file);
+
+            return response()->json([
+                'success' => 'Berhasil melakukan import data arsip statis.'
+            ], 200);
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errors = "";
+            foreach ($failures as $failure) {
+                $errors .= "Error baris " . $failure->row() . ", " . $failure->errors()[0] . "<br>\n";
+            }
+
+            return response()->json([
+                'errors' => $errors
+            ], 500);
+        }
+    }
+
+    /**
+     * Download template file for import archives
+     * 
+     */
+    public function download_template()
+    {
+        try {
+            $file = public_path('template/template-arsip-vital.xlsx');
+            $headers = array(
+                'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                'Pragma' => 'no-cache',
+                'Expires' => '0',
+                'Content-Description' => 'File Transfer'
+            );
+
+            return response()->download($file, basename($file), $headers);
         } catch (\Exception $e) {
             abort(500);
         }
