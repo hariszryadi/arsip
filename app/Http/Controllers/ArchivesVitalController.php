@@ -294,15 +294,19 @@ class ArchivesVitalController extends Controller
     {
         try {
             $archives = Archives::find($id);
-            $file = public_path('storage/' . $archives->file);
-            $headers = array(
-                'Cache-Control' => 'no-cache, no-store, must-revalidate',
-                'Pragma' => 'no-cache',
-                'Expires' => '0',
-                'Content-Description' => 'File Transfer'
-            );
-
-            return response()->download($file, basename($file), $headers);
+            if ($archives->file !== null) {
+                $file = public_path('storage/' . $archives->file);
+                $headers = array(
+                    'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                    'Pragma' => 'no-cache',
+                    'Expires' => '0',
+                    'Content-Description' => 'File Transfer'
+                );
+    
+                return response()->download($file, basename($file), $headers);
+            } else {
+                return redirect()->back()->with('error', 'File tidak ditemukan');
+            }
         } catch (\Exception $e) {
             abort(500);
         }

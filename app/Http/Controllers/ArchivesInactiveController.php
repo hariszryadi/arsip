@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PrimaryClassification;
-use App\Models\User;
-use App\Models\Mapping;
+use App\Imports\ArchivesInactiveImport;
 use App\Models\Archives;
+use App\Models\Mapping;
+use App\Models\User;
 use DataTables;
+use Excel;
 use File;
 
 class ArchivesInactiveController extends Controller
@@ -253,12 +255,74 @@ class ArchivesInactiveController extends Controller
 
     /**
      * Download file archives
+     * 
+     * @param  int  $id
      */
     public function download($id)
     {
         try {
             $archives = Archives::find($id);
-            $file = public_path('storage/' . $archives->file);
+            
+            if ($archives->file != null) {
+                $file = public_path('storage/' . $archives->file);
+                $headers = array(
+                    'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                    'Pragma' => 'no-cache',
+                    'Expires' => '0',
+                    'Content-Description' => 'File Transfer'
+                );
+    
+                return response()->download($file, basename($file), $headers);
+            } else {
+                return redirect()->back()->with('error', 'File tidak ditemukan');
+            }
+        } catch (\Exception $e) {
+            abort(500);
+        }
+    }
+
+    /**
+     * Import archives
+     * 
+     * @param \Illuminate\Http\Request  $request
+     */
+    public function import(Request $request)
+    {
+        try {
+            $this->validate($request, [
+                'file' => 'required'
+            ]);
+
+            // $pathTofile = $request->file('file')->store('inactive','public');
+            // $import =  new ArchivesInactiveImport;
+            // $import->import(\storage_path('app/public/' . $pathTofile));
+
+            Excel::import(new ArchivesInactiveImport, $request->file);
+
+            return response()->json([
+                'success' => 'Berhasil melakukan import data arsip inaktif.'
+            ], 200);
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errors = "";
+            foreach ($failures as $failure) {
+                $errors .= "Error baris " . $failure->row() . ", " . $failure->errors()[0] . "<br>\n";
+            }
+
+            return response()->json([
+                'errors' => $errors
+            ], 500);
+        }
+    }
+
+    /**
+     * Download template file for import archives
+     * 
+     */
+    public function download_template()
+    {
+        try {
+            $file = public_path('template/template-arsip-inaktif.xlsx');
             $headers = array(
                 'Cache-Control' => 'no-cache, no-store, must-revalidate',
                 'Pragma' => 'no-cache',

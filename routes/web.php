@@ -49,6 +49,8 @@ Route::get('archives-static/download/{id}', [ArchivesStaticController::class, 'd
 Route::post('archives-static/import', [ArchivesStaticController::class, 'import'])->name('archives-static.import');
 Route::resource('archives-inactive', ArchivesInactiveController::class);
 Route::get('archives-inactive/download/{id}', [ArchivesInactiveController::class, 'download'])->name('archives-inactive.download');
+Route::post('archives-inactive/import', [ArchivesInactiveController::class, 'import'])->name('archives-inactive.import');
+Route::get('download-template-archive-inactive', [ArchivesInactiveController::class, 'download_template'])->name('download-template-archive-inactive');
 Route::resource('archives-vital', ArchivesVitalController::class);
 Route::get('archives-vital/download/{id}', [ArchivesVitalController::class, 'download'])->name('archives-vital.download');
 // User Config

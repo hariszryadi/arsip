@@ -294,6 +294,8 @@ class ArchivesStaticController extends Controller
 
     /**
      * Download file archives
+     * 
+     * @param  int  $id
      */
     public function download($id)
     {
@@ -318,7 +320,7 @@ class ArchivesStaticController extends Controller
         try {
             Excel::import(new ArchivesImport, $request->file);
             return response()->json([
-                'success' => 'Berhasil melakukan import data arsip.'
+                'success' => 'Berhasil melakukan import data arsip statis.'
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

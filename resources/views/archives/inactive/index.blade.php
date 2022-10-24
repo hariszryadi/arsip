@@ -36,7 +36,9 @@
             
             <div class="card-body">
                 <div class="form-group text-left">
-                    <a href="{{ route('archives-inactive.create')}}" class="btn btn-primary"><i class="icon-file-plus"></i> Tambah</a>
+                    <a href="{{ route('archives-inactive.create')}}" class="btn btn-primary mr-2"><i class="icon-file-plus"></i> Tambah</a>
+                    <button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#importModal"><i class="icon-file-excel"></i> Import</button>
+                    <a href="{{ route('download-template-archive-inactive') }}" class="btn btn-warning"><i class="icon-file-download"></i> Template</a>
                 </div>
 
                 <table class="table datatable-basic table-hover table-bordered table-responsive">
@@ -61,6 +63,38 @@
 
 </div>
 <!-- /inner content -->
+
+<!-- Modal -->
+<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="importModalLabel">Import Arsip</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" id="import-form" class="form-horizontal" enctype="multipart/form-data">
+                <div class="modal-body">
+                    @csrf
+                    <div class="form-group">
+                        <div class="custom-file">
+                            <input type="file" name="file" class="custom-file-input" id="customFile">
+                            <label class="custom-file-label" for="customFile">Choose file</label>
+                            <span class="invalid-feedback" role="alert">
+                                <strong></strong>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Import</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
@@ -135,5 +169,41 @@
                 }
             });
         })
+
+        $('#import-form').on('submit', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "{{ route('archives-inactive.import') }}",
+                method: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json",
+                success: function (data) {
+                    $('#importModal').modal('hide');
+                    swalInit.fire('Sukses!', data.success, 'success');
+                    $('.datatable-basic').DataTable().ajax.reload();
+                    $('#import-form')[0].reset();
+                    $('.custom-file-label').text('Choose file');
+                },
+                error: function(xhr, textStatus, error) {
+                    var json = $.parseJSON(xhr.responseText);
+                    $('#importModal').modal('hide');
+                    swalInit.fire('Error!', json.errors, 'error');
+                    $('#import-form')[0].reset();
+                    $('.custom-file-label').text('Choose file');
+                }
+            })
+        })
+
+        $(".custom-file-input").on("change", function(e){
+            $('.custom-file-label').text(e.target.files[0].name);
+        });
+
+        $('#importModal').on('hidden.bs.modal', function (e) {
+            $('#import-form')[0].reset();
+            $('.custom-file-label').text('Choose file');
+        });
     </script>
 @endsection
