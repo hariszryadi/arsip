@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRacksTable extends Migration
+class CreateArchiveCreatorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,9 @@ class CreateRacksTable extends Migration
      */
     public function up()
     {
-        Schema::create('racks', function (Blueprint $table) {
+        Schema::create('archive_creators', function (Blueprint $table) {
             $table->id();
-            $table->integer('floor');
-            $table->enum('type', ['S', 'D', 'V']);
-            $table->string('no_rack');
-            $table->integer('capacity');
-            $table->integer('used')->default('0');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -31,6 +27,6 @@ class CreateRacksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('racks');
+        Schema::dropIfExists('archive_creators');
     }
 }

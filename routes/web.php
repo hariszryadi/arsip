@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RackController;
 use App\Http\Controllers\MappingController;
 use App\Http\Controllers\SecurityController;
 use App\Http\Controllers\RetentionController;
@@ -11,8 +12,9 @@ use App\Http\Controllers\ArchivesVitalController;
 use App\Http\Controllers\ClassificationController;
 use App\Http\Controllers\ArchivesStaticController;
 use App\Http\Controllers\ChangePasswordController;
+use App\Http\Controllers\ArchiveCreatorController;
+use App\Http\Controllers\ArchivesDestroyController;
 use App\Http\Controllers\ArchivesInactiveController;
-use App\Http\Controllers\RackController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +47,7 @@ Route::delete('classification/tertiary/{id}', [ClassificationController::class, 
 Route::resource('security', SecurityController::class);
 Route::resource('retention', RetentionController::class);
 Route::resource('mapping', MappingController::class);
+Route::resource('archive-creator', ArchiveCreatorController::class);
 Route::resource('rack', RackController::class);
 // Data
 Route::resource('archives-static', ArchivesStaticController::class);
@@ -55,10 +58,12 @@ Route::resource('archives-inactive', ArchivesInactiveController::class);
 Route::get('archives-inactive/download/{id}', [ArchivesInactiveController::class, 'download'])->name('archives-inactive.download');
 Route::post('archives-inactive/import', [ArchivesInactiveController::class, 'import'])->name('archives-inactive.import');
 Route::get('download-template-archive-inactive', [ArchivesInactiveController::class, 'download_template'])->name('download-template-archive-inactive');
+Route::post('get-rack-archive-inactive', [ArchivesInactiveController::class, 'get_rack'])->name('get-rack-archive-inactive');
 Route::resource('archives-vital', ArchivesVitalController::class);
 Route::get('archives-vital/download/{id}', [ArchivesVitalController::class, 'download'])->name('archives-vital.download');
 Route::post('archives-vital/import', [ArchivesVitalController::class, 'import'])->name('archives-vital.import');
 Route::get('download-template-archive-vital', [ArchivesVitalController::class, 'download_template'])->name('download-template-archive-vital');
+Route::resource('archives-destroy', ArchivesDestroyController::class);
 // User Config
 Route::resource('user', UserController::class);
 // Change Pasword

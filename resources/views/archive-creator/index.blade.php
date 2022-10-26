@@ -8,7 +8,7 @@
     <div class="page-header page-header-light">
         <div class="page-header-content header-elements-lg-inline">
             <div class="page-title d-flex">
-                <h4>Rak</h4>
+                <h4>Pencipta Arsip</h4>
             </div>
         </div>
 
@@ -17,7 +17,7 @@
                 <div class="breadcrumb">
                     <a href="{{ route('home') }}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
                     <span class="breadcrumb-item">Master</span>
-                    <span class="breadcrumb-item active">Rak</span>
+                    <span class="breadcrumb-item active">Pencipta Arsip</span>
                 </div>
 
             </div>
@@ -31,20 +31,19 @@
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">List Rak</h3>
+                <h3 class="card-title">List Pencipta Arsip</h3>
             </div>
             
             <div class="card-body">
                 <div class="form-group text-left">
-                    <a href="{{ route('rack.create')}}" class="btn btn-primary"><i class="icon-file-plus"></i> Tambah</a>
+                    <a href="{{ route('archive-creator.create')}}" class="btn btn-primary"><i class="icon-file-plus"></i> Tambah</a>
                 </div>
 
                 <table class="table datatable-basic table-hover table-bordered table-responsive">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Kode</th>
-                            <th>Kapasitas</th>
+                            <th>Nama</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -69,7 +68,7 @@
                 bLengthChange: true,
                 pageLength: 10,
                 ajax: {
-                    url: "{{ route('rack.index') }}",
+                    url: "{{ route('archive-creator.index') }}",
                 },
                 columns: [
                     {
@@ -77,14 +76,13 @@
                             return meta.row + meta.settings._iDisplayStart + 1;
                         },
                     },
-                    { data: "code" },
-                    { data: "capacity" },
+                    { data: "name" },
                     { data: "action", orderable: false}
                 ],
                 columnDefs: [
                     { width: "5%", "targets": [0] },
-                    { width: "15%", "targets": [3] },
-                    { className: "text-center", "targets": [3] }
+                    { width: "15%", "targets": [2] },
+                    { className: "text-center", "targets": [2] }
                 ],
                 dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
                 language: {
@@ -99,7 +97,7 @@
         
         $(document).on('click', '#delete', function () {
             var id = $(this).attr('data-id');
-            var url = "{{ route('rack.destroy', ":id") }}";
+            var url = "{{ route('archive-creator.destroy', ":id") }}";
             url = url.replace(':id', id);
             var disabled = $(this).attr('disabled');
 

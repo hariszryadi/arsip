@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Rack;
+use App\Models\ArchiveCreator;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
-class RackController extends Controller
+class ArchiveCreatorController extends Controller
 {
     /**
      * Folder views
      */
-    protected $_view = 'rack.';
+    protected $_view = 'archive-creator.';
 
     /**
      * Route index
      */
-    protected $_route = 'rack.index';
+    protected $_route = 'archive-creator.index';
 
     /**
      * Create a new controller instance.
@@ -35,7 +35,7 @@ class RackController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            return DataTables::of(Rack::orderBy('id')->get())
+            return DataTables::of(ArchiveCreator::orderBy('id')->get())
                 ->addColumn('action', function($data){
                     return '<div class="list-icons">
                                 <div class="dropdown">
@@ -44,14 +44,11 @@ class RackController extends Controller
                                     </a>
 
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="'.route('rack.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
+                                        <a href="'.route('archive-creator.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
                                         <a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i> Hapus</a>
                                     </div>
                                 </div>
                             </div>';
-                })
-                ->addColumn('code', function($data) {
-                    return 'R.'. $data->floor . '.' . $data->type . '.' . $data->no_rack;
                 })
                 ->make(true);
         }
@@ -78,20 +75,14 @@ class RackController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'floor' => 'required',
-            'type' => 'required',
-            'no_rack' => 'required',
-            'capacity' => 'required'
+            'name' => 'required|max:255',
         ]);
 
-        Rack::create([
-            'floor' => $request->floor,
-            'type' => $request->type,
-            'no_rack' => $request->no_rack,
-            'capacity' => $request->capacity
+        ArchiveCreator::create([
+            'name' => $request->name
         ]);
 
-        return redirect()->route($this->_route)->with('success', 'Data rak berhasil ditambahkan');
+        return redirect()->route($this->_route)->with('success', 'Data pencipta arsip berhasil ditambahkan');
     }
 
     /**
@@ -113,8 +104,8 @@ class RackController extends Controller
      */
     public function edit($id)
     {
-        $rack = Rack::find($id);
-        return view($this->_view.'form', compact('rack'));
+        $creator = ArchiveCreator::find($id);
+        return view($this->_view.'form', compact('creator'));
     }
 
     /**
@@ -127,21 +118,15 @@ class RackController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'floor' => 'required',
-            'type' => 'required',
-            'no_rack' => 'required',
-            'capacity' => 'required'
+            'name' => 'required|max:255',
         ]);
 
-        $rack = Rack::find($id);
-        $rack->update([
-            'floor' => $request->floor,
-            'type' => $request->type,
-            'no_rack' => $request->no_rack,
-            'capacity' => $request->capacity
+        $creator = ArchiveCreator::find($id);
+        $creator->update([
+            'name' => $request->name
         ]);
 
-        return redirect()->route($this->_route)->with('success', 'Data rak berhasil diubah');
+        return redirect()->route($this->_route)->with('success', 'Data pencipta arsip berhasil diubah');
     }
 
     /**
@@ -152,9 +137,9 @@ class RackController extends Controller
      */
     public function destroy($id)
     {
-        $rack = Rack::findOrFail($id);
-        $rack->delete();
+        $creator = ArchiveCreator::findOrFail($id);
+        $creator->delete();
 
-        return response()->json(['success' => 'Data rak berhasil dihapus']);
+        return response()->json(['success' => 'Data pencipta arsip berhasil dihapus']);
     }
 }

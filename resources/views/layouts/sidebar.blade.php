@@ -45,7 +45,7 @@
                     </span>
                 </a>
             </li>
-            <li class="nav-item nav-item-submenu {{ request()->is('classification') || request()->is('classification/*') || request()->is('security') || request()->is('security/*') || request()->is('retention') || request()->is('retention/*') || request()->is('mapping') || request()->is('mapping/*') || request()->is('rack') || request()->is('rack/*') ? 'nav-item-expanded nav-item-open' : '' }}">
+            <li class="nav-item nav-item-submenu {{ request()->is('classification') || request()->is('classification/*') || request()->is('security') || request()->is('security/*') || request()->is('retention') || request()->is('retention/*') || request()->is('mapping') || request()->is('mapping/*') || request()->is('archive-creator') || request()->is('archive-creator/*') || request()->is('rack') || request()->is('rack/*') ? 'nav-item-expanded nav-item-open' : '' }}">
                 <a href="#" class="nav-link"><i class="icon-cube3"></i> <span>Master</span></a>
 
                 <ul class="nav nav-group-sub" data-submenu-title="Master">
@@ -53,6 +53,7 @@
                     <li class="nav-item"><a href="{{ route('security.index') }}" class="nav-link {{ request()->is('security') || request()->is('security/*') ? 'active' : '' }}">Keamanan</a></li>
                     <li class="nav-item"><a href="{{ route('retention.index') }}" class="nav-link {{ request()->is('retention') || request()->is('retention/*') ? 'active' : '' }}">Retensi</a></li>
                     <li class="nav-item"><a href="{{ route('mapping.index') }}" class="nav-link {{ request()->is('mapping') || request()->is('mapping/*') ? 'active' : '' }}">Mapping</a></li>
+                    <li class="nav-item"><a href="{{ route('archive-creator.index') }}" class="nav-link {{ request()->is('archive-creator') || request()->is('archive-creator/*') ? 'active' : '' }}">Pencipta Arsip</a></li>
                     <li class="nav-item"><a href="{{ route('rack.index') }}" class="nav-link {{ request()->is('rack') || request()->is('rack/*') ? 'active' : '' }}">Rak</a></li>
                 </ul>
             </li>
@@ -60,9 +61,18 @@
             <li class="nav-item nav-item-submenu {{ request()->is('archives-static') || request()->is('archives-static/*') || request()->is('archives-inactive') || request()->is('archives-inactive/*') || request()->is('archives-vital') || request()->is('archives-vital/*') ? 'nav-item-expanded nav-item-open' : '' }}">
                 <a href="#" class="nav-link"><i class="icon-stack"></i> <span>Data</span></a>
                 <ul class="nav nav-group-sub" data-submenu-title="Data">
+                    <li class="nav-item"><a href="{{ route('archives-vital.index') }}" class="nav-link {{ request()->is('archives-vital') || request()->is('archives-vital/*') ? 'active' : '' }}">Arsip Vital</a></li>
                     <li class="nav-item"><a href="{{ route('archives-static.index') }}" class="nav-link {{ request()->is('archives-static') || request()->is('archives-static/*') ? 'active' : '' }}">Arsip Statis</a></li>
                     <li class="nav-item"><a href="{{ route('archives-inactive.index') }}" class="nav-link {{ request()->is('archives-inactive') || request()->is('archives-inactive/*') ? 'active' : '' }}">Arsip Inaktif</a></li>
-                    <li class="nav-item"><a href="{{ route('archives-vital.index') }}" class="nav-link {{ request()->is('archives-vital') || request()->is('archives-vital/*') ? 'active' : '' }}">Arsip Vital</a></li>
+                    <li class="nav-item"><a href="{{ route('archives-destroy.index') }}" class="nav-link {{ request()->is('archives-destroy') || request()->is('archives-destroy/*') ? 'active' : '' }}">Usul Musnah</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Usul Serah</a></li>
+                </ul>
+            </li>
+
+            <li class="nav-item nav-item-submenu {{ request()->is('report') || request()->is('report/*') ? 'nav-item-expanded nav-item-open' : '' }}">
+                <a href="#" class="nav-link"><i class="icon-file-stats"></i> <span>Report</span></a>
+                <ul class="nav nav-group-sub" data-submenu-title="Report">
+                    <li class="nav-item"><a href="#" class="nav-link">Report Arsip</a></li>
                 </ul>
             </li>
 

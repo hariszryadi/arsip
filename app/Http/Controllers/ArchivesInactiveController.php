@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Imports\ArchivesInactiveImport;
 use App\Models\Archives;
 use App\Models\Mapping;
+use App\Models\Rack;
 use App\Models\User;
 use Illuminate\Support\Facades\File;
 use Maatwebsite\Excel\Facades\Excel;
@@ -77,7 +78,8 @@ class ArchivesInactiveController extends Controller
     {
         $mapping = Mapping::orderBy('id')->get();
         $user = User::orderBy('id')->get();
-        return view($this->_view.'create', compact('mapping', 'user'));
+        $rack = Rack::where('type', 'D')->orderBy('id')->get();
+        return view($this->_view.'create', compact('mapping', 'user', 'rack'));
     }
 
     /**
@@ -99,7 +101,8 @@ class ArchivesInactiveController extends Controller
             'loc_rack' => 'required',
             'loc_box' => 'required',
             'file' => 'mimes:jpeg,bmp,png,gif,svg,pdf',
-            'officer' => 'required'
+            'officer' => 'required',
+            'rack_id' => 'required'
         ]);
 
         $path = null;
@@ -150,7 +153,8 @@ class ArchivesInactiveController extends Controller
         $archives = Archives::find($id);
         $mapping = Mapping::orderBy('id')->get();
         $user = User::orderBy('id')->get();
-        return view($this->_view.'edit', compact('archives', 'mapping', 'user'));
+        $rack = Rack::orderBy('id')->get();
+        return view($this->_view.'edit', compact('archives', 'mapping', 'user', 'rack'));
     }
 
     /**
@@ -333,5 +337,13 @@ class ArchivesInactiveController extends Controller
         } catch (\Exception $e) {
             abort(500);
         }
+    }
+
+    public function get_rack(Request $request)
+    {
+        $rack = Rack::find($request->id);
+        return '<span class="span-feedback">
+                    <strong>Kapasitas : ' . $rack->used . '/' . $rack->capacity . '</strong>
+                </span>';
     }
 }

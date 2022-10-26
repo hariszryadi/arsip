@@ -136,7 +136,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    {{-- <div class="form-group row">
                         <label class="col-form-label col-lg-2 @error('loc_floor') text-danger @enderror" for="loc_floor">Lantai</label>
                         <div class="col-lg-4">
                             <select name="loc_floor" class="form-control select-search @error('loc_floor') is-invalid @enderror" id="loc_floor" data-fouc>
@@ -175,10 +175,24 @@
                                 </span>
                             @enderror
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="form-group row">
-                        <label class="col-form-label col-lg-2 @error('loc_rack') text-danger @enderror" for="loc_rack">Rak</label>
+                        <label class="col-form-label col-lg-2 @error('rack_id') text-danger @enderror" for="rack_id">Rak</label>
+                        <div class="col-lg-4">
+                            <select name="rack_id" class="form-control select-search @error('rack_id') is-invalid @enderror" id="rack_id" select-search>
+                                <option value="" selected disabled>Pilih Rak</option>
+                                @foreach ($rack as $item)
+                                    <option value="{{ $item->id }}" {{ old('rack_id') == $item->id ? 'selected' : '' }}>R{{ $item->floor . $item->type . $item->no_rack }}</option>
+                                @endforeach
+                            </select>
+                            @error('rack_id')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        {{-- <label class="col-form-label col-lg-2 @error('loc_rack') text-danger @enderror" for="loc_rack">Rak</label>
                         <div class="col-lg-4">
                             <input type="string" class="form-control numeric @error('loc_rack') is-invalid @enderror" name="loc_rack" id="loc_rack" maxlength="3" value="{{ old('loc_rack') != null ? old('loc_rack') : $archives->loc_rack }}">
                             @error('loc_rack')
@@ -186,7 +200,7 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                        </div>
+                        </div> --}}
                         <label class="col-form-label col-lg-2 @error('loc_box') text-danger @enderror" for="loc_box">Box</label>
                         <div class="col-lg-4">
                             <input type="string" class="form-control numeric @error('loc_box') is-invalid @enderror" name="loc_box" id="loc_box" maxlength="2" value="{{ old('loc_box') != null ? old('loc_box') : $archives->loc_box }}">
