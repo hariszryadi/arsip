@@ -48,9 +48,10 @@
                             <th>Nama Arsip</th>
                             <th>Jenis Arsip</th>
                             <th>Tahun</th>
-                            <th>Jml. Berkas</th>
-                            <th>Tk. Perkembangan</th>
-                            <th>Lokasi</th>
+                            <th>Jumlah</th>
+                            <th>Tingkat Perkembangan</th>
+                            <th>Lokasi Rak</th>
+                            <th>Box</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -79,11 +80,8 @@
                     @csrf
                     <div class="form-group">
                         <div class="custom-file">
-                            <input type="file" name="file" class="custom-file-input" id="customFile">
+                            <input type="file" name="file" class="custom-file-input" id="customFile" accept=".xls,.xlsx">
                             <label class="custom-file-label" for="customFile">Choose file</label>
-                            <span class="invalid-feedback" role="alert">
-                                <strong></strong>
-                            </span>
                         </div>
                     </div>
                 </div>
@@ -120,7 +118,8 @@
                     { data: "year" },
                     { data: "amount" },
                     { data: "dev_level" },
-                    { data: "location" },
+                    { data: "rack" },
+                    { data: "box" },
                     { data: "action", orderable: false}
                 ],
                 columnDefs: [

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Imports\ArchivesInactiveImport;
+use App\Models\ArchiveCreator;
 use App\Models\Archives;
 use App\Models\Mapping;
 use App\Models\Rack;
@@ -48,6 +49,9 @@ class ArchivesInactiveController extends Controller
                 ->editColumn('dev_level', function($data) {
                     return $this->get_dev_level($data->dev_level);
                 })
+                ->editColumn('rack', function($data) {
+                    return 'R.' . $data->rack->floor . '.' . $data->rack->type . '.' . $data->rack->no_rack;
+                })
                 ->addColumn('action', function($data){
                     return '<div class="list-icons">
                                 <div class="dropdown">
@@ -78,8 +82,9 @@ class ArchivesInactiveController extends Controller
     {
         $mapping = Mapping::orderBy('id')->get();
         $user = User::orderBy('id')->get();
+        $creator = ArchiveCreator::orderBy('id')->get();
         $rack = Rack::where('type', 'D')->orderBy('id')->get();
-        return view($this->_view.'create', compact('mapping', 'user', 'rack'));
+        return view($this->_view.'create', compact('mapping', 'user', 'creator', 'rack'));
     }
 
     /**
@@ -93,16 +98,14 @@ class ArchivesInactiveController extends Controller
         $this->validate($request, [
             'name' => 'required|max:255',
             'mapping' => 'required',
+            'archive_creator_id' => 'required',
             'year' => 'required',
             'amount' => 'required',
             'dev_level' => 'required',
-            'loc_floor' => 'required',
-            'loc_status' => 'required',
-            'loc_rack' => 'required',
-            'loc_box' => 'required',
+            'rack_id' => 'required',
+            'box' => 'required',
             'file' => 'mimes:jpeg,bmp,png,gif,svg,pdf',
-            'officer' => 'required',
-            'rack_id' => 'required'
+            'officer' => 'required'
         ]);
 
         $path = null;
@@ -115,14 +118,12 @@ class ArchivesInactiveController extends Controller
         Archives::create([
             'name' => $request->name,
             'mapping_id' => $request->mapping,
+            'archive_creator_id' => $request->archive_creator_id,
             'year' => $request->year,
             'amount' => $request->amount,
             'dev_level' => $request->dev_level,
-            'location' => 'R'.$request->loc_floor.$request->loc_status.$request->loc_rack.$request->loc_box,
-            'loc_floor' => $request->loc_floor,
-            'loc_status' => $request->loc_status,
-            'loc_rack' => $request->loc_rack,
-            'loc_box' => $request->loc_box,
+            'rack_id' => $request->rack_id,
+            'box' => $request->box,
             'file' => $path,
             'officer' => $request->officer,
             'status' => '2'
@@ -153,8 +154,9 @@ class ArchivesInactiveController extends Controller
         $archives = Archives::find($id);
         $mapping = Mapping::orderBy('id')->get();
         $user = User::orderBy('id')->get();
+        $creator = ArchiveCreator::orderBy('id')->get();
         $rack = Rack::orderBy('id')->get();
-        return view($this->_view.'edit', compact('archives', 'mapping', 'user', 'rack'));
+        return view($this->_view.'edit', compact('archives', 'mapping', 'user', 'creator', 'rack'));
     }
 
     /**
@@ -169,13 +171,12 @@ class ArchivesInactiveController extends Controller
         $this->validate($request, [
             'name' => 'required|max:255',
             'mapping' => 'required',
+            'archive_creator_id' => 'required',
             'year' => 'required',
             'amount' => 'required',
             'dev_level' => 'required',
-            'loc_floor' => 'required',
-            'loc_status' => 'required',
-            'loc_rack' => 'required',
-            'loc_box' => 'required',
+            'rack_id' => 'required',
+            'box' => 'required',
             'file' => 'mimes:jpeg,bmp,png,gif,svg,pdf',
             'officer' => 'required'
         ]);
@@ -196,14 +197,12 @@ class ArchivesInactiveController extends Controller
         $archives->update([
             'name' => $request->name,
             'mapping_id' => $request->mapping,
+            'archive_creator_id' => $request->archive_creator_id,
             'year' => $request->year,
             'amount' => $request->amount,
             'dev_level' => $request->dev_level,
-            'location' => 'R'.$request->loc_floor.$request->loc_status.$request->loc_rack.$request->loc_box,
-            'loc_floor' => $request->loc_floor,
-            'loc_status' => $request->loc_status,
-            'loc_rack' => $request->loc_rack,
-            'loc_box' => $request->loc_box,
+            'rack_id' => $request->rack_id,
+            'box' => $request->box,
             'file' => $path,
             'officer' => $request->officer,
         ]);

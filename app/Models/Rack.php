@@ -10,4 +10,8 @@ class Rack extends Model
     use HasFactory;
 
     protected $fillable = ['floor', 'type', 'no_rack', 'capacity', 'used'];
+
+    public function archives() {
+        return $this->hasMany(Archives::class);
+    }
 }

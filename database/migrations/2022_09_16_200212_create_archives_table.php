@@ -20,11 +20,6 @@ class CreateArchivesTable extends Migration
             $table->string('year', 4);
             $table->integer('amount');
             $table->string('dev_level', 1)->comment('1. Asli, 2. Copy, 3. Salinan, 4. Pertinggal, 5. Asli/Copy');
-            $table->string('location');
-            $table->string('loc_floor');
-            $table->enum('loc_status', ['S', 'D']);
-            $table->string('loc_rack');
-            $table->string('loc_box');
             $table->string('file')->nullable();
             $table->string('officer');
             $table->string('status', 1)->comment('1. Statis, 2. Inaktif, 3. Vital');

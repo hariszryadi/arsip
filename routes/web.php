@@ -54,6 +54,7 @@ Route::resource('archives-static', ArchivesStaticController::class);
 Route::get('archives-static/download/{id}', [ArchivesStaticController::class, 'download'])->name('archives-static.download');
 Route::post('archives-static/import', [ArchivesStaticController::class, 'import'])->name('archives-static.import');
 Route::get('download-template-archive-static', [ArchivesStaticController::class, 'download_template'])->name('download-template-archive-static');
+Route::post('get-rack-archive-static', [ArchivesStaticController::class, 'get_rack'])->name('get-rack-archive-static');
 Route::resource('archives-inactive', ArchivesInactiveController::class);
 Route::get('archives-inactive/download/{id}', [ArchivesInactiveController::class, 'download'])->name('archives-inactive.download');
 Route::post('archives-inactive/import', [ArchivesInactiveController::class, 'import'])->name('archives-inactive.import');
@@ -63,6 +64,7 @@ Route::resource('archives-vital', ArchivesVitalController::class);
 Route::get('archives-vital/download/{id}', [ArchivesVitalController::class, 'download'])->name('archives-vital.download');
 Route::post('archives-vital/import', [ArchivesVitalController::class, 'import'])->name('archives-vital.import');
 Route::get('download-template-archive-vital', [ArchivesVitalController::class, 'download_template'])->name('download-template-archive-vital');
+Route::post('get-rack-archive-vital', [ArchivesVitalController::class, 'get_rack'])->name('get-rack-archive-vital');
 Route::resource('archives-destroy', ArchivesDestroyController::class);
 // User Config
 Route::resource('user', UserController::class);

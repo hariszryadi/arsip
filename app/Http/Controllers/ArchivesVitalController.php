@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\ArchivesVitalImport;
 use Illuminate\Http\Request;
-use App\Models\PrimaryClassification;
 use App\Models\User;
+use App\Models\Rack;
 use App\Models\Archives;
+use App\Models\ArchiveCreator;
+use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\File;
 use Maatwebsite\Excel\Facades\Excel;
-use Yajra\DataTables\DataTables;
+use App\Imports\ArchivesVitalImport;
+use App\Models\PrimaryClassification;
 
 class ArchivesVitalController extends Controller
 {
@@ -46,6 +48,9 @@ class ArchivesVitalController extends Controller
                 })
                 ->editColumn('dev_level', function($data) {
                     return $this->get_dev_level($data->dev_level);
+                })
+                ->editColumn('rack', function($data) {
+                    return 'R.' . $data->rack->floor . '.' . $data->rack->type . '.' . $data->rack->no_rack;
                 })
                 ->addColumn('action', function($data){
                     return '<div class="list-icons">
@@ -95,7 +100,9 @@ class ArchivesVitalController extends Controller
             }
         }
         $user = User::orderBy('id')->get();
-        return view($this->_view.'create', compact('classification', 'user'));
+        $creator = ArchiveCreator::orderBy('id')->get();
+        $rack = Rack::where('type', 'V')->orderBy('id')->get();
+        return view($this->_view.'create', compact('classification', 'user', 'creator', 'rack'));
     }
 
     /**
@@ -109,13 +116,12 @@ class ArchivesVitalController extends Controller
         $this->validate($request, [
             'name' => 'required|max:255',
             'code_classification' => 'required',
+            'archive_creator_id' => 'required',
             'year' => 'required',
             'amount' => 'required',
             'dev_level' => 'required',
-            'loc_floor' => 'required',
-            'loc_status' => 'required',
-            'loc_rack' => 'required',
-            'loc_box' => 'required',
+            'rack_id' => 'required',
+            'box' => 'required',
             'file' => 'mimes:jpeg,bmp,png,gif,svg,pdf',
             'officer' => 'required'
         ]);
@@ -130,14 +136,12 @@ class ArchivesVitalController extends Controller
         Archives::create([
             'name' => $request->name,
             'code_classification' => $request->code_classification,
+            'archive_creator_id' => $request->archive_creator_id,
             'year' => $request->year,
             'amount' => $request->amount,
             'dev_level' => $request->dev_level,
-            'location' => 'R'.$request->loc_floor.$request->loc_status.$request->loc_rack.$request->loc_box,
-            'loc_floor' => $request->loc_floor,
-            'loc_status' => $request->loc_status,
-            'loc_rack' => $request->loc_rack,
-            'loc_box' => $request->loc_box,
+            'rack_id' => $request->rack_id,
+            'box' => $request->box,
             'file' => $path,
             'officer' => $request->officer,
             'status' => '3'
@@ -186,7 +190,9 @@ class ArchivesVitalController extends Controller
             }
         }
         $user = User::orderBy('id')->get();
-        return view($this->_view.'edit', compact('archives', 'classification', 'user'));
+        $creator = ArchiveCreator::orderBy('id')->get();
+        $rack = Rack::where('type', 'V')->orderBy('id')->get();
+        return view($this->_view.'edit', compact('archives', 'classification', 'user', 'creator', 'rack'));
     }
 
     /**
@@ -201,13 +207,12 @@ class ArchivesVitalController extends Controller
         $this->validate($request, [
             'name' => 'required|max:255',
             'code_classification' => 'required',
+            'archive_creator_id' => 'required',
             'year' => 'required',
             'amount' => 'required',
             'dev_level' => 'required',
-            'loc_floor' => 'required',
-            'loc_status' => 'required',
-            'loc_rack' => 'required',
-            'loc_box' => 'required',
+            'rack_id' => 'required',
+            'box' => 'required',
             'file' => 'mimes:jpeg,bmp,png,gif,svg,pdf',
             'officer' => 'required'
         ]);
@@ -228,14 +233,12 @@ class ArchivesVitalController extends Controller
         $archives->update([
             'name' => $request->name,
             'code_classification' => $request->code_classification,
+            'archive_creator_id' => $request->archive_creator_id,
             'year' => $request->year,
             'amount' => $request->amount,
             'dev_level' => $request->dev_level,
-            'location' => 'R'.$request->loc_floor.$request->loc_status.$request->loc_rack.$request->loc_box,
-            'loc_floor' => $request->loc_floor,
-            'loc_status' => $request->loc_status,
-            'loc_rack' => $request->loc_rack,
-            'loc_box' => $request->loc_box,
+            'rack_id' => $request->rack_id,
+            'box' => $request->box,
             'file' => $path,
             'officer' => $request->officer,
         ]);
@@ -363,5 +366,13 @@ class ArchivesVitalController extends Controller
         } catch (\Exception $e) {
             abort(500);
         }
+    }
+
+    public function get_rack(Request $request)
+    {
+        $rack = Rack::find($request->id);
+        return '<span class="span-feedback">
+                    <strong>Kapasitas : ' . $rack->used . '/' . $rack->capacity . '</strong>
+                </span>';
     }
 }

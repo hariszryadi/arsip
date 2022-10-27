@@ -15,14 +15,12 @@ class Archives extends Model
         'name',
         'mapping_id',
         'code_classification',
+        'archive_creator_id',
         'year',
         'amount',
         'dev_level',
-        'location',
-        'loc_floor',
-        'loc_status',
-        'loc_rack',
-        'loc_box',
+        'rack_id',
+        'box',
         'file',
         'officer',
         'status' 
@@ -30,5 +28,9 @@ class Archives extends Model
 
     public function mapping() {
         return $this->belongsTo(Mapping::class, 'mapping_id');
+    }
+
+    public function rack() {
+        return $this->belongsTo(Rack::class, 'rack_id');
     }
 }
