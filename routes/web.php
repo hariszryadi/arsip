@@ -15,6 +15,7 @@ use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\ArchiveCreatorController;
 use App\Http\Controllers\ArchivesDestroyController;
 use App\Http\Controllers\ArchivesInactiveController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +67,10 @@ Route::post('archives-vital/import', [ArchivesVitalController::class, 'import'])
 Route::get('download-template-archive-vital', [ArchivesVitalController::class, 'download_template'])->name('download-template-archive-vital');
 Route::post('get-rack-archive-vital', [ArchivesVitalController::class, 'get_rack'])->name('get-rack-archive-vital');
 Route::resource('archives-destroy', ArchivesDestroyController::class);
+// Report
+Route::get('report-archive-vital', [ReportController::class, 'report_archive_vital'])->name('report-archive-vital');
+Route::get('report-archive-static', [ReportController::class, 'report_archive_static'])->name('report-archive-static');
+Route::get('report-archive-inactive', [ReportController::class, 'report_archive_inactive'])->name('report-archive-inactive');
 // User Config
 Route::resource('user', UserController::class);
 // Change Pasword

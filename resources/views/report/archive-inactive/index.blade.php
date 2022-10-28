@@ -23,7 +23,7 @@
     <div class="page-header page-header-light">
         <div class="page-header-content header-elements-lg-inline">
             <div class="page-title d-flex">
-                <h4>Mapping</h4>
+                <h4>Arsip Inaktif</h4>
             </div>
         </div>
 
@@ -31,8 +31,8 @@
             <div class="d-flex">
                 <div class="breadcrumb">
                     <a href="{{ route('home') }}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
-                    <span class="breadcrumb-item">Master</span>
-                    <span class="breadcrumb-item active">Mapping</span>
+                    <span class="breadcrumb-item">Report</span>
+                    <span class="breadcrumb-item active">Arsip Inaktif</span>
                 </div>
 
             </div>
@@ -46,27 +46,32 @@
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">List Mapping</h3>
+                <h3 class="card-title">List Arsip Inaktif</h3>
             </div>
             
             <div class="card-body">
-                <div class="form-group text-left">
-                    <a href="{{ route('mapping.create')}}" class="btn btn-primary"><i class="icon-file-plus"></i> Tambah</a>
-                </div>
-
                 <div class="row">
                     <div class="form-group col-lg-5">
-                        <label for="filter-primary">Klasifikasi</label>
-                        <select class="form-control select-search" id="filter-primary" data-fouc>
+                        <label for="filter-creator">Pencipta Arsip</label>
+                        <select class="form-control select-search" id="filter-creator" data-fouc>
                             <option value="">All</option>
-                            @foreach ($primaries as $item)
-                                <option value="{{ $item->code }}">{{ $item->code }} - {{ $item->name }}</option>
+                            @foreach ($creator as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group col-lg-5">
-                        <label for="filter-archive-type">Jenis Arsip</label>
-                        <input type="text" class="form-control" id="filter-archive-type" placeholder="Ketik jenis arsip">
+                        @php
+                            $first = (int)date('Y') - 30;
+                            $last = (int)date('Y') + 5;
+                        @endphp
+                        <label for="filter-year">Tahun</label>
+                        <select name="year" class="form-control select-search" id="filter-year" data-fouc>
+                            <option value="">All</option>
+                            @for ($i = $first; $i < $last; $i++)
+                                <option value="{{ $i }}">{{ $i }}</option>
+                            @endfor
+                        </select>
                     </div>
                     <div class="form-group col-lg-2 align-self-end">
                         <button type="button" class="btn btn-secondary btn-block btn-filter">Filter</button>
@@ -77,13 +82,14 @@
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>Nama Arsip</th>
                             <th>Klasifikasi</th>
                             <th>Jenis Arsip</th>
-                            <th>Keamanan</th>
-                            <th>Retensi</th>
-                            <th>Aktif</th>
-                            <th>Inaktif</th>
-                            <th>Aksi</th>
+                            <th>Tahun</th>
+                            <th>Jumlah</th>
+                            <th>Tingkat Perkembangan</th>
+                            <th>Lokasi Rak</th>
+                            <th>Box</th>
                         </tr>
                     </thead>
                 </table>
@@ -105,14 +111,14 @@
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script>
         $(document).ready(function () {
-            mappingList();
+            reportList();
         })
 
         $('.btn-filter').on('click', function () {
-            mappingList();
+            reportList();
         })
 
-        function mappingList() {
+        function reportList() {
             $('.datatable-basic').dataTable().fnDestroy();
             $('.datatable-basic').DataTable({
                 processing: true,
@@ -122,10 +128,10 @@
                 bFilter: false,
                 pageLength: 10,
                 ajax: {
-                    url: "{{ route('mapping.index') }}",
+                    url: "{{ route('report-archive-inactive') }}",
                     data: function (d) {
-                        d.filter_primary = $('#filter-primary').val(),
-                        d.filter_archive_type = $('#filter-archive-type').val()
+                        d.filter_creator = $('#filter-creator').val(),
+                        d.filter_year = $('#filter-year').val()
                     }
                 },
                 columns: [
@@ -135,16 +141,16 @@
                         },
                     },
                     { data: "name" },
-                    { data: "archive_type" },
-                    { data: "security" },
-                    { data: "retention" },
-                    { data: "active" },
-                    { data: "inactive" },
-                    { data: "action", orderable: false}
+                    { data: "mapping.code" },
+                    { data: "mapping.archive_type" },
+                    { data: "year" },
+                    { data: "amount" },
+                    { data: "dev_level" },
+                    { data: "rack" },
+                    { data: "box" }
                 ],
                 columnDefs: [
-                    { width: "5%", "targets": [0] },
-                    { className: "text-center", "targets": [5, 6, 7] }
+                    { width: "5%", "targets": [0] }
                 ],
                 dom: '<"datatable-header"flB><"datatable-scroll"t><"datatable-footer"ip>',
                 language: {
@@ -157,7 +163,7 @@
                     { 
                         extend: 'excelHtml5',
                         title: '',
-                        filename: 'Data Mapping',
+                        filename: 'Data Arsip Inaktif',
                         exportOptions: {
                             columns: ':not(:last-child)',
                             format: {
@@ -169,88 +175,24 @@
                                     }
                                 }
                             }
-                        }
-                    },
-                    { 
-                        extend: 'pdfHtml5',
-                        title: '',
-                        filename: 'Data Mapping',
-                        exportOptions: {
-                            columns: ':not(:last-child)',
-                            format: {
-                                body: function ( data, row, column, node ) {
-                                    if (column == 0) {
-                                        return row+1;
-                                    } else {
-                                        return data;
-                                    }
-                                }
-                            }
-                        },
-                        orientation: 'landscape'
+                        } 
                     }
                 ],
                 "preDrawCallback": function( settings ) {
                     var btnsXls = $('.buttons-excel');
-                    var btnsPdf = $('.buttons-pdf');
                     btnsXls.addClass('btn btn-success btn-sm mr-3 hidden');
                     btnsXls.html('<i class="icon-file-excel"></i> Export Excel')
                     btnsXls.removeClass('dt-button');
-                    btnsPdf.addClass('btn btn-danger btn-sm mr-3 hidden');
-                    btnsPdf.html('<i class="icon-file-pdf"></i> Export Pdf')
-                    btnsPdf.removeClass('dt-button');
                 },
                 "drawCallback": function(settings, json) {
                     var btnsXls = $('.buttons-excel');
-                    var btnsPdf = $('.buttons-pdf');
                     btnsXls.removeClass('hidden');
-                    btnsPdf.removeClass('hidden');
                 },
                 "initComplete": function(settings, json) {
                     var btnsXls = $('.buttons-excel');
-                    var btnsPdf = $('.buttons-pdf');
                     btnsXls.removeClass('hidden');
-                    btnsPdf.removeClass('hidden');
                 }
             });
         }
-        
-        $(document).on('click', '#delete', function () {
-            var id = $(this).attr('data-id');
-            var url = "{{ route('mapping.destroy', ":id") }}";
-            url = url.replace(':id', id);
-            var disabled = $(this).attr('disabled');
-
-            if (disabled) {
-                return false;
-            } else {
-                swalInit.fire({
-                    title: "Apakah Anda Yakin Akan Menghapus Data ini?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Ya, Hapus!",
-                    cancelButtonText: "Kembali"
-                }).then(function(result) {
-                    if(result.value) {
-                        $.ajax({
-                            url: url,
-                            method: "DELETE",
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            success: function (resp) {
-                                // $('.datatable-basic').DataTable().ajax.reload();
-                                mappingList();
-                                swalInit.fire('Sukses!', resp.success, 'success');
-                            },
-                            error: function (xhr, status, error) {
-                                swalInit.fire('Error!', xhr.responseText, 'error');
-                            }
-                        })
-                    }
-                });
-            }
-        })
     </script>
 @endsection
