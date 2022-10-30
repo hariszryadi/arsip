@@ -5,9 +5,13 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RackController;
+use App\Http\Controllers\GuestController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\MappingController;
 use App\Http\Controllers\SecurityController;
 use App\Http\Controllers\RetentionController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ArchivesVitalController;
 use App\Http\Controllers\ClassificationController;
 use App\Http\Controllers\ArchivesStaticController;
@@ -15,9 +19,6 @@ use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\ArchiveCreatorController;
 use App\Http\Controllers\ArchivesDestroyController;
 use App\Http\Controllers\ArchivesInactiveController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\GuestController;
-use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,3 +86,6 @@ Route::resource('user', UserController::class);
 // Change Pasword
 Route::get('change-password', [ChangePasswordController::class, 'edit'])->name('change-password.edit');
 Route::put('change-password/{id}', [ChangePasswordController::class, 'update'])->name('change-password.update');
+// Banner
+Route::resource('banner', BannerController::class);
+Route::post('banner/update-status', [BannerController::class, 'update_status'])->name('banner.update-status');

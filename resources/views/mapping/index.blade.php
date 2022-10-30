@@ -219,38 +219,33 @@
             var id = $(this).attr('data-id');
             var url = "{{ route('mapping.destroy', ":id") }}";
             url = url.replace(':id', id);
-            var disabled = $(this).attr('disabled');
 
-            if (disabled) {
-                return false;
-            } else {
-                swalInit.fire({
-                    title: "Apakah Anda Yakin Akan Menghapus Data ini?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Ya, Hapus!",
-                    cancelButtonText: "Kembali"
-                }).then(function(result) {
-                    if(result.value) {
-                        $.ajax({
-                            url: url,
-                            method: "DELETE",
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            success: function (resp) {
-                                // $('.datatable-basic').DataTable().ajax.reload();
-                                mappingList();
-                                swalInit.fire('Sukses!', resp.success, 'success');
-                            },
-                            error: function (xhr, status, error) {
-                                swalInit.fire('Error!', xhr.responseText, 'error');
-                            }
-                        })
-                    }
-                });
-            }
+            swalInit.fire({
+                title: "Apakah Anda Yakin Akan Menghapus Data ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Ya, Hapus!",
+                cancelButtonText: "Kembali"
+            }).then(function(result) {
+                if(result.value) {
+                    $.ajax({
+                        url: url,
+                        method: "DELETE",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (resp) {
+                            // $('.datatable-basic').DataTable().ajax.reload();
+                            mappingList();
+                            swalInit.fire('Sukses!', resp.success, 'success');
+                        },
+                        error: function (xhr, status, error) {
+                            swalInit.fire('Error!', xhr.responseText, 'error');
+                        }
+                    })
+                }
+            });
         })
     </script>
 @endsection

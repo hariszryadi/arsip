@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Yajra\DataTables\DataTables;
 use App\Models\User;
-use DataTables;
 
 class UserController extends Controller
 {
@@ -36,7 +36,7 @@ class UserController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            return Datatables::of(User::orderBy('id')->get())
+            return DataTables::of(User::orderBy('id')->get())
                 ->editColumn('created_at', function($data) {
                     $date = $data->created_at;
                     return $date->format('Y-m-d');

@@ -85,6 +85,13 @@
                     <li class="nav-item"><a href="{{ route('user.index') }}" class="nav-link {{ request()->is('user') || request()->is('user/*') ? 'active' : '' }}">User</a></li>
                 </ul>
             </li>
+            
+            <li class="nav-item nav-item-submenu {{ request()->is('banner') || request()->is('banner/*') ? 'nav-item-expanded nav-item-open' : '' }}">
+                <a href="#" class="nav-link"><i class="icon-gear"></i> <span>Pengaturan</span></a>
+                <ul class="nav nav-group-sub" data-submenu-title="Pengaturan">
+                    <li class="nav-item"><a href="{{ route('banner.index') }}" class="nav-link {{ request()->is('banner') || request()->is('banner/*') ? 'active' : '' }}">Banner</a></li>
+                </ul>
+            </li>
             <!-- /main -->
 
         </ul>
