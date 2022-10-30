@@ -109,6 +109,11 @@ class ArchivesInactiveController extends Controller
             'officer' => 'required'
         ]);
 
+        $check = Rack::find($request->rack_id);
+        if ($check->capacity == $check->used) {
+            return redirect()->route($this->_route)->with('error', 'Kapasitas rak R.' . $check->floor . '.' . $check->type . '.' . $check->no_rack .' sudah penuh');
+        }
+
         $path = null;
         if ($request->hasFile('file')) {
             $file = $request->file('file');
@@ -356,7 +361,13 @@ class ArchivesInactiveController extends Controller
     public function get_rack(Request $request)
     {
         $rack = Rack::find($request->id);
-        return '<span class="span-feedback">
+        if ($rack->capacity == $rack->used) {
+            $text = 'text-danger';
+        } else {
+            $text = 'text-success';
+        }
+        
+        return '<span class="span-feedback ' . $text . '">
                     <strong>Kapasitas : ' . $rack->used . '/' . $rack->capacity . '</strong>
                 </span>';
     }

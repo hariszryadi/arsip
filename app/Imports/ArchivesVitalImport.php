@@ -67,6 +67,13 @@ class ArchivesVitalImport implements ToModel, WithHeadingRow, WithValidation
 
             throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
         }
+
+        if ($rack->capacity == $rack->used) {
+            $error = ['Kapasitas rak R.' . $rack->floor . '.' . $rack->type . '.' . $rack->no_rack .' sudah penuh'];
+            $failures[] = new Failure($this->getRowNumber(), 'lokasi_rak', $error, $row);
+
+            throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
+        }
         
         $rack->update([
             'used' => DB::raw('used + 1')

@@ -28,25 +28,35 @@ class ArchivesInactiveImport implements ToModel, WithHeadingRow, WithValidation
         $creator = ArchiveCreator::where('name', $row['pencipta_arsip'])->first();
         $explode = explode(".", $row['lokasi_rak']);
         $rack = Rack::where('floor', $explode[1])->where('type', $explode[2])->where('no_rack', $explode[3])->first();
+        
         if ($mapping == null) {
             $error = ['Data jenis arsip tidak ditemukan'];
             $failures[] = new Failure($this->getRowNumber(), 'jenis_arsip', $error, $row);
 
             throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
         }
+        
         if ($creator == null) {
             $error = ['Data pencipta arsip tidak ditemukan'];
             $failures[] = new Failure($this->getRowNumber(), 'pencipta_arsip', $error, $row);
 
             throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
         }
+        
         if ($rack == null) {
             $error = ['Data rak tidak ditemukan'];
             $failures[] = new Failure($this->getRowNumber(), 'lokasi_rak', $error, $row);
 
             throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
         }
+        
+        if ($rack->capacity == $rack->used) {
+            $error = ['Kapasitas rak R.' . $rack->floor . '.' . $rack->type . '.' . $rack->no_rack .' sudah penuh'];
+            $failures[] = new Failure($this->getRowNumber(), 'lokasi_rak', $error, $row);
 
+            throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
+        }
+        
         $rack->update([
             'used' => DB::raw('used + 1')
         ]);
