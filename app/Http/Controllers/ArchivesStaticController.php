@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\File;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\PrimaryClassification;
 use App\Imports\ArchivesStaticImport;
+use Illuminate\Support\Facades\DB;
 
 class ArchivesStaticController extends Controller
 {
@@ -133,7 +134,7 @@ class ArchivesStaticController extends Controller
             $path = $file->storeAs('archive/static', $file_name, ['disk' => 'public']);
         }
 
-        Archives::create([
+        $store = Archives::create([
             'name' => $request->name,
             'code_classification' => $request->code_classification,
             'archive_creator_id' => $request->archive_creator_id,
@@ -146,6 +147,13 @@ class ArchivesStaticController extends Controller
             'officer' => $request->officer,
             'status' => '1'
         ]);
+
+        if ($store) {
+            $rack = Rack::find($request->rack_id);
+            $rack->update([
+                'used' => DB::raw('used + 1')
+            ]);
+        }
 
         return redirect()->route($this->_route)->with('success', 'Data arsip statis berhasil ditambahkan');
     }
@@ -258,7 +266,14 @@ class ArchivesStaticController extends Controller
         $archives = Archives::findOrFail($id);
         $path = \storage_path('app/public/' . $archives->file);
         File::delete($path);
-        $archives->delete();
+        $delete = $archives->delete();
+
+        if ($delete) {
+            $rack = Rack::find($archives->rack_id);
+            $rack->update([
+                'used' => DB::raw('used - 1')
+            ]);
+        }
 
         return response()->json(['success' => 'Data arsip statis berhasil dihapus']);
     }

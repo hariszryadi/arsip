@@ -6,6 +6,7 @@ use App\Models\ArchiveCreator;
 use App\Models\Archives;
 use App\Models\Mapping;
 use App\Models\Rack;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\RemembersRowNumber;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -45,6 +46,11 @@ class ArchivesInactiveImport implements ToModel, WithHeadingRow, WithValidation
 
             throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
         }
+
+        $rack->update([
+            'used' => DB::raw('used + 1')
+        ]);
+
         return new Archives([
             "name" => $row['nama'],
             "mapping_id" => $mapping->id,

@@ -4,7 +4,9 @@ namespace App\Imports;
 
 use App\Models\ArchiveCreator;
 use App\Models\Archives;
+use App\Models\PrimaryClassification;
 use App\Models\Rack;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\RemembersRowNumber;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -22,21 +24,53 @@ class ArchivesStaticImport implements ToModel, WithHeadingRow, WithValidation
     */
     public function model(array $row)
     {
+        $classification = [];
+        $primary = PrimaryClassification::orderBy('id')->get();
+        foreach ($primary as $p) {
+            if ($p->secondary()->exists()) {
+                array_push($classification, $p->code);
+                foreach ($p->secondary as $s) {
+                    if ($s->tertiary()->exists()) {
+                        array_push($classification, $s->code);
+                        foreach ($s->tertiary as $t) {
+                            array_push($classification, $t->code);
+                        }
+                    } else {
+                        array_push($classification, $s->code);
+                    }
+                }
+            } else {
+                array_push($classification, $p->code);
+            }
+        }
         $creator = ArchiveCreator::where('name', $row['pencipta_arsip'])->first();
         $explode = explode(".", $row['lokasi_rak']);
         $rack = Rack::where('floor', $explode[1])->where('type', $explode[2])->where('no_rack', $explode[3])->first();
+
+        if(!in_array($row['kode_klasifikasi'], $classification)) {
+            $error = ['Data kode klasifikasi arsip tidak ditemukan'];
+            $failures[] = new Failure($this->getRowNumber(), 'kode_klasifikasi', $error, $row);
+
+            throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
+        }
+
         if ($creator == null) {
             $error = ['Data pencipta arsip tidak ditemukan'];
             $failures[] = new Failure($this->getRowNumber(), 'pencipta_arsip', $error, $row);
 
             throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
         }
+
         if ($rack == null) {
             $error = ['Data rak tidak ditemukan'];
             $failures[] = new Failure($this->getRowNumber(), 'lokasi_rak', $error, $row);
 
             throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
         }
+
+        $rack->update([
+            'used' => DB::raw('used + 1')
+        ]);
 
         return new Archives([
             "name" => $row['nama'],

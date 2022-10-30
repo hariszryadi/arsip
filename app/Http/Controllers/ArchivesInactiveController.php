@@ -9,6 +9,7 @@ use App\Models\Archives;
 use App\Models\Mapping;
 use App\Models\Rack;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
@@ -115,7 +116,7 @@ class ArchivesInactiveController extends Controller
             $path = $file->storeAs('archive/inactive', $file_name, ['disk' => 'public']);
         }
 
-        Archives::create([
+        $store = Archives::create([
             'name' => $request->name,
             'mapping_id' => $request->mapping,
             'archive_creator_id' => $request->archive_creator_id,
@@ -128,6 +129,13 @@ class ArchivesInactiveController extends Controller
             'officer' => $request->officer,
             'status' => '2'
         ]);
+
+        if ($store) {
+            $rack = Rack::find($request->rack_id);
+            $rack->update([
+                'used' => DB::raw('used + 1')
+            ]);
+        }
 
         return redirect()->route($this->_route)->with('success', 'Data arsip inaktif berhasil ditambahkan');
     }
@@ -221,7 +229,14 @@ class ArchivesInactiveController extends Controller
         $archives = Archives::findOrFail($id);
         $path = \storage_path('app/public/' . $archives->file);
         File::delete($path);
-        $archives->delete();
+        $delete = $archives->delete();
+
+        if ($delete) {
+            $rack = Rack::find($archives->rack_id);
+            $rack->update([
+                'used' => DB::raw('used - 1')
+            ]);
+        }
 
         return response()->json(['success' => 'Data arsip inaktif berhasil dihapus']);
     }
