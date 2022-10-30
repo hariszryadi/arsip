@@ -15,6 +15,8 @@ use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\ArchiveCreatorController;
 use App\Http\Controllers\ArchivesDestroyController;
 use App\Http\Controllers\ArchivesInactiveController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GuestController;
 use App\Http\Controllers\ReportController;
 
 /*
@@ -30,7 +32,14 @@ use App\Http\Controllers\ReportController;
 
 Auth::routes();
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', function() {
+    return view('welcome');
+});
+/** GUEST */
+Route::get('register', [GuestController::class, 'register'])->name('guest.register');
+
+/** ADMIN */
+Route::get('dashboard', [DashboardController::class, 'index'])->name('home');
 // Master
 Route::resource('classification', ClassificationController::class);
 Route::post('classification-get-secondary', [ClassificationController::class, 'get_secondary'])->name('classification-get-secondary');
