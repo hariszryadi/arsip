@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@include('home.styles')
 <!-- Inner content -->
 <div class="content-inner">
 
@@ -28,89 +29,107 @@
     <!-- Content area -->
     <div class="content">
 
+        <!-- Dashboard content -->
+        <div class="row">
+            <div class="col-xl-12">
+
+                <div class="row">
+                    <div class="col-lg-4">
+
+                        <div class="card bg-teal text-white">
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <h3 class="font-weight-semibold mb-0">{{ $archive->where('status', '3')->count() }}</h3>
+                                </div>
+                                
+                                <div>
+                                    Arsip Vital
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4">
+
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <h3 class="font-weight-semibold mb-0">{{ $archive->where('status', '2')->count() }}</h3>
+                                </div>
+                                
+                                <div>
+                                    Arsip Statis
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4">
+
+                        <div class="card bg-pink text-white">
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <h3 class="font-weight-semibold mb-0">{{ $archive->where('status', '1')->count() }}</h3>
+                                </div>
+                                
+                                <div>
+                                    Arsip Inaktif
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
         <div class="row">
             <div class="col-xl-12">
 
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Dashboard Depo Arsip</h3>
+                        <h3 class="card-title">Denah Lokasi</h3>
                     </div>
-                    
-                    <div class="card-body pb-0">
-                        <div class="row">
 
-                            <div class="col-lg-4">
-                                <div class="card bg-teal text-white">
-                                    <div class="card-body">
-                                        <div class="d-flex">
-                                            <h3 class="font-weight-semibold mb-0">3,450</h3>
-                                            <span class="badge badge-dark badge-pill align-self-center ml-auto">+53,6%</span>
-                                        </div>
-                                        <div>
-                                            Members online
-                                            <div class="font-size-sm opacity-75">489 avg</div>
-                                        </div>
-                                    </div>
-                                    <div class="container-fluid">
-                                        <div id="members-online"></div>
-                                    </div>
-                                </div>
-                            </div>
-        
-                            <div class="col-lg-4">
-                                <div class="card bg-pink text-white">
-                                    <div class="card-body">
-                                        <div class="d-flex">
-                                            <h3 class="font-weight-semibold mb-0">49.4%</h3>
-                                            <div class="list-icons ml-auto">
-                                                <div class="dropdown">
-                                                    <a href="#" class="list-icons-item dropdown-toggle" data-toggle="dropdown"><i class="icon-cog3"></i></a>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a href="#" class="dropdown-item"><i class="icon-sync"></i> Update data</a>
-                                                        <a href="#" class="dropdown-item"><i class="icon-list-unordered"></i> Detailed log</a>
-                                                        <a href="#" class="dropdown-item"><i class="icon-pie5"></i> Statistics</a>
-                                                        <a href="#" class="dropdown-item"><i class="icon-cross3"></i> Clear list</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            Current server load
-                                            <div class="font-size-sm opacity-75">34.6% avg</div>
-                                        </div>
-                                    </div>
-                                    <div id="server-load"></div>
-                                </div>
-                            </div>
-        
-                            <div class="col-lg-4">
-                                <div class="card bg-primary text-white">
-                                    <div class="card-body">
-                                        <div class="d-flex">
-                                            <h3 class="font-weight-semibold mb-0">$18,390</h3>
-                                            <div class="list-icons ml-auto">
-                                                <a class="list-icons-item" data-action="reload"></a>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            Today's revenue
-                                            <div class="font-size-sm opacity-75">$37,578 avg</div>
-                                        </div>
-                                    </div>
-                                    <div id="today-revenue"></div>
-                                </div>
-                            </div>
+                    <div class="card-body">
+                        <div class="container">
+                            <!-- Start Row 1 -->
+                            @include('home.location-row1')
+                            <!-- End Row 1 -->
+
+                            <!-- Start Row 2 -->
+                            @include('home.location-row2')
+                            <!-- End Row 2 -->
+
+                            <!-- Start Row 3 -->
+                            @include('home.location-row3')
+                            <!-- End Row 3 -->
+
+                            <!-- Start Row 4 -->
+                            @include('home.location-row4')
+                            <!-- End Row 4 -->
                         </div>
                     </div>
                 </div>
-
+    
             </div>
-
         </div>
+        <!-- /dashboard content -->
 
     </div>
     <!-- /content area -->
 
 </div>
 <!-- /inner content -->
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
 @endsection

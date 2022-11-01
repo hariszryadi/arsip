@@ -38,7 +38,7 @@
             <!-- Main -->
             <li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Main</div> <i class="icon-menu" title="Main"></i></li>
             <li class="nav-item">
-                <a href="{{ route('home') }}" class="nav-link {{ request()->is('/') ? 'active' : '' }}">
+                <a href="{{ route('home') }}" class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
                     <i class="icon-home4"></i>
                     <span>
                         Dashboard

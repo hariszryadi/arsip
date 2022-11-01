@@ -24,6 +24,7 @@
 	<!-- /core JS files -->
 
 	<!-- Theme JS files -->
+	<script src="{{ asset('global_assets/js/plugins/visualization/d3/d3.min.js') }}"></script>
 	<script src="{{ asset('global_assets/js/plugins/ui/moment/moment.min.js') }}"></script>
 	<script src="{{ asset('global_assets/js/plugins/pickers/daterangepicker.js') }}"></script>
 	<script src="{{ asset('global_assets/js/plugins/tables/datatables/datatables.min.js') }}"></script>

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Archives;
+use App\Models\Rack;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -23,6 +25,9 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $archive = Archives::all();
+        $rack = Rack::orderBy('id')->get();
+        
+        return view('home', compact('archive', 'rack'));
     }
 }
