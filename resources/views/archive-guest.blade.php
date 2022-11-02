@@ -192,9 +192,11 @@
                         <div class="owl-carousel owl-theme">
                             @foreach ($banner as $item)
                                 <div class="item">
-                                    <div class="owl-text-overlay">
-                                        <h2 class="owl-title">{{ $item->caption }}</h2>
-                                    </div>
+                                    @if ($item->caption != null)
+                                        <div class="owl-text-overlay">
+                                            <h2 class="owl-title">{{ $item->caption }}</h2>
+                                        </div>
+                                    @endif
                                     <img class="owl-img" src="{{ asset('storage/'.$item->image) }}">
                                 </div>
                             @endforeach
@@ -273,18 +275,6 @@
 	</div>
 	<!-- /page content -->
 
-    {{-- <nav class="menu">
-        <a href="#red">Red</a>
-        <a href="#blue">Blue</a>
-        <a href="#pink">Pink</a>
-    </nav>
-    <div class="content">
-        <section class="section" id="red"><h1>Red</h1></section>
-        <section class="section" id="blue"><h1>Blue</h1></section>
-        <section class="section" id="pink"><h1>Pink</h1></section>
-    </div> --}}
-    <!-- Bootstrap JS file (usually before </body>) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function(){
             $(".owl-carousel").owlCarousel({
