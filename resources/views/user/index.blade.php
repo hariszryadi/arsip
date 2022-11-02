@@ -113,7 +113,7 @@
                 return false;
             } else {
                 swalInit.fire({
-                    title: "Apakah Anda Yakin Akan Menghapus Data ini?",
+                    title: "Apakah anda yakin akan menghapus data ini?",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
