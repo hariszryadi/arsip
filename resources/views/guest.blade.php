@@ -30,11 +30,17 @@
                 display:none;
             }
         }
+        .btn-back {
+            background-color: #00B49F;
+        }
+        .btn-back:hover {
+            background-color: #01534A;
+        }
     </style>
     <body>
         @include('helper.alert-swal')
         <div style="background-color: #009E8B; padding: 12px;">
-            <a href="{{ url('/') }}" style="color: #fff;">
+            <a href="{{ url('/') }}" class="btn btn-success btn-back">
                 <i class="icon-arrow-left52"></i> Kembali
             </a>
         </div>

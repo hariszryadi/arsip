@@ -2,24 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Archives;
-use App\Models\Rack;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Yajra\DataTables\DataTables;
 
-class ArchivesDestroyController extends Controller
+class ArchivesOverController extends Controller
 {
     /**
      * Folder views
      */
-    protected $_view = 'archives.destroy.';
+    protected $_view = 'archives.over.';
     
     /**
      * Route index
      */
-    protected $_route = 'archives-destroy.index';
+    protected $_route = 'archives-over.index';
 
     /**
      * Create a new controller instance.
@@ -62,7 +59,7 @@ class ArchivesDestroyController extends Controller
                         LEFT JOIN retention_classifications ON mapping.retention = retention_classifications.id 
                     WHERE
                         archives.status = '2' 
-                        AND mapping.retention = 1 
+                        AND mapping.retention = 2 
                     HAVING
                         destroyed_at <= DATE_FORMAT(CURDATE(),'%Y')
                     ORDER BY
@@ -71,9 +68,6 @@ class ArchivesDestroyController extends Controller
 
         if (request()->ajax()) {
             return DataTables::of($query)
-                ->addColumn('form', function($data) {
-                    return '<input type="checkbox" class="sub_chk" data-id="'.$data->id.'">';
-                })
                 ->editColumn('amount', function($data) {
                     return $data->amount . ' Berkas';
                 })
@@ -83,10 +77,6 @@ class ArchivesDestroyController extends Controller
                 ->editColumn('rack', function($data) {
                     return 'R.' . $data->floor . '.' . $data->type . '.' . $data->no_rack;
                 })
-                ->addColumn('action', function($data){
-                    return '<a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i></a>';
-                })
-                ->rawColumns(['form', 'action'])
                 ->make(true);
         }
 
@@ -156,73 +146,6 @@ class ArchivesDestroyController extends Controller
      */
     public function destroy($id)
     {
-        $archives = Archives::findOrFail($id);
-        $path = \storage_path('app/public/' . $archives->file);
-        File::delete($path);
-        $delete = $archives->delete();
-
-        if ($delete) {
-            $rack = Rack::find($archives->rack_id);
-            $rack->update([
-                'used' => DB::raw('used - 1')
-            ]);
-        }
-
-        return response()->json(['success' => 'Data arsip inaktif berhasil dihapus']);
-    }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy_all(Request $request)
-    {
-        $ids = explode(',', $request->ids);
-        foreach ($ids as $key => $value) {
-            $archives = Archives::findOrFail($value);
-            $path = \storage_path('app/public/' . $archives->file);
-            File::delete($path);
-            $delete = $archives->delete();
-    
-            if ($delete) {
-                $rack = Rack::find($archives->rack_id);
-                $rack->update([
-                    'used' => DB::raw('used - 1')
-                ]);
-            }
-        }
-
-        return response()->json(['success' => 'Data usul musnah berhasil dihapus']);
-    }
-
-    /**
-     * Get description development level
-     * 
-     * @param String $dev_level
-     */
-    private function get_dev_level($dev_level) {
-        switch ($dev_level) {
-            case '1':
-                return 'Asli';
-                break;
-            case '2':
-                return 'Copy';
-                break;
-            case '3':
-                return 'Salinan';
-                break;
-            case '4':
-                return 'Pertinggal';
-                break;
-            case '5':
-                return 'Asli/Copy';
-                break;
-            
-            default:
-                return '-';
-                break;
-        }
+        //
     }
 }
