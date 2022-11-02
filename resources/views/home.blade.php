@@ -121,7 +121,7 @@
                                         </div>
                                         
                                         <div class="ml-3 align-self-center">
-                                            <i class="icon-users icon-3x opacity-75"></i>
+                                            <i class="icon-users4 icon-3x opacity-75"></i>
                                         </div>
                                     </div>
                                 </div>
