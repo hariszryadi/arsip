@@ -91,7 +91,7 @@
         -webkit-transition: 0.5s;
                 transition: 0.5s;
     }
-    .has-bg-image:hover{
+    .has-bg-image:hover {
         -webkit-transform: scale(1.1);
                 transform: scale(1.1);
     }

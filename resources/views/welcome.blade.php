@@ -23,6 +23,16 @@
         <script src="{{ asset('assets/js/app.js') }}"></script>
         <!-- /theme JS files -->
     </head>
+    <style>
+        .btn-img-welcome {
+            -webkit-transition: 0.5s;
+                    transition: 0.5s;
+        }
+        .btn-img-welcome:hover {
+            -webkit-transform: scale(1.1);
+                    transform: scale(1.1);
+        }
+    </style>
     <body style="background: url({{ asset('images/bg-welcome.png') }}); background-size: 100% 100%;">
 
         <div class="mt-4">
@@ -44,7 +54,7 @@
                             <div class="content d-flex justify-content-center align-items-center">
             
                                 <a href="{{ route('guest.register') }}">
-                                    <img src="{{ asset('images/btn-guest.svg') }}" alt="guest page">
+                                    <img class="btn-img-welcome" src="{{ asset('images/btn-guest.svg') }}" alt="guest page">
                                 </a>
             
                             </div>
@@ -73,7 +83,7 @@
                             <div class="content d-flex justify-content-center align-items-center">
             
                                 <a href="{{ route('login') }}">
-                                    <img src="{{ asset('images/btn-admin.svg') }}" alt="admin page">
+                                    <img class="btn-img-welcome" src="{{ asset('images/btn-admin.svg') }}" alt="admin page">
                                 </a>
 
                             </div>
