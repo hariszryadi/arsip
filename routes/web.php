@@ -37,7 +37,12 @@ Route::get('/', function() {
     return view('welcome');
 });
 /** GUEST */
-Route::get('register', [GuestController::class, 'register'])->name('guest.register');
+Route::get('guest/register', [GuestController::class, 'register'])->name('guest.register');
+Route::post('guest/store', [GuestController::class, 'store'])->name('guest.store');
+Route::get('guest/archive/{token}', [GuestController::class, 'archive'])->name('guest.archive')->middleware('guest.register');
+Route::get('guest/logout/{token}', [GuestController::class, 'logout'])->name('guest.logout')->middleware('guest.register');
+Route::get('guest/archive-static', [GuestController::class, 'get_static'])->name('guest.archive.static')->middleware('guest.register');
+Route::get('guest/archive-inactive', [GuestController::class, 'get_inactive'])->name('guest.archive.inactive')->middleware('guest.register');
 
 /** ADMIN */
 Route::get('dashboard', [DashboardController::class, 'index'])->name('home');

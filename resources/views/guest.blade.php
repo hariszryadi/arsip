@@ -21,6 +21,7 @@
 
         <!-- Theme JS files -->
         <script src="{{ asset('assets/js/app.js') }}"></script>
+        <script src="{{ asset('global_assets/js/plugins/notifications/sweet_alert.min.js') }}"></script>
         <!-- /theme JS files -->
     </head>
     <style>
@@ -31,7 +32,7 @@
         }
     </style>
     <body>
-
+        @include('helper.alert-swal')
         <div style="background-color: #009E8B; padding: 12px;">
             <a href="{{ url('/') }}" style="color: #fff;">
                 <i class="icon-arrow-left52"></i> Kembali
@@ -39,7 +40,7 @@
         </div>
 
         <div class="mt-4">
-            <h1 class="font-weight-bold text-center" style="font-size: 2rem;">FORM PENDAFTARAN PENGUNJUNG</h1>
+            <h1 class="font-weight-bold text-center">FORM PENDAFTARAN PENGUNJUNG</h1>
         </div>
 
         <div class="row">
@@ -85,7 +86,7 @@
                             <div class="content d-flex justify-content-center align-items-center">
             
                                 <!-- Login card -->
-                                <form class="login-form" method="POST" action="#">
+                                <form class="login-form" method="POST" action="{{ route('guest.store') }}">
                                     @csrf
                                     <div class="card mb-0">
                                         <div class="card-body">
@@ -94,7 +95,7 @@
                                             </div>
 
                                             <div class="form-group form-group-feedback form-group-feedback-left">
-                                                <input id="fullname" type="text" class="form-control @error('fullname') is-invalid @enderror" name="fullname" value="{{ old('fullname') }}" placeholder="Nama Lengkap" autofocus>
+                                                <input id="fullname" type="text" class="form-control @error('fullname') is-invalid @enderror" name="fullname" value="{{ old('fullname') }}" placeholder="Nama Lengkap" value="{{ old('fullname') }}" autofocus>
                                                 <div class="form-control-feedback">
                                                     <i class="icon-user text-muted"></i>
                                                 </div>
@@ -106,7 +107,7 @@
                                             </div>
 
                                             <div class="form-group form-group-feedback form-group-feedback-left">
-                                                <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" placeholder="Alamat/Nama Instansi">
+                                                <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" placeholder="Alamat/Nama Instansi" value="{{ old('address') }}">
                                                 <div class="form-control-feedback">
                                                     <i class="icon-home2 text-muted"></i>
                                                 </div>
@@ -118,7 +119,7 @@
                                             </div>
 
                                             <div class="form-group form-group-feedback form-group-feedback-left">
-                                                <input id="nik" type="text" class="form-control @error('nik') is-invalid @enderror" name="nik" placeholder="NIP/NIK">
+                                                <input id="nik" type="text" class="form-control @error('nik') is-invalid @enderror" name="nik" placeholder="NIK/NIP" value="{{ old('nik') }}">
                                                 <div class="form-control-feedback">
                                                     <i class="icon-vcard text-muted"></i>
                                                 </div>
@@ -127,6 +128,18 @@
                                                         <strong>{{ $message }}</strong>
                                                     </span>
                                                 @enderror
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" class="custom-control-input" id="static" name="static" value="1" checked="">
+                                                    <label class="custom-control-label" for="static">Statis</label>
+                                                </div>
+    
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" class="custom-control-input" id="inactive" name="inactive" value="2">
+                                                    <label class="custom-control-label" for="inactive">Inaktif</label>
+                                                </div>
                                             </div>
 
                                             <div class="form-group">

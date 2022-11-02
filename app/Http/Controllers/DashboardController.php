@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Archives;
+use App\Models\Guest;
 use App\Models\Rack;
 use Illuminate\Http\Request;
 
@@ -27,7 +28,8 @@ class DashboardController extends Controller
     {
         $archive = Archives::all();
         $rack = Rack::orderBy('id')->get();
-        
-        return view('home', compact('archive', 'rack'));
+        $guest = Guest::orderBy('id')->get();
+
+        return view('home', compact('archive', 'rack', 'guest'));
     }
 }
