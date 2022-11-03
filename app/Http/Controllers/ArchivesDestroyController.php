@@ -54,7 +54,7 @@ class ArchivesDestroyController extends Controller
                         racks.type,
                         racks.no_rack,
                         retention_classifications.name AS retention,
-                        ( CAST( archives.YEAR AS INT ) + mapping.active ) AS destroyed_at 
+                        ( CAST( archives.YEAR AS UNSIGNED ) + mapping.active ) AS destroyed_at 
                     FROM
                         archives
                         LEFT JOIN mapping ON archives.mapping_id = mapping.id
