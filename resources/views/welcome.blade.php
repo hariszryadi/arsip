@@ -33,7 +33,7 @@
                     transform: scale(1.1);
         }
     </style>
-    <body style="background: url({{ asset('images/bg-welcome.png') }}); background-size: 100% 100%;">
+    <body style="background: url({{ asset('images/bg-welcome.jpg') }}); background-size: 100% 100%;">
 
         <div class="mt-4">
             <h1 class="font-weight-bold text-center" style="font-size: 2rem;">SISTEM INFORMASI DEPO ARSIP TERPADU</h1>

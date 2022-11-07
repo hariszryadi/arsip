@@ -140,8 +140,7 @@ class BannerController extends Controller
     {
         $banner = Banner::find($id);
         if ($request->hasFile('image')) {
-            $image = $banner->first()->image;
-            $path = \storage_path('app/public/' . $image);
+            $path = \storage_path('app/public/' . $banner->image);
             File::delete($path);
 
             $path = $request->file('image')->store('banner', ['disk' => 'public']);
@@ -163,12 +162,11 @@ class BannerController extends Controller
     public function destroy($id)
     {
         $banner = Banner::findOrFail($id);
-        $image = $banner->first()->image;
-        $path = \storage_path('app/public/' . $image);
+        $path = \storage_path('app/public/' . $banner->image);
         File::delete($path);
         $banner->delete();
 
-        return response()->json(['success' => 'Data rak berhasil dihapus']);
+        return response()->json(['success' => 'Data banner berhasil dihapus']);
     }
 
     /**

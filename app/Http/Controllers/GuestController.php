@@ -16,7 +16,8 @@ class GuestController extends Controller
      */
     public function register()
     {
-        return view('guest');
+        $banner = Banner::where('status', 1)->get();
+        return view('guest', compact('banner'));
     }
 
     /**
@@ -58,8 +59,7 @@ class GuestController extends Controller
     public function archive($token)
     {
         $guest = Guest::where('token', $token)->first();
-        $banner = Banner::where('status', 1)->get();
-        return view('archive-guest', compact('guest', 'banner'));
+        return view('archive-guest', compact('guest'));
     }
 
     /**
