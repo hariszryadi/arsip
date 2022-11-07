@@ -184,6 +184,8 @@
     <meta name="keywords" content="kabupaten bekasi, sitem informasi depo arsip kabupaten bekasi, dinas perpustakaan dan arsip kabupaten bekasi">
     <meta name="author" content="ThemeAtelier">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- CSRF Token -->
+	<meta name="csrf-token" content="{{ csrf_token() }}" />
     <!-- ========== Title ========== -->
     <title>Halaman Pengunjung - {{  config('app.name', 'Laravel')  }}</title>
     <!-- ========== Favicon Ico ========== -->
@@ -240,6 +242,13 @@
     }
     .invalid-feedback {
         color: #F44336;
+    }
+    .modal-footer {
+        border: none !important;
+    }
+    .btn {
+        border: 1px solid transparent;
+        border-radius: 0.25rem;
     }
 </style>
 <body>
@@ -308,50 +317,35 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div class="alert alert-danger" style="display:none"></div>
                 <form method="POST" action="{{ route('guest.store') }}">
-                    @csrf
                     <div class="form-group">
-                        <input id="fullname" type="text" class="form-control @error('fullname') invalid @enderror" name="fullname" value="{{ old('fullname') }}" placeholder="Nama Lengkap" value="{{ old('fullname') }}" autofocus>
-                        @error('fullname')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <input id="fullname" type="text" class="form-control" name="fullname" placeholder="Nama Lengkap" autofocus>
                     </div>
                     
                     <div class="form-group">
-                        <input id="address" type="text" class="form-control @error('address') invalid @enderror" name="address" placeholder="Alamat/Nama Instansi" value="{{ old('address') }}">
-                        @error('address')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <input id="address" type="text" class="form-control" name="address" placeholder="Alamat / Nama Instansi">
                     </div>
                     
                     <div class="form-group">
-                        <input id="nik" type="text" class="form-control @error('nik') invalid @enderror" name="nik" placeholder="NIK/NIP" value="{{ old('nik') }}">
-                        @error('nik')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <input id="nik" type="text" class="form-control" name="nik" placeholder="NIK / NIP">
                     </div>
                     
-                    <div class="form-group">
+                    <div class="form-group" style="display: flex;">
                         <div class="custom-control custom-checkbox custom-control-inline">
-                            <input type="checkbox" class="custom-control-input" id="static" name="static" value="1" checked="">
+                            <input type="checkbox" class="custom-control-input" id="static" name="static" checked>
                             <label class="custom-control-label" for="static">Statis</label>
                         </div>
 
-                        <div class="custom-control custom-checkbox custom-control-inline">
-                            <input type="checkbox" class="custom-control-input" id="inactive" name="inactive" value="2">
+                        <div class="custom-control custom-checkbox custom-control-inline" style="margin-left: 24px;">
+                            <input type="checkbox" class="custom-control-input" id="inactive" name="inactive">
                             <label class="custom-control-label" for="inactive">Inaktif</label>
                         </div>
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn" style="background-color: #FF5722;" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Daftar</button>
+                        <button type="button" id="formSubmit" class="btn btn-primary">Daftar</button>
                     </div>
                 </form>
             </div>
@@ -387,5 +381,51 @@
 <!-- jquery.ajaxchimp.min.js -->
 <script src="{{ asset('js/jquery.ajaxchimp.min.js') }}"></script>
 <script src="{{ asset('js/app.js') }}"></script>
+<script>
+    $('.modal').modal();
+    $(document).ready(function () {
+        $('#formSubmit').on('click', function(e){
+            e.preventDefault();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+            });
+            $.ajax({
+                url: "{{ route('guest.store') }}",
+                method: 'POST',
+                data: {
+                    fullname: $('#fullname').val(),
+                    address: $('#address').val(),
+                    nik: $('#nik').val(),
+                    static: $('#static').is(':checked') ? 1 : null,
+                    inactive: $('#inactive').is(':checked') ? 1 : null
+                },
+                success: function(result){
+                    if(result.errors) {
+                        $('.alert-danger').html('');
+                        $.each(result.errors, function(key, value){
+                            console.log(value);
+                            $('.alert-danger').show();
+                            $('.alert-danger').append('<li>'+value+'</li>');
+                        });
+                    } else if (result.error) {
+                        $('.alert-danger').html('');
+                        $('.alert-danger').show();
+                        $('.alert-danger').append(result.error);
+                    } else {
+                        $('.alert-danger').hide();
+                        $('#exampleModal').modal('close');
+                        window.location = result.url;
+                    }
+                }
+            });
+        });
+    })
+
+    $('.modal').on('shown.bs.modal', function() {
+        $(this).find('[autofocus]').focus();
+    });
+</script>
 </body>
 </html>

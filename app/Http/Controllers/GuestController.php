@@ -6,6 +6,7 @@ use App\Models\Archives;
 use App\Models\Banner;
 use App\Models\Guest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
 
@@ -28,14 +29,27 @@ class GuestController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'fullname' => 'required',
-            'address' => 'required',
-            'nik' => 'required'
-        ]);
+        $validator = Validator::make(
+            $request->all(), 
+            [
+                'fullname' => 'required',
+                'address' => 'required',
+                'nik' => 'required|numeric'
+            ],
+            [
+                'fullname.required' => 'Kolom Nama Lengkap harus diisi',
+                'address.required' => 'Kolom Alamat / Nama Instansi harus diisi',
+                'nik.required' => 'Kolom NIK / NIP harus diisi',
+                'nik.numeric' => 'Kolom NIK / NIP harus berupa angka'
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['errors'=>$validator->errors()->all()]);
+        }
 
         if ($request->static == null && $request->inactive == null) {
-            return redirect()->back()->withInput()->with('error', 'Pilih minimail 1 jenis arsip');
+            return response()->json(['error'=>'Pilih minimail 1 jenis arsip']);
         }
 
         $token = Str::random(40);
@@ -48,7 +62,9 @@ class GuestController extends Controller
             'token' => $token
         ]);
         
-        return redirect()->route('guest.archive', $token);
+        return response()->json([
+            'url' => url('/guest/archive/'.$token) 
+        ]);
     }
 
     /**

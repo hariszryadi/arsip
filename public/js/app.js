@@ -41,8 +41,7 @@
             var $portfolio = $('.portfolio-boxes');
             $portfolio.isotope({
                 itemSelector: '.portfolio-box',
-                layoutMode: 'fitRows',
-				// filter: '.static'
+                layoutMode: 'fitRows'
             });
 
             $portfolio_selectors.on('click', function() {

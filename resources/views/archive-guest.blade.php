@@ -38,114 +38,103 @@
 	<link rel="stylesheet" href="{{ asset('css/colors/teal.css') }}">
 </head>
 <body>
-    <!-- ========== Header Start ========== -->
+<!-- ========== Header Start ========== -->
 <nav class="navbar navbar-default navbar-sticky bootsnav">
 	<div class="header-top primary-bg">
 		<div class="container">
-			<div class="row">
-				<div class="col-sm-6">
-					<div class="top-cta">
-						<ul>
-							{{-- <li>
-								<i class="fa fa-phone-square"></i><span>(+84) 123 456 6789</span> 
-							</li>
-							<li>
-								<a href="#"><i class="fa fa-envelope-square"></i>hello@yoursite.net</a>
-							</li> --}}
-						</ul>
-					</div>
-				</div>
-				<div class="col-sm-6">
-					<ul class="social-link pull-right">
-						{{-- <li>Follow us</li>
-						<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-						<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-						<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-						<li><a href="#"><i class="fa fa-pinterest"></i></a></li> --}}
-                        <li><a href="{{ route('guest.logout', $guest->token) }}" class="navbar-nav-link">
-                            <i class="icon-exit3"></i>&nbsp;&nbsp;Keluar
-                        </a></li>
-					</ul>
-				</div>
+			<div class="row text-center">
+                <span><strong>MAKIN BERANI</strong>, Energi Baru Kabupaten Bekasi</span>
 			</div>
 		</div>
 	</div>
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                <i class="fa fa-bars"></i>
+            </button>
+            <a class="navbar-brand" href="#"><img src="{{ asset('images/logo-sm.png') }}" class="logo" alt=""></a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-menu">
+            <ul class="nav navbar-nav navbar-right" data-in="fadeInUp" data-out="fadeOutDown">
+                <li>
+                    <a href="{{ route('guest.logout', $guest->token) }}"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Keluar</a>
+                </li>
+            </ul>
+        </div>
+    </div>   
 </nav>
 
-<!-- Latest works Start -->
 <section class="section-padding gray-bg">
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-12">
-				<div class="section-title text-center mb70">
-					<h2>DATA ARSIP</h2>
-				</div>
-			</div>
-		</div>
-		
-		<div class="row">
-			<div class="col-sm-12">
-			<ul class="portfolio-filter text-center">
-                @if ($guest->static != null)
-    				<li><a class="btn btn-default waves-effect active" href="#" data-filter=".static">Statis</a></li>
-                @endif
-                @if ($guest->inactive != null)
-    				<li><a class="btn btn-default waves-effect" href="#" data-filter=".inactive">Inaktif</a></li>
-                @endif
-			</ul>
-			
-			<div class="portfolio-boxes">
-                @if ($guest->static != null)
-                    <div class="each-box portfolio-box static">
-                        <div class="inner gray-bg text-center">
-                            <table class="table datatable-basic table-hover table-bordered table-responsive" id="table-static">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Nama Arsip</th>
-                                        <th>Klasifikasi</th>
-                                        <th>Tahun</th>
-                                        <th>Jumlah</th>
-                                        <th>Tingkat Perkembangan</th>
-                                        <th>Lokasi Rak</th>
-                                        <th>Box</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-                @endif
+			<div class="col-md-12">
+				<!-- Contact form start -->
+					<div class="contact-form-box">
+						<div class="col-sm-12">
+							<h3 class="ilm-subtitle mb50">DATA ARSIP</h3>
+						</div>
+						
+						<div class="col-sm-12">
 
-                @if ($guest->inactive != null)
-                    <div class="each-box portfolio-box inactive">
-                        <div class="inner gray-bg text-center">
-                            <table class="table datatable-basic table-hover table-bordered table-responsive" id="table-inactive">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Nama Arsip</th>
-                                        <th>Jenis Arsip</th>
-                                        <th>Tahun</th>
-                                        <th>Jumlah</th>
-                                        <th>Tingkat Perkembangan</th>
-                                        <th>Lokasi Rak</th>
-                                        <th>Box</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-                @endif
-			</div>
+                            <ul class="tabs">
+                                @if ($guest->static != null)
+                                    <li class="tab s3 active"><a class="waves-effect" href="#static">Arsip Statis</a></li>
+                                @endif
+                                @if ($guest->inactive != null)
+                                    <li class="tab s3"><a class="waves-effect" href="#inactive">Arsip Inaktif</a></li>
+                                @endif
+                            </ul>
+
+                            @if ($guest->static != null)
+                                <div id="static" class="single-tab-content">
+                                    <table class="table datatable-basic table-hover table-bordered table-responsive" id="table-static">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Nama Arsip</th>
+                                                <th>Klasifikasi</th>
+                                                <th>Tahun</th>
+                                                <th>Jumlah</th>
+                                                <th>Tingkat Perkembangan</th>
+                                                <th>Lokasi Rak</th>
+                                                <th>Box</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            @endif
+
+                            @if ($guest->inactive != null)
+                                <div id="inactive" class="single-tab-content">
+                                    <table class="table datatable-basic table-hover table-bordered table-responsive" id="table-inactive">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Nama Arsip</th>
+                                                <th>Jenis Arsip</th>
+                                                <th>Tahun</th>
+                                                <th>Jumlah</th>
+                                                <th>Tingkat Perkembangan</th>
+                                                <th>Lokasi Rak</th>
+                                                <th>Box</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            @endif
+
+						</div>
+					</div>
+				<!-- Contact form end -->
 			</div>
         </div>
-	</div>
+    </div>
 </section>
 
 <!-- Footer -->
 <div class="navbar navbar-expand-lg navbar-light border-bottom-0 border-top">
-
-    <div class="navbar-collapse collapse" id="navbar-footer">
+    <div class="navbar-collapse collapse">
         <span class="navbar-text">
             &copy; {{ date('Y') }}. <a href="#">Dinas Arsip dan Perpustakaan Kabupaten Bekasi</a>
         </span>
@@ -207,14 +196,7 @@
         ],
         columnDefs: [
             { width: "5%", "targets": [0] }
-        ],
-        dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
-        language: {
-            search: '_INPUT_',
-            searchPlaceholder: 'Masukkan pencarian nama arsip ...',
-            lengthMenu: '<span>Show:</span> _MENU_',
-            paginate: { 'first': 'First', 'last': 'Last', 'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;', 'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;' }
-        }
+        ]
     });
     
     $('#table-inactive').DataTable({
@@ -242,13 +224,7 @@
         ],
         columnDefs: [
             { width: "5%", "targets": [0] }
-        ],
-        dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
-        language: {
-            search: '_INPUT_',
-            searchPlaceholder: 'Masukkan pencarian nama arsip ...',
-            paginate: { 'first': 'First', 'last': 'Last', 'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;', 'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;' }
-        }
+        ]
     });
 </script>
 </body>
