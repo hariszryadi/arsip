@@ -108,6 +108,12 @@ class GuestController extends Controller
             ->editColumn('rack', function($data) {
                 return 'R.' . $data->rack->floor . '.' . $data->rack->type . '.' . $data->rack->no_rack;
             })
+            ->addColumn('generate', function($data) {
+                if ($data->file != null) {
+                    return '<a href="'.route('guest.generate-pdf', $data->id).'" class="btn btn-download"><i class="fa fa-download" title="download"></i></a>';
+                }
+            })
+            ->rawColumns(['generate'])
             ->make(true);
     }
 
@@ -129,6 +135,10 @@ class GuestController extends Controller
             ->editColumn('mapping', function($data) {
                 return '(' . $data->mapping->code . ') - ' . $data->mapping->archive_type;
             })
+            ->addColumn('generate', function($data) {
+                return '<a href="'.route('guest.generate-pdf', $data->id).'" class="btn btn-download"><i class="fa fa-download" title="download"></i></a>';
+            })
+            ->rawColumns(['generate'])
             ->make(true);
     }
 
@@ -160,5 +170,24 @@ class GuestController extends Controller
                 return '-';
                 break;
         }
+    }
+
+    /**
+     * Download file
+     *
+     * @return string
+    */
+    public function generate_pdf($id)
+    {
+        $archives = Archives::find($id);
+        $file = public_path('storage/' . $archives->file);
+        $headers = array(
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+            'Content-Description' => 'File Transfer'
+        );
+
+        return response()->download($file, basename($file), $headers);
     }
 }

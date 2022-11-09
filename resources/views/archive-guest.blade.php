@@ -37,6 +37,13 @@
 	<link rel="stylesheet" href="{{ asset('css/responsive.css') }}" />
 	<link rel="stylesheet" href="{{ asset('css/colors/teal.css') }}">
 </head>
+<style>
+    .btn-download {
+        height: 24px;
+        line-height: 24px;
+        padding: 0 12px;
+    }
+</style>
 <body>
 <!-- ========== Header Start ========== -->
 <nav class="navbar navbar-default navbar-sticky bootsnav">
@@ -99,6 +106,7 @@
                                                 <th>Tingkat Perkembangan</th>
                                                 <th>Lokasi Rak</th>
                                                 <th>Box</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -118,6 +126,7 @@
                                                 <th>Tingkat Perkembangan</th>
                                                 <th>Lokasi Rak</th>
                                                 <th>Box</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -192,7 +201,8 @@
             { data: "amount", searchable: false },
             { data: "dev_level", searchable: false },
             { data: "rack", searchable: false },
-            { data: "box", searchable: false }
+            { data: "box", searchable: false },
+            { data: "generate", searchable: false }
         ],
         columnDefs: [
             { width: "5%", "targets": [0] }
@@ -221,6 +231,7 @@
             { data: "dev_level", searchable: false },
             { data: "rack", searchable: false },
             { data: "box", searchable: false },
+            { data: "generate", searchable: false }
         ],
         columnDefs: [
             { width: "5%", "targets": [0] }

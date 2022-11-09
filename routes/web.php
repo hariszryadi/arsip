@@ -44,6 +44,7 @@ Route::get('guest/archive/{token}', [GuestController::class, 'archive'])->name('
 Route::get('guest/logout/{token}', [GuestController::class, 'logout'])->name('guest.logout')->middleware('guest.register');
 Route::get('guest/archive-static', [GuestController::class, 'get_static'])->name('guest.archive.static')->middleware('guest.register');
 Route::get('guest/archive-inactive', [GuestController::class, 'get_inactive'])->name('guest.archive.inactive')->middleware('guest.register');
+Route::get('guest/generate-pdf/{id}', [GuestController::class, 'generate_pdf'])->name('guest.generate-pdf')->middleware('guest.register');
 
 /** ADMIN */
 Route::get('dashboard', [DashboardController::class, 'index'])->name('home');
