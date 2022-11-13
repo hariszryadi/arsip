@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="description" content="Dinas Perpustakaan dan Arsip Kabupaten Bekasi">
     <meta name="keywords" content="kabupaten bekasi, sitem informasi depo arsip kabupaten bekasi, dinas perpustakaan dan arsip kabupaten bekasi">
-    <meta name="author" content="ThemeAtelier">
+    <meta name="author" content="Dinas Perpustakaan dan Arsip Kabupaten Bekasi">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <!-- ========== Title ========== -->
     <title>Halaman Pengunjung - {{  config('app.name', 'Laravel')  }}</title>
@@ -36,14 +36,74 @@
 	<!-- Responsive CSS -->
 	<link rel="stylesheet" href="{{ asset('css/responsive.css') }}" />
 	<link rel="stylesheet" href="{{ asset('css/colors/teal.css') }}">
+    <style>
+        .frame {
+            height: 100px; /* Can be anything */
+            width: 100px; /* Can be anything */
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .frame>img {
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+        .btn-download {
+            height: 24px;
+            line-height: 24px;
+            padding: 0 12px;
+        }
+        .dataTables_paginate {
+            float: right !important;
+        }
+        .dataTables_paginate .btn-primary {
+            padding: 0 12px;
+            margin: 0 6px;
+        }
+        .paginate_button {
+            padding: 0 12px;
+            margin: 0 6px;
+        }
+        input[type=search]:focus:not([readonly]) {
+            border: 1px solid #009688;
+        }
+        input[type=search] {
+            color: #000;
+        }
+        /* do not group these rules */
+        *::-webkit-input-placeholder {
+            color: #525252;
+        }
+        *:-moz-placeholder {
+            /* FF 4-18 */
+            color: #525252;
+            opacity: 1;
+        }
+        *::-moz-placeholder {
+            /* FF 19+ */
+            color: #525252;
+            opacity: 1;
+        }
+        *:-ms-input-placeholder {
+            /* IE 10+ */
+            color: #525252;
+        }
+        *::-ms-input-placeholder {
+            /* Microsoft Edge */
+            color: #525252;
+        }
+        *::placeholder {
+            /* modern browser */
+            color: #525252;
+        }
+    </style>
 </head>
-<style>
-    .btn-download {
-        height: 24px;
-        line-height: 24px;
-        padding: 0 12px;
-    }
-</style>
 <body>
 <!-- ========== Header Start ========== -->
 <nav class="navbar navbar-default navbar-sticky bootsnav">
@@ -59,7 +119,7 @@
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
                 <i class="fa fa-bars"></i>
             </button>
-            <a class="navbar-brand" href="#"><img src="{{ asset('images/logo-sm.png') }}" class="logo" alt=""></a>
+            <a class="navbar-brand" href="#"><img src="{{ asset('images/pemda.png') }}" class="logo" alt=""></a>
         </div>
 
         <div class="collapse navbar-collapse" id="navbar-menu">
@@ -99,14 +159,12 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Nama Arsip</th>
-                                                <th>Klasifikasi</th>
-                                                <th>Tahun</th>
-                                                <th>Jumlah</th>
-                                                <th>Tingkat Perkembangan</th>
-                                                <th>Lokasi Rak</th>
-                                                <th>Box</th>
-                                                <th>Aksi</th>
+                                                <th width="40%">Nama Arsip</th>
+                                                <th width="10%">Klasifikasi</th>
+                                                <th width="10%">Tahun</th>
+                                                <th width="10%">Jumlah</th>
+                                                <th width="10%">Tingkat Perkembangan</th>
+                                                <th width="10%">Aksi</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -119,14 +177,12 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Nama Arsip</th>
-                                                <th>Jenis Arsip</th>
-                                                <th>Tahun</th>
-                                                <th>Jumlah</th>
-                                                <th>Tingkat Perkembangan</th>
-                                                <th>Lokasi Rak</th>
-                                                <th>Box</th>
-                                                <th>Aksi</th>
+                                                <th width="40%">Nama Arsip</th>
+                                                <th width="10%">Jenis Arsip</th>
+                                                <th width="10%">Tahun</th>
+                                                <th width="10%">Jumlah</th>
+                                                <th width="10%">Tingkat Perkembangan</th>
+                                                <th width="10%">Aksi</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -141,14 +197,52 @@
     </div>
 </section>
 
-<!-- Footer -->
-<div class="navbar navbar-expand-lg navbar-light border-bottom-0 border-top">
-    <div class="navbar-collapse collapse">
-        <span class="navbar-text">
-            &copy; {{ date('Y') }}. <a href="#">Dinas Arsip dan Perpustakaan Kabupaten Bekasi</a>
-        </span>
-    </div>
-</div>
+<!-- ========== Footer Start ========== -->
+<footer id="footer" class="pt80" style="background-image:url({{ asset('images/bg-footer.png') }})">
+	<div class="container">
+		<div class="row">
+			<div class="footer-wrap clearfix">
+				<div class="col-sm-2">
+                    <div class="frame">
+                        <img src="{{ asset('images/pemda.png') }}" class="img-responsive" alt="Logo">
+                    </div>
+				</div>
+				<div class="col-sm-2">
+                    <div class="frame">
+                        <img src="{{ asset('images/disarpus.png') }}" class="img-responsive" alt="Logo">
+                    </div>
+				</div>
+				<div class="col-sm-2">
+                    <div class="frame">
+                        <img src="{{ asset('images/pemkab-bekasi.png') }}" class="img-responsive" alt="Logo">
+                    </div>
+				</div>
+				<div class="col-sm-2">
+                    <div class="frame">
+                        <img src="{{ asset('images/berakhlak.png') }}" class="img-responsive" alt="Logo">
+                    </div>
+				</div>
+				<div class="col-sm-2">
+                    <div class="frame">
+                        <img src="{{ asset('images/evp.png') }}" class="img-responsive" alt="Logo">
+                    </div>
+				</div>
+				<div class="col-sm-2">
+                    <div class="frame">
+                        <img src="{{ asset('images/makin-berani.png') }}" class="img-responsive" alt="Logo">
+                    </div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="footer-copyright text-center">
+				<p>&copy; {{ date('Y') }} <a href="{{ url('/') }}">Dinas Arsip dan Perpustakaan Kabupaten Bekasi</a>, All rights reserved.</p>
+			</div>
+		</div>
+	</div>
+</footer>
+<!-- ========== Footer End ========== -->
+
 
 <!-- jquery -->
 <script src="{{ asset('js/jquery.min.js') }}"></script>
@@ -185,7 +279,7 @@
         serverside: true,
         autoWidth: false,
         bLengthChange: false,
-        bInfo: false,
+        bInfo: true,
         ajax: {
             url: "{{ route('guest.archive.static') }}",
         },
@@ -200,13 +294,33 @@
             { data: "year", searchable: false },
             { data: "amount", searchable: false },
             { data: "dev_level", searchable: false },
-            { data: "rack", searchable: false },
-            { data: "box", searchable: false },
             { data: "generate", searchable: false }
         ],
         columnDefs: [
             { width: "5%", "targets": [0] }
-        ]
+        ],
+        dom: "<'row'<'col-sm-12'ftr>>" +
+         "<'row'<'col-sm-4'i><'col-sm-8'p>>",
+        language: {
+            search: '<span>Pencarian:</span> _INPUT_',
+            searchPlaceholder: 'Ketik nama arsip...',
+            lengthMenu: '<span>Show:</span> _MENU_',
+        },
+        preDrawCallback: function () {
+            $('.previous').addClass('btn btn-primary');
+            $('.next').addClass('btn btn-primary');
+            $('.current').addClass('btn btn-primary');
+        },
+        drawCallback: function () {
+            $('.previous').addClass('btn btn-primary');
+            $('.next').addClass('btn btn-primary');
+            $('.current').addClass('btn btn-primary');
+        },
+        initComplete: function() {
+            $('.previous').addClass('btn btn-primary');
+            $('.next').addClass('btn btn-primary');
+            $('.current').addClass('btn btn-primary');
+        }
     });
     
     $('#table-inactive').DataTable({
@@ -214,7 +328,7 @@
         serverside: true,
         autoWidth: false,
         bLengthChange: false,
-        bInfo: false,
+        bInfo: true,
         ajax: {
             url: "{{ route('guest.archive.inactive') }}",
         },
@@ -229,13 +343,24 @@
             { data: "year", searchable: false },
             { data: "amount", searchable: false },
             { data: "dev_level", searchable: false },
-            { data: "rack", searchable: false },
-            { data: "box", searchable: false },
             { data: "generate", searchable: false }
         ],
-        columnDefs: [
-            { width: "5%", "targets": [0] }
-        ]
+        dom: "<'row'<'col-sm-12'ftr>>" +
+         "<'row'<'col-sm-4'i><'col-sm-8'p>>",
+        language: {
+            search: '<span>Pencarian:</span> _INPUT_',
+            searchPlaceholder: 'Ketik nama arsip...',
+            lengthMenu: '<span>Show:</span> _MENU_',
+        },
+        // preDrawCallback: function () {
+        //     $('.paginate_button').addClass('btn btn-primary');
+        // },
+        // drawCallback: function () {
+        //     $('.paginate_button').addClass('btn btn-primary');
+        // },
+        // initComplete: function() {
+        //     $('.paginate_button').addClass('btn btn-primary');
+        // }
     });
 </script>
 </body>
