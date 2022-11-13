@@ -352,15 +352,21 @@
             searchPlaceholder: 'Ketik nama arsip...',
             lengthMenu: '<span>Show:</span> _MENU_',
         },
-        // preDrawCallback: function () {
-        //     $('.paginate_button').addClass('btn btn-primary');
-        // },
-        // drawCallback: function () {
-        //     $('.paginate_button').addClass('btn btn-primary');
-        // },
-        // initComplete: function() {
-        //     $('.paginate_button').addClass('btn btn-primary');
-        // }
+        preDrawCallback: function () {
+            $('.previous').addClass('btn btn-primary');
+            $('.next').addClass('btn btn-primary');
+            $('.current').addClass('btn btn-primary');
+        },
+        drawCallback: function () {
+            $('.previous').addClass('btn btn-primary');
+            $('.next').addClass('btn btn-primary');
+            $('.current').addClass('btn btn-primary');
+        },
+        initComplete: function() {
+            $('.previous').addClass('btn btn-primary');
+            $('.next').addClass('btn btn-primary');
+            $('.current').addClass('btn btn-primary');
+        }
     });
 </script>
 </body>

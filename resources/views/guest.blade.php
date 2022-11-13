@@ -74,6 +74,12 @@
             border: 1px solid transparent;
             border-radius: 0.25rem;
         }
+        .fa {
+            float: right;
+            margin-right: 6px;
+            margin-top: -30px;
+            position: relative;
+        }
     </style>
 </head>
 <body>
@@ -152,19 +158,27 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="padding: 25px;">
                 <div class="alert alert-danger" style="display:none"></div>
                 <form method="POST" action="{{ route('guest.store') }}">
                     <div class="form-group">
                         <input id="fullname" type="text" class="form-control" name="fullname" placeholder="Nama Lengkap" autofocus>
+                        <i class="fa fa-user"></i>
                     </div>
                     
                     <div class="form-group">
                         <input id="address" type="text" class="form-control" name="address" placeholder="Alamat / Nama Instansi">
+                        <i class="fa fa-home"></i>
                     </div>
                     
                     <div class="form-group">
                         <input id="nik" type="text" class="form-control" name="nik" placeholder="NIK / NIP">
+                        <i class="fa fa-id-card-o"></i>
+                    </div>
+
+                    <div class="form-group">
+                        <input id="phone_number" type="text" class="form-control" name="phone_number" placeholder="Telepon">
+                        <i class="fa fa-phone"></i>
                     </div>
                     
                     <div class="form-group" style="display: flex;">
@@ -235,7 +249,8 @@
                     address: $('#address').val(),
                     nik: $('#nik').val(),
                     static: $('#static').is(':checked') ? 1 : null,
-                    inactive: $('#inactive').is(':checked') ? 1 : null
+                    inactive: $('#inactive').is(':checked') ? 1 : null,
+                    phone_number: $('#phone_number').val(),
                 },
                 success: function(result){
                     if(result.errors) {

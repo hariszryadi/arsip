@@ -59,6 +59,7 @@ class GuestController extends Controller
             'nik' => $request->nik,
             'static' => $request->static,
             'inactive' => $request->inactive,
+            'phone_number' => $request->phone_number,
             'token' => $token
         ]);
         
