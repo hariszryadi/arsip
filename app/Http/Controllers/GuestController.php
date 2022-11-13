@@ -137,7 +137,9 @@ class GuestController extends Controller
                 return '(' . $data->mapping->code . ') - ' . $data->mapping->archive_type;
             })
             ->addColumn('generate', function($data) {
-                return '<a href="'.route('guest.generate-pdf', $data->id).'" class="btn btn-download"><i class="fa fa-download" title="download"></i></a>';
+                if ($data->file != null) {
+                    return '<a href="'.route('guest.generate-pdf', $data->id).'" class="btn btn-download"><i class="fa fa-download" title="download"></i></a>';
+                }
             })
             ->rawColumns(['generate'])
             ->make(true);
