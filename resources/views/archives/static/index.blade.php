@@ -87,7 +87,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Import</button>
+                    <button type="submit" class="btn btn-primary" id="btn-import">Import</button>
+                    <span id="text-loading" style="padding: 6px; display: none;">Loading...</span>
                 </div>
             </form>
         </div>
@@ -171,6 +172,8 @@
 
         $('#import-form').on('submit', function (e) {
             e.preventDefault();
+            $('#btn-import').hide();
+            $('#text-loading').show();
             $.ajax({
                 url: "{{ route('archives-static.import') }}",
                 method: "POST",
@@ -185,6 +188,8 @@
                     $('.datatable-basic').DataTable().ajax.reload();
                     $('#import-form')[0].reset();
                     $('.custom-file-label').text('Choose file');
+                    $('#btn-import').show();
+                    $('#text-loading').hide();
                 },
                 error: function(xhr, textStatus, error) {
                     var json = $.parseJSON(xhr.responseText);
@@ -192,6 +197,8 @@
                     swalInit.fire('Error!', json.errors, 'error');
                     $('#import-form')[0].reset();
                     $('.custom-file-label').text('Choose file');
+                    $('#btn-import').show();
+                    $('#text-loading').hide();
                 }
             })
         })
