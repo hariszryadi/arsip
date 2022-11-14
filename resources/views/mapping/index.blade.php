@@ -65,7 +65,7 @@
                         </select>
                     </div>
                     <div class="form-group col-lg-5">
-                        <label for="filter-archive-type">Jenis Arsip</label>
+                        <label for="filter-archive-type">Jenis arsip</label>
                         <input type="text" class="form-control" id="filter-archive-type" placeholder="Ketik jenis arsip">
                     </div>
                     <div class="form-group col-lg-2 align-self-end">

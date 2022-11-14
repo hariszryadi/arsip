@@ -23,7 +23,7 @@
     <div class="page-header page-header-light">
         <div class="page-header-content header-elements-lg-inline">
             <div class="page-title d-flex">
-                <h4>Arsip Inaktif</h4>
+                <h4>Pengunjung</h4>
             </div>
         </div>
 
@@ -32,7 +32,7 @@
                 <div class="breadcrumb">
                     <a href="{{ route('home') }}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
                     <span class="breadcrumb-item">Report</span>
-                    <span class="breadcrumb-item active">Arsip Inaktif</span>
+                    <span class="breadcrumb-item active">Pengunjung</span>
                 </div>
 
             </div>
@@ -46,32 +46,28 @@
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">List Arsip Inaktif</h3>
+                <h3 class="card-title">List Pengunjung</h3>
             </div>
             
             <div class="card-body">
                 <div class="row">
                     <div class="form-group col-lg-5">
-                        <label for="filter-creator">Pencipta arsip</label>
-                        <select class="form-control select-search" id="filter-creator" data-fouc>
-                            <option value="">All</option>
-                            @foreach ($creator as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
+                        <label for="filter-creator">Tangal awal</label>
+                        <div class="input-group">
+                            <span class="input-group-prepend">
+                                <span class="input-group-text"><i class="icon-calendar22"></i></span>
+                            </span>
+                            <input type="text" class="form-control daterange-single" id="start-date">
+                        </div>
                     </div>
                     <div class="form-group col-lg-5">
-                        @php
-                            $first = (int)date('Y') - 30;
-                            $last = (int)date('Y') + 5;
-                        @endphp
-                        <label for="filter-year">Tahun</label>
-                        <select name="year" class="form-control select-search" id="filter-year" data-fouc>
-                            <option value="">All</option>
-                            @for ($i = $first; $i < $last; $i++)
-                                <option value="{{ $i }}">{{ $i }}</option>
-                            @endfor
-                        </select>
+                        <label for="filter-creator">Tangal akhir</label>
+                        <div class="input-group">
+                            <span class="input-group-prepend">
+                                <span class="input-group-text"><i class="icon-calendar22"></i></span>
+                            </span>
+                            <input type="text" class="form-control daterange-single" id="end-date">
+                        </div>
                     </div>
                     <div class="form-group col-lg-2 align-self-end">
                         <button type="button" class="btn btn-secondary btn-block btn-filter">Filter</button>
@@ -82,14 +78,13 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Nama Arsip</th>
-                            <th>Klasifikasi</th>
-                            <th>Jenis Arsip</th>
-                            <th>Tahun</th>
-                            <th>Jumlah</th>
-                            <th>Tingkat Perkembangan</th>
-                            <th>Lokasi Rak</th>
-                            <th>Box</th>
+                            <th>Nama Pengunjung</th>
+                            <th>Alamat</th>
+                            <th>NIK</th>
+                            <th>No. Telepon</th>
+                            <th>Statis</th>
+                            <th>Inaktif</th>
+                            <th>Tanggal</th>
                         </tr>
                     </thead>
                 </table>
@@ -128,10 +123,10 @@
                 bFilter: false,
                 pageLength: 10,
                 ajax: {
-                    url: "{{ route('report-archive-inactive') }}",
+                    url: "{{ route('report-guest') }}",
                     data: function (d) {
-                        d.filter_creator = $('#filter-creator').val(),
-                        d.filter_year = $('#filter-year').val()
+                        d.start_date = $('#start-date').val(),
+                        d.end_date = $('#end-date').val()
                     }
                 },
                 columns: [
@@ -140,17 +135,17 @@
                             return meta.row + meta.settings._iDisplayStart + 1;
                         },
                     },
-                    { data: "name" },
-                    { data: "mapping.code" },
-                    { data: "mapping.archive_type" },
-                    { data: "year" },
-                    { data: "amount" },
-                    { data: "dev_level" },
-                    { data: "rack" },
-                    { data: "box" }
+                    { data: "fullname" },
+                    { data: "address" },
+                    { data: "nik" },
+                    { data: "phone_number" },
+                    { data: "static" },
+                    { data: "inactive" },
+                    { data: "created_at" }
                 ],
                 columnDefs: [
-                    { width: "5%", "targets": [0] }
+                    { width: "5%", "targets": [0] },
+                    { className: "text-center", "targets": [5, 6] },
                 ],
                 dom: '<"datatable-header"flB><"datatable-scroll"t><"datatable-footer"ip>',
                 language: {
@@ -163,7 +158,7 @@
                     { 
                         extend: 'excelHtml5',
                         title: '',
-                        filename: 'Data Arsip Inaktif',
+                        filename: 'Data Pengunjung',
                         exportOptions: {
                             // columns: ':not(:last-child)',
                             format: {

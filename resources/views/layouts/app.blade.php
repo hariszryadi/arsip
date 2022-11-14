@@ -30,6 +30,9 @@
 	<script src="{{ asset('global_assets/js/plugins/tables/datatables/datatables.min.js') }}"></script>
 	<script src="{{ asset('global_assets/js/plugins/forms/selects/select2.min.js') }}"></script>
 	<script src="{{ asset('global_assets/js/plugins/notifications/sweet_alert.min.js') }}"></script>
+	
+	<script src="{{ asset('global_assets/js/plugins/pickers/pickadate/picker.js') }}"></script>
+	<script src="{{ asset('global_assets/js/plugins/pickers/pickadate/picker.date.js') }}"></script>
 
 	<script src="{{ asset('assets/js/app.js') }}"></script>
 	<!-- /theme JS files -->
@@ -83,6 +86,46 @@
 								input: 'form-control'
 							}
 						});
+
+		var DateTimePickers = function() {
+			//
+			// Setup module components
+			//
+
+			// Daterange picker
+			var _componentDaterange = function() {
+				if (!$().daterangepicker) {
+					console.warn('Warning - daterangepicker.js is not loaded.');
+					return;
+				}
+
+				// Single picker
+				$('.daterange-single').daterangepicker({
+					parentEl: '.content-inner',
+					singleDatePicker: true
+				});
+				
+			};
+
+
+			//
+			// Return objects assigned to module
+			//
+
+			return {
+				init: function() {
+					_componentDaterange();
+				}
+			}
+		}();
+
+
+		// Initialize module
+		// ------------------------------
+
+		document.addEventListener('DOMContentLoaded', function() {
+			DateTimePickers.init();
+		});
 	</script>
 	@yield('scripts')
 </body>

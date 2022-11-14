@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\ArchivesVitalExport;
 use App\Models\ArchiveCreator;
 use App\Models\Archives;
+use App\Models\Guest;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
@@ -132,6 +133,50 @@ class ReportController extends Controller
         }
 
         return view('report.archive-inactive.index', compact('creator'));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function report_guest()
+    {
+
+        $query = Guest::orderBy('id');
+
+        if (request()->start_date != null) {
+            $start_date = date('Y-m-d', strtotime(request()->start_date));
+            $query->where('created_at', '>=', $start_date);
+        }
+
+        if (request()->end_date != null) {
+            $end_date = date('Y-m-d', strtotime(request()->end_date));
+            $query->where('created_at', '<=', $end_date);
+        }
+
+        $query->get();
+
+        if (request()->ajax()) {
+            return DataTables::of($query)
+                ->editColumn('static', function($data) {
+                    if ($data->static != null) {
+                        return 'Y';
+                    }
+                })
+                ->editColumn('inactive', function($data) {
+                    if ($data->inactive != null) {
+                        return 'Y';
+                    }
+                })
+                ->editColumn('created_at', function($data) {
+                    return $data->created_at->format('d/m/Y');
+                })
+                ->rawColumns(['static', 'inactive'])
+                ->make(true);
+        }
+
+        return view('report.guest.index');
     }
 
     /**

@@ -52,7 +52,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="form-group col-lg-5">
-                        <label for="filter-creator">Pencipta Arsip</label>
+                        <label for="filter-creator">Pencipta arsip</label>
                         <select class="form-control select-search" id="filter-creator" data-fouc>
                             <option value="">All</option>
                             @foreach ($creator as $item)
@@ -163,7 +163,7 @@
                         title: '',
                         filename: 'Data Arsip Statis',
                         exportOptions: {
-                            columns: ':not(:last-child)',
+                            // columns: ':not(:last-child)',
                             format: {
                                 body: function ( data, row, column, node ) {
                                     if (column == 0) {

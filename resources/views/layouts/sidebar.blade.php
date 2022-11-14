@@ -69,12 +69,13 @@
                 </ul>
             </li>
 
-            <li class="nav-item nav-item-submenu {{ request()->is('report-archive-vital') || request()->is('report-archive-static') || request()->is('report-archive-inactive') ? 'nav-item-expanded nav-item-open' : '' }}">
+            <li class="nav-item nav-item-submenu {{ request()->is('report-archive-vital') || request()->is('report-archive-static') || request()->is('report-archive-inactive') || request()->is('report-guest') ? 'nav-item-expanded nav-item-open' : '' }}">
                 <a href="#" class="nav-link"><i class="icon-file-stats"></i> <span>Report</span></a>
                 <ul class="nav nav-group-sub" data-submenu-title="Report">
                     <li class="nav-item"><a href="{{ route('report-archive-vital') }}" class="nav-link {{ request()->is('report-archive-vital') ? 'active' : '' }}">Arsip Vital</a></li>
                     <li class="nav-item"><a href="{{ route('report-archive-static') }}" class="nav-link {{ request()->is('report-archive-static') ? 'active' : '' }}">Arsip Statis</a></li>
                     <li class="nav-item"><a href="{{ route('report-archive-inactive') }}" class="nav-link {{ request()->is('report-archive-inactive') ? 'active' : '' }}">Arsip Inaktif</a></li>
+                    <li class="nav-item"><a href="{{ route('report-guest') }}" class="nav-link {{ request()->is('report-guest') ? 'active' : '' }}">Pengunjung</a></li>
                 </ul>
             </li>
 

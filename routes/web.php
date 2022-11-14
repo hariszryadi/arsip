@@ -90,6 +90,7 @@ Route::resource('archives-over', ArchivesOverController::class);
 Route::get('report-archive-vital', [ReportController::class, 'report_archive_vital'])->name('report-archive-vital');
 Route::get('report-archive-static', [ReportController::class, 'report_archive_static'])->name('report-archive-static');
 Route::get('report-archive-inactive', [ReportController::class, 'report_archive_inactive'])->name('report-archive-inactive');
+Route::get('report-guest', [ReportController::class, 'report_guest'])->name('report-guest');
 // User Config
 Route::resource('user', UserController::class);
 // Change Pasword

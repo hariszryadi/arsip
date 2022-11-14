@@ -207,52 +207,58 @@
                         <div class="row">
                             <div class="col-lg-4">
         
-                                <div class="card card-body bg-success text-white has-bg-image">
-                                    <div class="media">
-                                        <div class="media-body">
-                                            <h3 class="font-weight-semibold mb-0 count">{{ $guest->count() }}</h3>
-                                            <span>Jumlah Pengunjung</span>
-                                        </div>
-                                        
-                                        <div class="ml-3 align-self-center">
-                                            <i class="icon-users4 icon-3x opacity-75"></i>
+                                <a href="{{ route('report-guest') }}">
+                                    <div class="card card-body bg-success text-white has-bg-image">
+                                        <div class="media">
+                                            <div class="media-body">
+                                                <h3 class="font-weight-semibold mb-0 count">{{ $guest->count() }}</h3>
+                                                <span>Jumlah Pengunjung</span>
+                                            </div>
+                                            
+                                            <div class="ml-3 align-self-center">
+                                                <i class="icon-users4 icon-3x opacity-75"></i>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
         
                             </div>
         
                             <div class="col-lg-4">
 
-                                <div class="card card-body bg-info text-white has-bg-image">
-                                    <div class="media">
-                                        <div class="media-body">
-                                            <h3 class="font-weight-semibold mb-0 count">{{ $guest->whereNotNull('static')->count() }}</h3>
-                                            <span>Pengunjung Arsip Statis</span>
-                                        </div>
-                                        
-                                        <div class="ml-3 align-self-center">
-                                            <i class="icon-users icon-3x opacity-75"></i>
+                                <a href="{{ route('report-guest') }}">
+                                    <div class="card card-body bg-info text-white has-bg-image">
+                                        <div class="media">
+                                            <div class="media-body">
+                                                <h3 class="font-weight-semibold mb-0 count">{{ $guest->whereNotNull('static')->count() }}</h3>
+                                                <span>Pengunjung Arsip Statis</span>
+                                            </div>
+                                            
+                                            <div class="ml-3 align-self-center">
+                                                <i class="icon-users icon-3x opacity-75"></i>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
         
                             </div>
         
                             <div class="col-lg-4">
         
-                                <div class="card card-body bg-warning text-white has-bg-image">
-                                    <div class="media">
-                                        <div class="media-body">
-                                            <h3 class="font-weight-semibold mb-0 count">{{ $guest->whereNotNull('inactive')->count() }}</h3>
-                                            <span>Pengunjung Arsip Inaktif</span>
-                                        </div>
-                                        
-                                        <div class="ml-3 align-self-center">
-                                            <i class="icon-users icon-3x opacity-75"></i>
+                                <a href="{{ route('report-guest') }}">
+                                    <div class="card card-body bg-warning text-white has-bg-image">
+                                        <div class="media">
+                                            <div class="media-body">
+                                                <h3 class="font-weight-semibold mb-0 count">{{ $guest->whereNotNull('inactive')->count() }}</h3>
+                                                <span>Pengunjung Arsip Inaktif</span>
+                                            </div>
+                                            
+                                            <div class="ml-3 align-self-center">
+                                                <i class="icon-users icon-3x opacity-75"></i>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
         
                             </div>
                         </div>
