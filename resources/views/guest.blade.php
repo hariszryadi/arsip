@@ -177,10 +177,11 @@
                     </div>
 
                     <div class="form-group">
-                        <input id="phone_number" type="text" class="form-control" name="phone_number" placeholder="Telepon">
+                        <input id="phone_number" type="text" class="form-control" name="phone_number" placeholder="No. Telepon">
                         <i class="fa fa-phone"></i>
                     </div>
                     
+                    <label>Jenis Arsip Yang Dicari</label>
                     <div class="form-group" style="display: flex;">
                         <div class="custom-control custom-checkbox custom-control-inline">
                             <input type="checkbox" class="custom-control-input" id="static" name="static" checked>

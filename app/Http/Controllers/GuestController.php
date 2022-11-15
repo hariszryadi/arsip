@@ -34,13 +34,16 @@ class GuestController extends Controller
             [
                 'fullname' => 'required',
                 'address' => 'required',
-                'nik' => 'required|numeric'
+                'nik' => 'required|numeric',
+                'phone_number' => 'required|numeric'
             ],
             [
                 'fullname.required' => 'Kolom Nama Lengkap harus diisi',
                 'address.required' => 'Kolom Alamat / Nama Instansi harus diisi',
                 'nik.required' => 'Kolom NIK / NIP harus diisi',
-                'nik.numeric' => 'Kolom NIK / NIP harus berupa angka'
+                'nik.numeric' => 'Kolom NIK / NIP harus berupa angka',
+                'phone_number.required' => 'Kolom No. Telepon harus diisi',
+                'phone_number.numeric' => 'Kolom No. Telepon harus berupa angka'
             ]
         );
 

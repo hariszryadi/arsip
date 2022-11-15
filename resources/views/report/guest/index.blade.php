@@ -2,6 +2,8 @@
 
 @section('content')
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <style>
     .hidden {
         display: none !important;
@@ -51,22 +53,30 @@
             
             <div class="card-body">
                 <div class="row">
-                    <div class="form-group col-lg-5">
+                    <div class="form-group col-lg-2">
+                        <label for="filter-type">Jenis Arsip</label>
+                        <select class="form-control select-search" id="type">
+                            <option value="">All</option>
+                            <option value="static">Statis</option>
+                            <option value="inactive">Inaktif</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-4">
                         <label for="filter-creator">Tangal awal</label>
                         <div class="input-group">
                             <span class="input-group-prepend">
                                 <span class="input-group-text"><i class="icon-calendar22"></i></span>
                             </span>
-                            <input type="text" class="form-control daterange-single" id="start-date">
+                            <input type="text" class="form-control datepicker" id="start-date" placeholder="dd-mm-yyy" autocomplete="off">
                         </div>
                     </div>
-                    <div class="form-group col-lg-5">
+                    <div class="form-group col-lg-4">
                         <label for="filter-creator">Tangal akhir</label>
                         <div class="input-group">
                             <span class="input-group-prepend">
                                 <span class="input-group-text"><i class="icon-calendar22"></i></span>
                             </span>
-                            <input type="text" class="form-control daterange-single" id="end-date">
+                            <input type="text" class="form-control datepicker" id="end-date" placeholder="dd-mm-yyy" autocomplete="off">
                         </div>
                     </div>
                     <div class="form-group col-lg-2 align-self-end">
@@ -125,6 +135,7 @@
                 ajax: {
                     url: "{{ route('report-guest') }}",
                     data: function (d) {
+                        d.type = $('#type').val()
                         d.start_date = $('#start-date').val(),
                         d.end_date = $('#end-date').val()
                     }
@@ -156,11 +167,10 @@
                 },
                 buttons: [
                     { 
-                        extend: 'excelHtml5',
-                        title: '',
+                        extend: 'pdfHtml5',
+                        title: getExportTitle(),
                         filename: 'Data Pengunjung',
                         exportOptions: {
-                            // columns: ':not(:last-child)',
                             format: {
                                 body: function ( data, row, column, node ) {
                                     if (column == 0) {
@@ -170,24 +180,49 @@
                                     }
                                 }
                             }
-                        } 
+                        },
+                        customize: function (doc) {
+                            doc.defaultStyle.fontSize = 8; //2, 3, 4,etc
+                            doc.styles.tableHeader.fontSize = 10; //2, 3, 4, etc
+                            doc.content[1].table.widths = [ '2%',  '22%', '22%', '15%', 
+                                                            '15%', '5%', '5%', '14%'];
+                        },
+                        orientation: 'landscape' 
                     }
                 ],
                 "preDrawCallback": function( settings ) {
-                    var btnsXls = $('.buttons-excel');
-                    btnsXls.addClass('btn btn-success btn-sm mr-3 hidden');
-                    btnsXls.html('<i class="icon-file-excel"></i> Export Excel')
+                    var btnsXls = $('.buttons-pdf');
+                    btnsXls.addClass('btn btn-danger btn-sm mr-3 hidden');
+                    btnsXls.html('<i class="icon-file-pdf"></i> Export PDF')
                     btnsXls.removeClass('dt-button');
                 },
                 "drawCallback": function(settings, json) {
-                    var btnsXls = $('.buttons-excel');
+                    var btnsXls = $('.buttons-pdf');
                     btnsXls.removeClass('hidden');
                 },
                 "initComplete": function(settings, json) {
-                    var btnsXls = $('.buttons-excel');
+                    var btnsXls = $('.buttons-pdf');
                     btnsXls.removeClass('hidden');
                 }
             });
         }
+
+        function getExportTitle() {
+            if ($('#type').val() == '') {
+                return 'REGISTER LAYANAN ARSIP STATIS & INAKTIF';
+            } else {
+                if ($('#type').val() == 'static') {
+                    return 'REGISTER LAYANAN ARSIP STATIS';
+                } else {
+                    return 'REGISTER LAYANAN ARSIP INAKTIF';
+                }
+            }
+        }
+
+        $('.datepicker').datepicker({
+            format: 'dd-mm-yyyy',
+            todayHighlight: true,
+            autoclose: true
+        });
     </script>
 @endsection

@@ -145,14 +145,23 @@ class ReportController extends Controller
 
         $query = Guest::orderBy('id');
 
+        if (request()->type != null) {
+            if (request()->type == 'static') {
+                $query->whereNotNull('static');
+            }
+
+            if (request()->type == 'inactive') {
+                $query->whereNotNull('inactive');
+            }
+        }
         if (request()->start_date != null) {
             $start_date = date('Y-m-d', strtotime(request()->start_date));
-            $query->where('created_at', '>=', $start_date);
+            $query->whereDate('created_at', '>=', $start_date);
         }
 
         if (request()->end_date != null) {
             $end_date = date('Y-m-d', strtotime(request()->end_date));
-            $query->where('created_at', '<=', $end_date);
+            $query->whereDate('created_at', '<=', $end_date);
         }
 
         $query->get();
@@ -161,16 +170,18 @@ class ReportController extends Controller
             return DataTables::of($query)
                 ->editColumn('static', function($data) {
                     if ($data->static != null) {
-                        return 'Y';
+                        return '√';
                     }
                 })
                 ->editColumn('inactive', function($data) {
                     if ($data->inactive != null) {
-                        return 'Y';
+                        return '√';
                     }
                 })
                 ->editColumn('created_at', function($data) {
-                    return $data->created_at->format('d/m/Y');
+                    $date = $data->created_at;
+                    $date->settings(['formatFunction' => 'translatedFormat']);
+                    return $date->format('j F Y');
                 })
                 ->rawColumns(['static', 'inactive'])
                 ->make(true);
