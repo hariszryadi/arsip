@@ -6,9 +6,11 @@ use App\Models\Archives;
 use App\Models\Banner;
 use App\Models\Guest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
+use setasign\Fpdi\Fpdi;
 
 class GuestController extends Controller
 {
@@ -186,14 +188,33 @@ class GuestController extends Controller
     public function generate_pdf($id)
     {
         $archives = Archives::find($id);
-        $file = public_path('storage/' . $archives->file);
-        $headers = array(
-            'Cache-Control' => 'no-cache, no-store, must-revalidate',
-            'Pragma' => 'no-cache',
-            'Expires' => '0',
-            'Content-Description' => 'File Transfer'
-        );
+        $filepath = storage_path('app/public/' . $archives->file);
+        if (!File::exists(public_path('temp'))) {
+            File::makeDirectory(public_path('temp'), 0775, true);
+        }
+        $target_path = public_path('temp/' . basename($filepath));
+        File::copy($filepath, $target_path);
+        $pict = public_path('watermark.png');
+        // $text = 'DISARPUS KAB BEKASI';
+        $pdf = new Fpdi();
+        if (file_exists($target_path)) {
+            $pagecount = $pdf->setSourceFile($target_path);
+        } else {
+            return dd("Source not found");
+        }
 
-        return response()->download($file, basename($file), $headers);
+        for ($i = 1; $i <= $pagecount; $i++) {
+            $tpl = $pdf->importPage($i);
+            $size = $pdf->getTemplateSize($tpl);
+            $pdf->addPage();
+            $pdf->useTemplate($tpl, 1, 1, $size['width'], $size['height'], TRUE);
+            $pdf->Image($pict, 20, 100, 180);
+            // $pdf->SetFont('Arial', 'B', 40);
+            // $pdf->SetTextColor(50,50,50);
+            // $pdf->SetXY(50,50);
+            // $pdf->Cell( 0, 11, $text, 0, 0, 'C' );
+        }
+        File::delete($target_path);
+        $pdf->Output();
     }
 }
