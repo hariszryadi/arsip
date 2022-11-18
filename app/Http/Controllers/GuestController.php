@@ -116,7 +116,7 @@ class GuestController extends Controller
             })
             ->addColumn('generate', function($data) {
                 if ($data->file != null) {
-                    return '<a href="'.route('guest.generate-pdf', $data->id).'" class="btn btn-download"><i class="fa fa-download" title="download"></i></a>';
+                    return '<a href="'.route('guest.generate-pdf', encrypt($data->id)).'" class="btn btn-download"><i class="fa fa-download" title="download"></i></a>';
                 }
             })
             ->rawColumns(['generate'])
@@ -143,7 +143,7 @@ class GuestController extends Controller
             })
             ->addColumn('generate', function($data) {
                 if ($data->file != null) {
-                    return '<a href="'.route('guest.generate-pdf', $data->id).'" class="btn btn-download"><i class="fa fa-download" title="download"></i></a>';
+                    return '<a href="'.route('guest.generate-pdf', encrypt($data->id)).'" class="btn btn-download"><i class="fa fa-download" title="download"></i></a>';
                 }
             })
             ->rawColumns(['generate'])
@@ -187,7 +187,7 @@ class GuestController extends Controller
     */
     public function generate_pdf($id)
     {
-        $archives = Archives::find($id);
+        $archives = Archives::find(decrypt($id));
         $filepath = storage_path('app/public/' . $archives->file);
         if (!File::exists(public_path('temp'))) {
             File::makeDirectory(public_path('temp'), 0775, true);
