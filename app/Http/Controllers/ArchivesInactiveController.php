@@ -105,7 +105,8 @@ class ArchivesInactiveController extends Controller
             'dev_level' => 'required',
             'rack_id' => 'required',
             'box' => 'required',
-            'file' => 'mimes:jpeg,bmp,png,gif,svg,pdf',
+            // 'file' => 'mimes:jpeg,bmp,png,gif,svg,pdf',
+            'file' => 'mimes:pdf',
             'officer' => 'required'
         ]);
 
@@ -190,7 +191,8 @@ class ArchivesInactiveController extends Controller
             'dev_level' => 'required',
             'rack_id' => 'required',
             'box' => 'required',
-            'file' => 'mimes:jpeg,bmp,png,gif,svg,pdf',
+            // 'file' => 'mimes:jpeg,bmp,png,gif,svg,pdf',
+            'file' => 'mimes:pdf',
             'officer' => 'required'
         ]);
 
