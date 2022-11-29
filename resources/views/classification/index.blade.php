@@ -36,16 +36,18 @@
             
             <div class="card-body">
                 <div class="form-group text-left">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="icon-file-plus"></i> Tambah
-                        </button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{{ route('classification.create') }}">Klasifikasi Primer</a>
-                            <a class="dropdown-item" href="{{ route('classification-secondary.create') }}">Klasifikasi Sekunder</a>
-                            <a class="dropdown-item" href="{{ route('classification-tertiary.create') }}">Klasifikasi Tersier</a>
+                    @can('classification-create')
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="icon-file-plus"></i> Tambah
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{{ route('classification.create') }}">Klasifikasi Primer</a>
+                                <a class="dropdown-item" href="{{ route('classification-secondary.create') }}">Klasifikasi Sekunder</a>
+                                <a class="dropdown-item" href="{{ route('classification-tertiary.create') }}">Klasifikasi Tersier</a>
+                            </div>
                         </div>
-                    </div>
+                    @endcan
                 </div>
 
                 <table class="table datatable-basic table-hover table-bordered table-responsive">
@@ -74,7 +76,7 @@
     $(document).ready(function () {
         var table = $('.datatable-basic').DataTable({
             processing: true,
-            serverside: true,
+            serverSide: true,
             autoWidth: false,
             bLengthChange: true,
             pageLength: 10,

@@ -25,6 +25,10 @@ class RackController extends Controller
      */
     public function __construct() {
         $this->middleware('auth');
+        $this->middleware('permission:rack-list', ['only' => ['index']]);
+        $this->middleware('permission:rack-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:rack-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:rack-delete', ['only' => ['destroy']]);
     }
 
     /**
@@ -37,18 +41,27 @@ class RackController extends Controller
         if (request()->ajax()) {
             return DataTables::of(Rack::orderBy('id')->get())
                 ->addColumn('action', function($data){
-                    return '<div class="list-icons">
-                                <div class="dropdown">
-                                    <a href="#" class="list-icons-item" data-toggle="dropdown">
-                                        <i class="icon-menu9"></i>
-                                    </a>
+                    $permission = '';
+                    if (auth()->user()->can('rack-edit')) {
+                        $permission .= '<a href="'.route('rack.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>';
+                    }
+                    if (auth()->user()->can('rack-delete')) {
+                        $permission .= '<a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i> Hapus</a>';
+                    }
 
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="'.route('rack.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
-                                        <a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i> Hapus</a>
+                    if (auth()->user()->can('rack-edit') || auth()->user()->can('rack-delete')) {
+                        return '<div class="list-icons">
+                                    <div class="dropdown">
+                                        <a href="#" class="list-icons-item" data-toggle="dropdown">
+                                            <i class="icon-menu9"></i>
+                                        </a>
+    
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            '.$permission.'
+                                        </div>
                                     </div>
-                                </div>
-                            </div>';
+                                </div>';
+                    }
                 })
                 ->addColumn('code', function($data) {
                     return 'R.'. $data->floor . '.' . $data->type . '.' . $data->no_rack;

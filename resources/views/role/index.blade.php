@@ -8,7 +8,7 @@
     <div class="page-header page-header-light">
         <div class="page-header-content header-elements-lg-inline">
             <div class="page-title d-flex">
-                <h4>Pencipta Arsip</h4>
+                <h4>Role</h4>
             </div>
         </div>
 
@@ -16,8 +16,8 @@
             <div class="d-flex">
                 <div class="breadcrumb">
                     <a href="{{ route('home') }}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
-                    <span class="breadcrumb-item">Master</span>
-                    <span class="breadcrumb-item active">Pencipta Arsip</span>
+                    <span class="breadcrumb-item">User Config</span>
+                    <span class="breadcrumb-item active">Role</span>
                 </div>
 
             </div>
@@ -31,13 +31,13 @@
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">List Pencipta Arsip</h3>
+                <h3 class="card-title">List Role</h3>
             </div>
             
             <div class="card-body">
                 <div class="form-group text-left">
-                    @can('archive-creator-create')
-                        <a href="{{ route('archive-creator.create')}}" class="btn btn-primary"><i class="icon-file-plus"></i> Tambah</a>
+                    @can('role-create')
+                        <a href="{{ route('role.create')}}" class="btn btn-primary"><i class="icon-file-plus"></i> Tambah</a>
                     @endcan
                 </div>
 
@@ -45,7 +45,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Nama</th>
+                            <th>Nama Role</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -70,7 +70,7 @@
                 bLengthChange: true,
                 pageLength: 10,
                 ajax: {
-                    url: "{{ route('archive-creator.index') }}",
+                    url: "{{ route('role.index') }}",
                 },
                 columns: [
                     {
@@ -99,9 +99,9 @@
         
         $(document).on('click', '#delete', function () {
             var id = $(this).attr('data-id');
-            var url = "{{ route('archive-creator.destroy', ":id") }}";
+            var url = "{{ route('role.destroy', ":id") }}";
             url = url.replace(':id', id);
-            
+
             swalInit.fire({
                 title: "Apakah anda yakin akan menghapus data ini?",
                 icon: "warning",

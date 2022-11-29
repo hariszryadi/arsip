@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RackController;
 use App\Http\Controllers\GuestController;
@@ -92,6 +93,7 @@ Route::get('report-archive-static', [ReportController::class, 'report_archive_st
 Route::get('report-archive-inactive', [ReportController::class, 'report_archive_inactive'])->name('report-archive-inactive');
 Route::get('report-guest', [ReportController::class, 'report_guest'])->name('report-guest');
 // User Config
+Route::resource('role', RoleController::class);
 Route::resource('user', UserController::class);
 // Change Pasword
 Route::get('change-password', [ChangePasswordController::class, 'edit'])->name('change-password.edit');

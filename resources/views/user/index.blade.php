@@ -41,7 +41,9 @@
             
             <div class="card-body">
                 <div class="form-group text-left">
-                    <a href="{{ route('user.create')}}" class="btn btn-primary"><i class="icon-file-plus"></i> Tambah</a>
+                    @can('user-create')
+                        <a href="{{ route('user.create')}}" class="btn btn-primary"><i class="icon-file-plus"></i> Tambah</a>
+                    @endcan
                 </div>
 
                 <table class="table datatable-basic table-hover table-bordered table-responsive">
@@ -50,6 +52,7 @@
                             <th>#</th>
                             <th>Nama</th>
                             <th>Email</th>
+                            <th>Role</th>
                             <th>Tanggal Buat</th>
                             <th>Aksi</th>
                         </tr>
@@ -70,7 +73,7 @@
         $(document).ready(function () {
             $('.datatable-basic').DataTable({
                 processing: true,
-                serverside: true,
+                serverSide: true,
                 autoWidth: false,
                 bLengthChange: true,
                 pageLength: 10,
@@ -85,12 +88,13 @@
                     },
                     { data: "name" },
                     { data: "email" },
+                    { data: "roles.0.name" },
                     { data: "created_at" },
                     { data: "action", orderable: false}
                 ],
                 columnDefs: [
                     { width: "5%", "targets": [0] },
-                    { className: "text-center", "targets": [4] }
+                    { className: "text-center", "targets": [4, 5] }
                 ],
                 dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
                 language: {

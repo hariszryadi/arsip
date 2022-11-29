@@ -33,6 +33,11 @@ class ArchivesVitalController extends Controller
      */
     public function __construct() {
         $this->middleware('auth');
+        $this->middleware('permission:archives-vital-list', ['only' => ['index']]);
+        $this->middleware('permission:archives-vital-create', ['only' => ['create', 'store', 'import', 'download_template']]);
+        $this->middleware('permission:archives-vital-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:archives-vital-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:archives-vital-download', ['only' => ['destroy']]);
     }
 
     /**
@@ -54,19 +59,30 @@ class ArchivesVitalController extends Controller
                     return 'R.' . $data->rack->floor . '.' . $data->rack->type . '.' . $data->rack->no_rack;
                 })
                 ->addColumn('action', function($data){
-                    return '<div class="list-icons">
-                                <div class="dropdown">
-                                    <a href="#" class="list-icons-item" data-toggle="dropdown">
-                                        <i class="icon-menu9"></i>
-                                    </a>
+                    $permission = '';
+                    if (auth()->user()->can('archives-vital-download')) {
+                        $permission .= '<a href="'.route('archives-vital.download', $data->id).'" class="dropdown-item"><i class="icon-download text-success"></i> Download</a>';
+                    }
+                    if (auth()->user()->can('archives-vital-edit')) {
+                        $permission .= '<a href="'.route('archives-vital.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>';
+                    }
+                    if (auth()->user()->can('archives-vital-delete')) {
+                        $permission .= '<a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i> Hapus</a>';
+                    }
 
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="'.route('archives-vital.download', $data->id).'" class="dropdown-item"><i class="icon-download text-success"></i> Download</a>
-                                        <a href="'.route('archives-vital.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
-                                        <a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i> Hapus</a>
+                    if (auth()->user()->can('archives-vital-download') || auth()->user()->can('archives-vital-edit') || auth()->user()->can('archives-vital-delete')) {
+                        return '<div class="list-icons">
+                                    <div class="dropdown">
+                                        <a href="#" class="list-icons-item" data-toggle="dropdown">
+                                            <i class="icon-menu9"></i>
+                                        </a>
+    
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            '.$permission.'
+                                        </div>
                                     </div>
-                                </div>
-                            </div>';
+                                </div>';
+                    }
                 })
                 ->make(true);
         }

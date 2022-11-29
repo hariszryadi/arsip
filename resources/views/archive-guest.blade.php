@@ -276,7 +276,7 @@
 <script>
     $('#table-static').DataTable({
         processing: true,
-        serverside: true,
+        serverSide: true,
         autoWidth: false,
         bLengthChange: false,
         bInfo: true,
@@ -325,7 +325,7 @@
     
     $('#table-inactive').DataTable({
         processing: true,
-        serverside: true,
+        serverSide: true,
         autoWidth: false,
         bLengthChange: false,
         bInfo: true,

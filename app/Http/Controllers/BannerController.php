@@ -26,6 +26,10 @@ class BannerController extends Controller
      */
     public function __construct() {
         $this->middleware('auth');
+        $this->middleware('permission:banner-list', ['only' => ['index']]);
+        $this->middleware('permission:banner-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:banner-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:banner-delete', ['only' => ['destroy']]);
     }
 
     /**
@@ -45,24 +49,35 @@ class BannerController extends Controller
                         $checked = '';
                         $text = 'Tidak Aktif';
                     }
-                    return '<div class="custom-control custom-switch custom-control-success mb-2">
-                                <input type="checkbox" class="custom-control-input switch" id="sc_r_success'.$data->id.'" data-id="'.$data->id.'" '.$checked.'>
-                                <label class="custom-control-label" for="sc_r_success'.$data->id.'">'.$text.'</label>
-                            </div>';
+                    if (auth()->user()->can('banner-edit')) { 
+                        return '<div class="custom-control custom-switch custom-control-success mb-2">
+                                    <input type="checkbox" class="custom-control-input switch" id="sc_r_success'.$data->id.'" data-id="'.$data->id.'" '.$checked.'>
+                                    <label class="custom-control-label" for="sc_r_success'.$data->id.'">'.$text.'</label>
+                                </div>';
+                    }
                 })    
                 ->addColumn('action', function($data){
-                    return '<div class="list-icons">
-                                <div class="dropdown">
-                                    <a href="#" class="list-icons-item" data-toggle="dropdown">
-                                        <i class="icon-menu9"></i>
-                                    </a>
+                    $permission = '';
+                    if (auth()->user()->can('banner-edit')) {
+                        $permission .= '<a href="'.route('banner.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>';
+                    }
+                    if (auth()->user()->can('banner-delete')) {
+                        $permission .= '<a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i> Hapus</a>';
+                    }
 
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="'.route('banner.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
-                                        <a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i> Hapus</a>
+                    if (auth()->user()->can('banner-edit') || auth()->user()->can('banner-delete')) {
+                        return '<div class="list-icons">
+                                    <div class="dropdown">
+                                        <a href="#" class="list-icons-item" data-toggle="dropdown">
+                                            <i class="icon-menu9"></i>
+                                        </a>
+    
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            '.$permission.'
+                                        </div>
                                     </div>
-                                </div>
-                            </div>';
+                                </div>';
+                    }
                 })
                 ->rawColumns(['status', 'action'])
                 ->make(true);

@@ -19,6 +19,10 @@ class ReportController extends Controller
      */
     public function __construct() {
         $this->middleware('auth');
+        $this->middleware('permission:report-archive-vital-list', ['only' => ['report_archive_vital']]);
+        $this->middleware('permission:report-archive-static-list', ['only' => ['report_archive_static']]);
+        $this->middleware('permission:report-archive-inactive-list', ['only' => ['report_archive_inactive']]);
+        $this->middleware('permission:report-guest-list', ['only' => ['report_guest']]);
     }
 
     /**

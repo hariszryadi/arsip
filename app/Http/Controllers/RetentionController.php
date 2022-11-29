@@ -25,6 +25,10 @@ class RetentionController extends Controller
      */
     public function __construct() {
         $this->middleware('auth');
+        $this->middleware('permission:retention-list', ['only' => ['index']]);
+        $this->middleware('permission:retention-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:retention-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:retention-delete', ['only' => ['destroy']]);
     }
 
     /**
@@ -37,18 +41,27 @@ class RetentionController extends Controller
         if (request()->ajax()) {
             return DataTables::of(RetentionClassification::orderBy('id')->get())
                 ->addColumn('action', function($data){
-                    return '<div class="list-icons">
-                                <div class="dropdown">
-                                    <a href="#" class="list-icons-item" data-toggle="dropdown">
-                                        <i class="icon-menu9"></i>
-                                    </a>
+                    $permission = '';
+                    if (auth()->user()->can('retention-edit')) {
+                        $permission .= '<a href="'.route('retention.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>';
+                    }
+                    if (auth()->user()->can('retention-delete')) {
+                        $permission .= '<a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i> Hapus</a>';
+                    }
 
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="'.route('retention.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
-                                        <a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i> Hapus</a>
+                    if (auth()->user()->can('retention-edit') || auth()->user()->can('retention-delete')) {
+                        return '<div class="list-icons">
+                                    <div class="dropdown">
+                                        <a href="#" class="list-icons-item" data-toggle="dropdown">
+                                            <i class="icon-menu9"></i>
+                                        </a>
+    
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            '.$permission.'
+                                        </div>
                                     </div>
-                                </div>
-                            </div>';
+                                </div>';
+                    }
                 })
                 ->make(true);
         }

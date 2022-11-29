@@ -29,6 +29,10 @@ class ClassificationController extends Controller
      */
     public function __construct() {
         $this->middleware('auth');
+        $this->middleware('permission:classification-list', ['only' => ['index']]);
+        $this->middleware('permission:classification-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:classification-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:classification-delete', ['only' => ['destroy']]);
     }
 
     /**
@@ -48,18 +52,27 @@ class ClassificationController extends Controller
                     }
                 })
                 ->addColumn('action', function($data){
-                    return '<div class="list-icons">
-                                <div class="dropdown">
-                                    <a href="#" class="list-icons-item" data-toggle="dropdown">
-                                        <i class="icon-menu9"></i>
-                                    </a>
+                    $permission = '';
+                    if (auth()->user()->can('classification-edit')) {
+                        $permission .= '<a href="'.route('classification.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>';
+                    }
+                    if (auth()->user()->can('classification-delete')) {
+                        $permission .= '<a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i> Hapus</a>';
+                    }
 
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="'.route('classification.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
-                                        <a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i> Hapus</a>
+                    if (auth()->user()->can('classification-edit') || auth()->user()->can('classification-delete')) {
+                        return '<div class="list-icons">
+                                    <div class="dropdown">
+                                        <a href="#" class="list-icons-item" data-toggle="dropdown">
+                                            <i class="icon-menu9"></i>
+                                        </a>
+    
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            '.$permission.'
+                                        </div>
                                     </div>
-                                </div>
-                            </div>';
+                                </div>';
+                    }
                 })
                 ->make(true);
         }

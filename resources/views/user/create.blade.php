@@ -79,6 +79,23 @@
                             <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" placeholder="Password Confirmation">
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label class="control-label col-lg-2 @error('role') text-danger @enderror" for="role">Role</label>
+                        <div class="col-lg-10">
+                            <select class="form-control @error('role') is-invalid @enderror" name="role" id="">
+                                <option value="null" selected disabled>Pilih Role</option>
+                                @foreach ($role as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('role')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
     
                     <div class="form-group" style="margin-top: 50px; margin-left: 10px;">
                         <a class="btn btn-danger" href="{{ route('user.index') }}">Kembali</a>
@@ -93,4 +110,14 @@
 
 </div>
 <!-- /inner content -->
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(function () {  
+        $("#name").keyup(function () {  
+            $(this).val($(this).val().toUpperCase());  
+        });  
+    });
+</script>
 @endsection

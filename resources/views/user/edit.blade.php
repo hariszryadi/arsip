@@ -53,7 +53,7 @@
                     <div class="form-group row">
                         <label class="col-form-label col-lg-2 @error('email') text-danger @enderror" for="email">Email</label>
                         <div class="col-lg-10">
-                            <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" value="{{ old('email')!== null ? old('email') : $user->email }}" placeholder="Email">
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" value="{{ old('email')!== null ? old('email') : $user->email }}" placeholder="Email" readonly>
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -80,6 +80,23 @@
                             <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" placeholder="Password Confirmation">
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label class="control-label col-lg-2 @error('role') text-danger @enderror" for="role">Role</label>
+                        <div class="col-lg-10">
+                            <select class="form-control" name="role" id="">
+                                <option value="null" selected disabled>Pilih Role</option>
+                                @foreach ($role as $item)
+                                    <option value="{{ $item->id }}" {{ $user->roles->first()->id == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('role')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
     
                     <div class="form-group" style="margin-top: 50px; margin-left: 10px;">
                         <a class="btn btn-danger" href="{{ route('user.index') }}">Kembali</a>
@@ -94,4 +111,14 @@
 
 </div>
 <!-- /inner content -->
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(function () {  
+        $("#name").keyup(function () {  
+            $(this).val($(this).val().toUpperCase());  
+        });  
+    });
+</script>
 @endsection

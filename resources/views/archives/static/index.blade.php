@@ -36,9 +36,11 @@
             
             <div class="card-body">
                 <div class="form-group text-left">
-                    <a href="{{ route('archives-static.create')}}" class="btn btn-primary mr-2"><i class="icon-file-plus"></i> Tambah</a>
-                    <button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#importModal"><i class="icon-file-excel"></i> Import</button>
-                    <a href="{{ route('download-template-archive-static') }}" class="btn btn-warning"><i class="icon-file-download"></i> Template</a>
+                    @can('archives-static-create')
+                        <a href="{{ route('archives-static.create')}}" class="btn btn-primary mr-2"><i class="icon-file-plus"></i> Tambah</a>
+                        <button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#importModal"><i class="icon-file-excel"></i> Import</button>
+                        <a href="{{ route('download-template-archive-static') }}" class="btn btn-warning"><i class="icon-file-download"></i> Template</a>
+                    @endcan
                 </div>
 
                 <table class="table datatable-basic table-hover table-bordered table-responsive">
@@ -101,7 +103,7 @@
         $(document).ready(function () {
             $('.datatable-basic').DataTable({
                 processing: true,
-                serverside: true,
+                serverSide: true,
                 autoWidth: false,
                 bLengthChange: true,
                 pageLength: 10,

@@ -122,7 +122,7 @@
             $('.datatable-basic').dataTable().fnDestroy();
             $('.datatable-basic').DataTable({
                 processing: true,
-                serverside: true,
+                serverSide: true,
                 autoWidth: false,
                 bLengthChange: true,
                 bFilter: false,

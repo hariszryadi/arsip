@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ArchiveCreator;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\PermissionRegistrar;
+use Yajra\DataTables\Facades\DataTables;
 
-class ArchiveCreatorController extends Controller
+class RoleController extends Controller
 {
     /**
      * Folder views
      */
-    protected $_view = 'archive-creator.';
+    protected $_view = 'role.';
 
     /**
      * Route index
      */
-    protected $_route = 'archive-creator.index';
+    protected $_route = 'role.index';
 
     /**
      * Create a new controller instance.
@@ -25,10 +27,10 @@ class ArchiveCreatorController extends Controller
      */
     public function __construct() {
         $this->middleware('auth');
-        $this->middleware('permission:archive-creator-list', ['only' => ['index']]);
-        $this->middleware('permission:archive-creator-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:archive-creator-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:archive-creator-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:role-list', ['only' => ['index']]);
+        $this->middleware('permission:role-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:role-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:role-delete', ['only' => ['destroy']]);
     }
 
     /**
@@ -39,23 +41,23 @@ class ArchiveCreatorController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            return DataTables::of(ArchiveCreator::orderBy('id')->get())
+            return DataTables::of(Role::orderBy('id')->get())
                 ->addColumn('action', function($data){
                     $permission = '';
-                    if (auth()->user()->can('archive-creator-edit')) {
-                        $permission .= '<a href="'.route('archive-creator.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>';
+                    if (auth()->user()->can('role-edit')) {
+                        $permission .= '<a href="'.route('role.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>';
                     }
-                    if (auth()->user()->can('archive-creator-delete')) {
+                    if (auth()->user()->can('role-delete')) {
                         $permission .= '<a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i> Hapus</a>';
                     }
 
-                    if (auth()->user()->can('archive-creator-edit') || auth()->user()->can('archive-creator-delete')) {
+                    if (auth()->user()->can('role-edit') || auth()->user()->can('role-delete')) {
                         return '<div class="list-icons">
                                     <div class="dropdown">
                                         <a href="#" class="list-icons-item" data-toggle="dropdown">
                                             <i class="icon-menu9"></i>
                                         </a>
-    
+
                                         <div class="dropdown-menu dropdown-menu-right">
                                             '.$permission.'
                                         </div>
@@ -91,11 +93,14 @@ class ArchiveCreatorController extends Controller
             'name' => 'required|max:255',
         ]);
 
-        ArchiveCreator::create([
+        $role = Role::create([
             'name' => $request->name
         ]);
+        foreach ($request->permission as $key => $value) {
+            $role->givePermissionTo($value);
+        }
 
-        return redirect()->route($this->_route)->with('success', 'Data pencipta arsip berhasil ditambahkan');
+        return redirect()->route($this->_route)->with('success', 'Data role berhasil ditambahkan');
     }
 
     /**
@@ -117,8 +122,9 @@ class ArchiveCreatorController extends Controller
      */
     public function edit($id)
     {
-        $creator = ArchiveCreator::find($id);
-        return view($this->_view.'form', compact('creator'));
+        $role = Role::with('permissions')->find($id);
+        $permissions = Permission::orderBy('id')->get();
+        return view($this->_view.'form', compact('role', 'permissions'));
     }
 
     /**
@@ -134,12 +140,12 @@ class ArchiveCreatorController extends Controller
             'name' => 'required|max:255',
         ]);
 
-        $creator = ArchiveCreator::find($id);
-        $creator->update([
-            'name' => $request->name
-        ]);
+        $role = Role::find($id);
+        $role->name = $request->name;
+        $role->syncPermissions($request->permission);
+        $role->update();
 
-        return redirect()->route($this->_route)->with('success', 'Data pencipta arsip berhasil diubah');
+        return redirect()->route($this->_route)->with('success', 'Data role berhasil diubah');
     }
 
     /**
@@ -150,9 +156,9 @@ class ArchiveCreatorController extends Controller
      */
     public function destroy($id)
     {
-        $creator = ArchiveCreator::findOrFail($id);
-        $creator->delete();
+        $role = Role::findOrFail($id);
+        $role->delete();
 
-        return response()->json(['success' => 'Data pencipta arsip berhasil dihapus']);
+        return response()->json(['success' => 'Data role berhasil dihapus']);
     }
 }

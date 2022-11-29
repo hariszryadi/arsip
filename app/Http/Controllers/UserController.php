@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
 use App\Models\User;
 
@@ -26,6 +27,10 @@ class UserController extends Controller
      */
     public function __construct() {
         $this->middleware('auth');
+        $this->middleware('permission:user-list', ['only' => ['index']]);
+        $this->middleware('permission:user-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:user-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:user-delete', ['only' => ['destroy']]);
     }
 
     /**
@@ -36,7 +41,7 @@ class UserController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            return DataTables::of(User::orderBy('id')->get())
+            return DataTables::of(User::with('roles')->orderBy('id')->get())
                 ->editColumn('created_at', function($data) {
                     $date = $data->created_at;
                     return $date->format('Y-m-d');
@@ -50,18 +55,27 @@ class UserController extends Controller
                         $text = 'text-danger';
                     }
 
-                    return '<div class="list-icons">
-                                <div class="dropdown">
-                                    <a href="#" class="list-icons-item" data-toggle="dropdown">
-                                        <i class="icon-menu9"></i>
-                                    </a>
+                    $permission = '';
+                    if (auth()->user()->can('user-edit')) {
+                        $permission .= '<a href="'.route('user.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>';
+                    }
+                    if (auth()->user()->can('user-delete')) {
+                        $permission .= '<a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item" '.$disabled.'><i class="icon-bin '.$text.'"></i> Hapus</a>';
+                    }
 
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="'.route('user.edit', $data->id).'" class="dropdown-item"><i class="icon-pencil5 text-primary"></i> Edit</a>
-                                        <a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item" '.$disabled.'><i class="icon-bin '.$text.'"></i> Hapus</a>
+                    if (auth()->user()->can('user-edit') || auth()->user()->can('user-delete')) {
+                        return '<div class="list-icons">
+                                    <div class="dropdown">
+                                        <a href="#" class="list-icons-item" data-toggle="dropdown">
+                                            <i class="icon-menu9"></i>
+                                        </a>
+    
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            '.$permission.'
+                                        </div>
                                     </div>
-                                </div>
-                            </div>';
+                                </div>';
+                    }
                 })
                 ->make(true);
         }
@@ -76,7 +90,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view($this->_view.'create');
+        $role = Role::orderBy('id')->get();
+        return view($this->_view.'create', compact('role'));
     }
 
     /**
@@ -90,7 +105,8 @@ class UserController extends Controller
         $this->validate($request, [
             'name' => 'required|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
+            'password' => 'required|confirmed',
+            'role' => 'required'
         ]);
 
         $user = User::create([
@@ -98,6 +114,9 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
+
+        $role = Role::find($request->role);
+        $user->assignRole($role);
 
         return redirect()->route($this->_route)->with('success', 'Data user berhasil ditambahkan');
     }
@@ -122,7 +141,8 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        return view($this->_view.'edit', compact('user'));
+        $role = Role::orderBy('id')->get();
+        return view($this->_view.'edit', compact('user', 'role'));
     }
 
     /**
@@ -157,6 +177,9 @@ class UserController extends Controller
                 'email' => $request->email
             ]);
         }
+
+        $role = Role::find($request->role);
+        $user->syncRoles($role);
 
         return redirect()->route($this->_route)->with('success', 'Data user berhasil diubah');
     }

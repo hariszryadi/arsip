@@ -28,6 +28,8 @@ class ArchivesDestroyController extends Controller
      */
     public function __construct() {
         $this->middleware('auth');
+        $this->middleware('permission:archives-destroy-list', ['only' => ['index']]);
+        $this->middleware('permission:archives-destroy-delete', ['only' => ['destroy', 'destroy_all']]);
     }
 
     /**
@@ -84,7 +86,9 @@ class ArchivesDestroyController extends Controller
                     return 'R.' . $data->floor . '.' . $data->type . '.' . $data->no_rack;
                 })
                 ->addColumn('action', function($data){
-                    return '<a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i></a>';
+                    if (auth()->user()->can('archives-destroy-delete')) {
+                        return '<a href="javascript:void(0)" id="delete" data-id="'.$data->id.'" class="dropdown-item"><i class="icon-bin text-danger"></i></a>';
+                    }
                 })
                 ->rawColumns(['form', 'action'])
                 ->make(true);
@@ -168,7 +172,7 @@ class ArchivesDestroyController extends Controller
             ]);
         }
 
-        return response()->json(['success' => 'Data arsip inaktif berhasil dihapus']);
+        return response()->json(['success' => 'Data usul musnah berhasil dihapus']);
     }
     
     /**

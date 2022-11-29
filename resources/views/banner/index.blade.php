@@ -37,7 +37,9 @@
             
             <div class="card-body">
                 <div class="form-group text-left">
-                    <a href="{{ route('banner.create')}}" class="btn btn-primary"><i class="icon-file-plus"></i> Tambah</a>
+                    @can('banner-create')
+                        <a href="{{ route('banner.create')}}" class="btn btn-primary"><i class="icon-file-plus"></i> Tambah</a>
+                    @endcan
                 </div>
 
                 <table class="table datatable-basic table-hover table-bordered table-responsive">
@@ -67,7 +69,7 @@
         $(document).ready(function () {
             $('.datatable-basic').DataTable({
                 processing: true,
-                serverside: true,
+                serverSide: true,
                 autoWidth: false,
                 bLengthChange: true,
                 pageLength: 10,

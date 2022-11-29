@@ -36,7 +36,9 @@
             
             <div class="card-body">
                 <div class="form-group text-left">
-                    <button type="button" class="btn btn-danger delete_all"><i class="icon-bin"></i> Hapus Semua</button>
+                    @can('archives-destroy-delete')
+                        <button type="button" class="btn btn-danger delete_all"><i class="icon-bin"></i> Hapus Semua</button>
+                    @endcan
                 </div>
 
                 <table class="table datatable-basic table-hover table-bordered table-responsive">
@@ -70,7 +72,7 @@
         $(document).ready(function () {
             $('.datatable-basic').DataTable({
                 processing: true,
-                serverside: true,
+                serverSide: true,
                 autoWidth: false,
                 bLengthChange: true,
                 pageLength: 10,

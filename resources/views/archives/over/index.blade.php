@@ -66,7 +66,7 @@
         $(document).ready(function () {
             $('.datatable-basic').DataTable({
                 processing: true,
-                serverside: true,
+                serverSide: true,
                 autoWidth: false,
                 bLengthChange: true,
                 pageLength: 10,
