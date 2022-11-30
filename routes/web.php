@@ -21,6 +21,7 @@ use App\Http\Controllers\ArchiveCreatorController;
 use App\Http\Controllers\ArchivesDestroyController;
 use App\Http\Controllers\ArchivesInactiveController;
 use App\Http\Controllers\ArchivesOverController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,3 +102,5 @@ Route::put('change-password/{id}', [ChangePasswordController::class, 'update'])-
 // Banner
 Route::resource('banner', BannerController::class);
 Route::post('banner/update-status', [BannerController::class, 'update_status'])->name('banner.update-status');
+// Profile
+Route::resource('profile', ProfileController::class);
