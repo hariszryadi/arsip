@@ -28,7 +28,7 @@
 
     <li class="nav-item nav-item-dropdown-lg dropdown dropdown-user h-100">
         <a href="#" class="navbar-nav-link navbar-nav-link-toggler dropdown-toggle d-inline-flex align-items-center h-100" data-toggle="dropdown">
-            <img src="{{ asset('global_assets/images/placeholders/placeholder.jpg') }}" class="rounded-pill mr-lg-2" height="34" alt="">
+            <img src="{{ asset('storage/'.auth()->user()->avatar) }}" class="rounded-pill mr-lg-2" height="34" alt="" onerror="this.onerror=null;this.src='{{ asset('global_assets/images/placeholders/placeholder.jpg') }}';">
             <span class="d-none d-lg-inline-block">{{ auth()->user()->name }}</span>
         </a>
 

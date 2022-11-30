@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
 use App\Models\User;
+use Illuminate\Support\Facades\File;
 
 class UserController extends Controller
 {
@@ -110,11 +111,16 @@ class UserController extends Controller
             'role' => 'required'
         ]);
 
+        if ($request->hasFile('avatar')) {
+            $path = $request->file('avatar')->store('avatar', ['disk' => 'public']);
+        }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'username' => $request->username,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'avatar' => $path
         ]);
 
         $role = Role::find($request->role);
@@ -168,18 +174,38 @@ class UserController extends Controller
             ]);
 
             $user = User::find($id);
+            $path = '';
+            if ($request->hasFile('avatar')) {
+                $path = \storage_path('app/public/' . $user->avatar);
+                File::delete($path);
+    
+                $path = $request->file('avatar')->store('avatar', ['disk' => 'public']);
+            } else {
+                $path = $user->avatar;
+            }
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
                 'username' => $request->username,
-                'password' => Hash::make($request->password)
+                'password' => Hash::make($request->password),
+                'avatar' => $path
             ]);
         } else {
             $user = User::find($id);
+            $path = '';
+            if ($request->hasFile('avatar')) {
+                $path = \storage_path('app/public/' . $user->avatar);
+                File::delete($path);
+    
+                $path = $request->file('avatar')->store('avatar', ['disk' => 'public']);
+            } else {
+                $path = $user->avatar;
+            }
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
-                'username' => $request->username
+                'username' => $request->username,
+                'avatar' => $path
             ]);
         }
 

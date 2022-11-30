@@ -6,7 +6,7 @@
         <div class="sidebar-section-body">
             <div class="media">
                 <a href="#" class="mr-3">
-                    <img src="{{ asset('global_assets/images/placeholders/placeholder.jpg') }}" class="rounded-circle" alt="">
+                    <img src="{{ asset('storage/'.auth()->user()->avatar) }}" class="rounded-circle" alt="" onerror="this.onerror=null;this.src='{{ asset('global_assets/images/placeholders/placeholder.jpg') }}';">
                 </a>
 
                 <div class="media-body">

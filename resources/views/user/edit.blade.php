@@ -35,7 +35,7 @@
             </div>
             
             <div class="card-body">
-                <form class="form-horizontal" id="form" action="{{ route('user.update', $user->id) }}" method="POST">
+                <form class="form-horizontal" id="form" action="{{ route('user.update', $user->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="form-group row">
@@ -109,6 +109,26 @@
                             @enderror
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label class="col-form-label col-lg-2 @error('avatar') text-danger @enderror" for="avatar">Avatar</label>
+                        <div class="col-lg-10">
+                            <div class="form-group">
+                                <div class="custom-file">
+                                    <input type="file" name="avatar" class="custom-file-input form-control @error('avatar') is-invalid @enderror" id="customFile" accept=".jpg,.jpeg,.png">
+                                    @error('avatar')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                            </div>
+                            <span id="temp_avatar">
+                                <img src="{{ asset('storage/'.$user->avatar) }}" class="img-thumbnail" style="margin-top: 12px;"/>
+                            </span>
+                        </div>
+                    </div>
     
                     <div class="form-group" style="margin-top: 50px; margin-left: 10px;">
                         <a class="btn btn-danger" href="{{ route('user.index') }}">Kembali</a>
@@ -132,5 +152,32 @@
             $(this).val($(this).val().toUpperCase());  
         });  
     });
+
+    var previews = $('#temp_avatar');
+
+    $(".custom-file-input").on("change", function(e){
+        $('.custom-file-label').text(e.target.files[0].name);
+    });
+
+    $("input[type=file]").on("change", function (e) {
+        if (this.files[0].size > 2097152) {
+            alert('Upload file max 2 MB');
+            this.value = null;
+        }
+        previews.empty();
+        Array.prototype.slice.call(e.target.files)
+            .forEach(function (file, idx) {
+                var reader = new FileReader();
+                reader.onload = function (event) {
+                    $("<img/>", {
+                            "src": event.target.result,
+                            "class": idx,
+                            "class": "img-thumbnail",
+                            "style": "margin-top: 12px"
+                        }).appendTo(previews);
+                };
+                reader.readAsDataURL(file);
+            })
+    })
 </script>
 @endsection

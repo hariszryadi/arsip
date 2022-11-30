@@ -35,7 +35,7 @@
             </div>
             
             <div class="card-body">
-                <form class="form-horizontal" id="form" action="{{ route('user.store') }}" method="POST">
+                <form class="form-horizontal" id="form" action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group row">
                         <label class="col-form-label col-lg-2 @error('name') text-danger @enderror" for="name">Nama</label>
@@ -95,7 +95,7 @@
                     <div class="form-group row">
                         <label class="control-label col-lg-2 @error('role') text-danger @enderror" for="role">Role</label>
                         <div class="col-lg-10">
-                            <select class="form-control @error('role') is-invalid @enderror" name="role" id="">
+                            <select class="form-control select-search @error('role') is-invalid @enderror" name="role" id="" data-fouc>
                                 <option value="null" selected disabled>Pilih Role</option>
                                 @foreach ($role as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -106,6 +106,24 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-form-label col-lg-2 @error('avatar') text-danger @enderror" for="avatar">Avatar</label>
+                        <div class="col-lg-10">
+                            <div class="form-group">
+                                <div class="custom-file">
+                                    <input type="file" name="avatar" class="custom-file-input form-control @error('avatar') is-invalid @enderror" id="customFile" accept=".jpg,.jpeg,.png">
+                                    @error('avatar')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                            </div>
+                            <span id="temp_avatar"></span>
                         </div>
                     </div>
     
@@ -131,5 +149,32 @@
             $(this).val($(this).val().toUpperCase());  
         });  
     });
+
+    var previews = $('#temp_avatar');
+
+    $(".custom-file-input").on("change", function(e){
+        $('.custom-file-label').text(e.target.files[0].name);
+    });
+
+    $("input[type=file]").on("change", function (e) {
+        if (this.files[0].size > 2097152) {
+            alert('Upload file max 2 MB');
+            this.value = null;
+        }
+        previews.empty();
+        Array.prototype.slice.call(e.target.files)
+            .forEach(function (file, idx) {
+                var reader = new FileReader();
+                reader.onload = function (event) {
+                    $("<img/>", {
+                            "src": event.target.result,
+                            "class": idx,
+                            "class": "img-thumbnail",
+                            "style": "margin-top: 12px"
+                        }).appendTo(previews);
+                };
+                reader.readAsDataURL(file);
+            })
+    })
 </script>
 @endsection
