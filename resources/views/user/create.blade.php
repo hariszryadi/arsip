@@ -60,6 +60,18 @@
                             @enderror
                         </div>
                     </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-form-label col-lg-2 @error('username') text-danger @enderror" for="username">Username</label>
+                        <div class="col-lg-10">
+                            <input type="username" class="form-control @error('username') is-invalid @enderror" name="username" id="username" value="{{ old('username') }}" placeholder="Username">
+                            @error('username')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
     
                     <div class="form-group row">
                         <label class="col-form-label col-lg-2 @error('password') text-danger @enderror" for="password">Password</label>
