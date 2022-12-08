@@ -111,6 +111,7 @@ class UserController extends Controller
             'role' => 'required'
         ]);
 
+        $path = '';
         if ($request->hasFile('avatar')) {
             $path = $request->file('avatar')->store('avatar', ['disk' => 'public']);
         }
